@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_register">
+    app:startDestination="@+id/navigation_post">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -40,4 +40,11 @@
         android:name="com.example.comepet.ui.boarding.BoardingFragment"
         android:label="@string/title_boarding"
         tools:layout="@layout/fragment_boarding"/>
+
+    <!--    ini tempat post     -->
+    <fragment
+        android:id="@+id/navigation_post"
+        android:name="com.example.comepet.ui.post.PostFragment"
+        android:label="@string/title_post"
+        tools:layout="@layout/fragment_post" />
 </navigation>

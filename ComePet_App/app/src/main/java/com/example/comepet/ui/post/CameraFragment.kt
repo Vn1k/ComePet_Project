@@ -1,6 +1,5 @@
 package com.example.comepet.ui.post
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,28 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.comepet.R
 
-class PostFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = PostFragment()
-    }
-
-    private val viewModel: PostViewModel by viewModels()
+class CameraFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO: Use the ViewModel
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_post, container, false)
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_camera, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
 }
