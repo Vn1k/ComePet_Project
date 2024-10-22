@@ -55,6 +55,7 @@ class RegisterFragment : Fragment() {
         confirm_password_input_Field = view.findViewById(R.id.confirm_password_input_Field)
 
         register_button = view.findViewById(R.id.registerButton)
+        login_button = view.findViewById(R.id.loginButton)
 
         register_button.setOnClickListener{
             val name = name_input_Field.text.toString().trim()
@@ -102,6 +103,10 @@ class RegisterFragment : Fragment() {
                 } else {
                     Toast.makeText(requireContext(), "Password does not match", Toast.LENGTH_SHORT).show()
             }
+        }
+
+        login_button.setOnClickListener {
+            findNavController().navigate(R.id.navigation_register_to_navigation_login)
         }
     }
 }

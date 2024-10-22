@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "324070079062",
+    "project_id": "comepet-e8840",
+    "storage_bucket": "comepet-e8840.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:324070079062:android:d9ace52d327554c10fd9f7",
+        "android_client_info": {
+          "package_name": "com.example.comepet"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_Q9LzUBDDgwTJkb0asHW8oXuPApxS7Nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
