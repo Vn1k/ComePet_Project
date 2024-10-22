@@ -3,11 +3,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_beige"
     tools:context=".ui.boarding.BoardingFragment">
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
         android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:text="@string/boarding_question"
+            android:textColor="@color/dark_blue_gray"
+            android:textSize="24sp"
+            android:textAlignment="center"
+            android:fontFamily="@font/merriweather_bold"/>
+        <Button
+            android:id="@+id/personalPurposeButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/boarding_button_style"
+            android:text="@string/personal_purpose"
+            android:textColor="@color/dark_blue_gray"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="12sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+
+        <Button
+            android:id="@+id/sellerPurposeButton"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/boarding_button_style"
+            android:text="@string/seller_purpose"
+            android:textColor="@color/dark_blue_gray"
+            android:fontFamily="@font/montserrat_bold"
+            android:textSize="12sp"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+    </LinearLayout>
 
 </FrameLayout>

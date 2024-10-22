@@ -3,11 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_register">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.comepet.ui.home.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/navigation_register"
+        android:name="com.example.comepet.ui.auth.register.RegisterFragment"
+        android:label="@string/title_register"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/navigation_register_to_navigation_boarding"
+            app:destination="@id/navigation_boarding"/>
+        <action
+            android:id="@+id/navigation_register_to_navigation_login"
+            app:destination="@id/navigation_login"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_login"
+        android:name="com.example.comepet.ui.auth.login.LoginFragment"
+        android:label="@string/title_login"
+        tools:layout="@layout/fragment_login"/>
+
+    <fragment
+        android:id="@+id/navigation_boarding"
+        android:name="com.example.comepet.ui.boarding.BoardingFragment"
+        android:label="@string/title_boarding"
+        tools:layout="@layout/fragment_boarding"/>
 </navigation>

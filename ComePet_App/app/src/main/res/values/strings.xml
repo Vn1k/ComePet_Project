@@ -4,4 +4,21 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_search">Search</string>
+    <string name="register_title">Register</string>
+    <string name="username_input_text">Username</string>
+    <string name="icon_description">icon</string>
+    <string name="email_input_text">Email Address</string>
+    <string name="password_input_text">Password</string>
+    <string name="name_input_text">Name</string>
+    <string name="confirm_password_input_text">Confirm Password</string>
+    <string name="register_account_text">Sign Up</string>
+    <string name="title_register">Register</string>
+    <string name="or">or</string>
+    <string name="login_account_text">Login</string>
+    <string name="login_title">Login</string>
+    <string name="title_login">login</string>
+    <string name="boarding_question">Are you willing to be a pet boarding facility?</string>
+    <string name="personal_purpose">No, I only use it for personal purposes</string>
+    <string name="seller_purpose">Yes, I am willing to be a pet \nboarding facility.</string>
+    <string name="title_boarding">boarding</string>
 </resources>

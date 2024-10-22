@@ -28,8 +28,9 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-//                R.id.navigation_login -> hideBottomNavigation()
-//                R.id.navigation_register -> hideBottomNavigation()
+                R.id.navigation_login -> hideBottomNavigation()
+                R.id.navigation_register -> hideBottomNavigation()
+                R.id.navigation_boarding -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }
