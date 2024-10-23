@@ -20,6 +20,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.comepet.R
+import com.example.comepet.databinding.FragmentCameraBinding
+import com.example.comepet.ui.post.upload.UploadFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.Blob
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,14 +31,16 @@ class CameraFragment : Fragment() {
 
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
+    private lateinit var binding: FragmentCameraBinding
 
-    private lateinit var previewView: ImageView // Ganti dengan ID yang sesuai
     private var capturedImageBitmap: Bitmap? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
+
     }
 
     override fun onCreateView(
@@ -44,18 +48,19 @@ class CameraFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         // Inflate layout untuk fragment
-        return inflater.inflate(R.layout.fragment_camera, container, false)
+        binding = FragmentCameraBinding.inflate(inflater, container, false)
+
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inisialisasi elemen UI dengan findViewById
-        previewView = view.findViewById(R.id.preview_view)
-
         requestCameraPermission()
+
     }
 
+    // Camera permission
     private fun requestCameraPermission() {
         if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
@@ -70,79 +75,65 @@ class CameraFragment : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CAMERA_PERMISSION_REQUEST_CODE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                openCamera()
-            } else {
-                Toast.makeText(requireContext(), "Camera permission is required", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    // Open camera
+    // open camera
     private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val data = result.data
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             imageBitmap?.let {
                 capturedImageBitmap = it
-                previewView.setImageBitmap(it)
+                binding.previewView.setImageBitmap(it)
+                // Langsung upload setelah gambar ditampilkan
                 uploadImageToFirestore()
             }
         }
     }
 
+
     private fun openCamera() {
-        Log.d("CameraFragment", "Opening camera...")
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        val packageManager = requireActivity().packageManager
-        val activities = packageManager.queryIntentActivities(intent, 0)
-        if (activities.isNotEmpty()) {
-            takePictureLauncher.launch(intent)
-        } else {
-            Log.e("CameraFragment", "No camera app available")
-            Toast.makeText(requireContext(), "No camera app available", Toast.LENGTH_SHORT).show()
-        }
+        takePictureLauncher.launch(intent)
     }
 
-
     private fun uploadImageToFirestore() {
-        val userId = "testUserId" // Gunakan user ID dummy untuk testing
-
-        val imagesCollection = db.collection("users").document(userId).collection("images")
         capturedImageBitmap?.let { bitmap ->
+            val currentUser = auth.currentUser
+            if (currentUser == null) {
+                Toast.makeText(requireContext(), "User not authenticated", Toast.LENGTH_SHORT)
+                    .show()
+                return
+            }
+
+            val userId = currentUser.uid
+            val imagesCollection = db.collection("users").document(userId).collection("images")
+
             val imageBytes = bitmapToByteArray(bitmap)
             val imageBlob = Blob.fromBytes(imageBytes)
-            val imageData = mapOf("image" to imageBlob)
 
-            imagesCollection.add(imageData)
+            val image = hashMapOf(
+                "image" to imageBlob
+            )
+
+            imagesCollection.add(image)
                 .addOnSuccessListener {
-                    Toast.makeText(requireContext(), "Image uploaded successfully", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Image uploaded", Toast.LENGTH_SHORT).show()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Image upload failed", Toast.LENGTH_SHORT)
+                        .show()
                 }
-        } ?: run {
-            Toast.makeText(requireContext(), "No image to upload", Toast.LENGTH_SHORT).show()
         }
     }
 
     // Convert Bitmap to byte array
     private fun bitmapToByteArray(bitmap: Bitmap): ByteArray {
-        ByteArrayOutputStream().use { byteArrayOutputStream ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
-            return byteArrayOutputStream.toByteArray()
-        }
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
+        return byteArrayOutputStream.toByteArray()
     }
-
 
     companion object {
         private const val CAMERA_PERMISSION_REQUEST_CODE = 1001
     }
+
 }
