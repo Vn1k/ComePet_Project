@@ -21,4 +21,10 @@
     <string name="personal_purpose">No, I only use it for personal purposes</string>
     <string name="seller_purpose">Yes, I am willing to be a pet \nboarding facility.</string>
     <string name="title_boarding">boarding</string>
+    <string name="title_post">Post</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="new_post">New Post</string>
+    <string name="next">Next</string>
+    <string name="capture">capture</string>
 </resources>

@@ -43,4 +43,22 @@
         android:name="com.example.comepet.ui.boarding.BoardingFragment"
         android:label="@string/title_boarding"
         tools:layout="@layout/fragment_boarding"/>
+
+    <!--    ini tempat post     -->
+    <fragment
+        android:id="@+id/navigation_post"
+        android:name="com.example.comepet.ui.post.PostFragment"
+        android:label="@string/title_post"
+        tools:layout="@layout/fragment_post">
+
+        <action
+            android:id="@+id/navigation_post_to_navigation_camera"
+            app:destination="@id/navigation_camera"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_camera"
+        android:name="com.example.comepet.ui.post.camera.CameraFragment"
+        android:label="Camera"
+        tools:layout="@layout/fragment_camera"/>
 </navigation>

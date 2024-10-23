@@ -11,4 +11,8 @@
         android:icon="@drawable/search"
         android:title="@string/title_search" />
 
+    <item
+        android:id="@+id/navigation_post"
+        android:icon="@drawable/addpost_green"
+        android:title="@string/title_post" />
 </menu>
