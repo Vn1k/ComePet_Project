@@ -7,8 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.comepet.R
+import com.example.comepet.ui.auth.BaseAuthFragment
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : BaseAuthFragment() {
 
     companion object {
         fun newInstance() = ProfileFragment()

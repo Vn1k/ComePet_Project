@@ -8,8 +8,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.comepet.databinding.FragmentHomeBinding
+import com.example.comepet.ui.auth.BaseAuthFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseAuthFragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
