@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
+import androidx.core.os.bundleOf
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -58,6 +60,9 @@ class CameraFragment : Fragment() {
 
         requestCameraPermission()
 
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
     }
 
     // Camera permission
@@ -82,12 +87,16 @@ class CameraFragment : Fragment() {
             val imageBitmap = data?.extras?.get("data") as? Bitmap
             imageBitmap?.let {
                 capturedImageBitmap = it
-                binding.previewView.setImageBitmap(it)
-                // Langsung upload setelah gambar ditampilkan
-                uploadImageToFirestore()
+
+                // Kirim bitmap ke UploadFragment menggunakan NavController
+                val bundle = bundleOf("capturedImage" to it) // Simpan bitmap ke Bundle
+
+                // Ganti fragment ke UploadFragment menggunakan NavController
+                findNavController().navigate(R.id.navigation_camera_to_navigation_upload, bundle)
             }
         }
     }
+
 
 
     private fun openCamera() {
