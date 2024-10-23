@@ -34,8 +34,8 @@
             android:id="@+id/navigation_login_to_navigation_register"
             app:destination="@id/navigation_register"/>
         <action
-            android:id="@+id/navigation_login_to_navigation_home"
-            app:destination="@id/navigation_home"/>
+            android:id="@+id/navigation_login_to_navigation_welcome"
+            app:destination="@id/navigation_welcome"/>
     </fragment>
 
     <fragment
@@ -43,6 +43,22 @@
         android:name="com.example.comepet.ui.boarding.BoardingFragment"
         android:label="@string/title_boarding"
         tools:layout="@layout/fragment_boarding"/>
+
+    <fragment
+        android:id="@+id/navigation_welcome"
+        android:name="com.example.comepet.ui.boarding.WelcomeFragment"
+        android:label="@string/title_welcome"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/navigation_welcome_to_navigation_home"
+            app:destination="@id/navigation_home"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.comepet.ui.profile.ProfileFragment"
+        android:label="@string/title_profile"
+        tools:layout="@layout/fragment_profile"/>
 
     <!--    ini tempat post     -->
     <fragment

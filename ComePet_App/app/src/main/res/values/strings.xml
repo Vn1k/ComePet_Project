@@ -27,4 +27,7 @@
     <string name="new_post">New Post</string>
     <string name="next">Next</string>
     <string name="capture">capture</string>
+    <string name="title_welcome">Welcome user</string>
+    <string name="logout_text">Log out</string>
+    <string name="title_profile">Profile</string>
 </resources>

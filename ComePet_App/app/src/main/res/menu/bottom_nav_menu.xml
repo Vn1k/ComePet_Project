@@ -15,4 +15,10 @@
         android:id="@+id/navigation_post"
         android:icon="@drawable/addpost_green"
         android:title="@string/title_post" />
+
+    <item
+        android:id="@+id/navigation_profile"
+        android:icon="@drawable/user"
+        android:title="@string/title_profile" />
+
 </menu>

@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_login -> hideBottomNavigation()
                 R.id.navigation_register -> hideBottomNavigation()
                 R.id.navigation_boarding -> hideBottomNavigation()
+                R.id.navigation_welcome -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }

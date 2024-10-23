@@ -73,7 +73,7 @@ class LoginFragment : Fragment() {
                                 val user = document.toObject(User::class.java)
                                 if (user != null) {
                                     GlobalVar.currentUser = user
-                                    findNavController().navigate(R.id.navigation_login_to_navigation_home)
+                                    findNavController().navigate(R.id.navigation_login_to_navigation_welcome)
                                 }
                             }
                         }.addOnFailureListener { exception ->
