@@ -30,4 +30,9 @@
     <string name="title_welcome">Welcome user</string>
     <string name="logout_text">Log out</string>
     <string name="title_profile">Profile</string>
+    <string name="write_a_caption">Write a caption...</string>
+    <string name="tag_pet">Tag Pet</string>
+    <string name="post_feeds">Post Feeds</string>
+    <string name="post_shelter">Post Shelter</string>
+    <string name="add_location">Add Location</string>
 </resources>

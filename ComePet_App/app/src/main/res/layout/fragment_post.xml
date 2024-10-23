@@ -38,22 +38,24 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:layout_width="315dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:text="@string/new_post"
                     android:textSize="15sp"
                     android:layout_gravity="center"
                     android:gravity="center"
+                    android:layout_marginStart="130dp"
                     android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_semibold" />
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat_semibold"
                     android:text="@string/next"
                     android:textAlignment="textEnd"
+                    android:layout_marginStart="110dp"
                     android:textColor="@color/soft_blue"
                     android:textSize="15sp" />
             </LinearLayout>
