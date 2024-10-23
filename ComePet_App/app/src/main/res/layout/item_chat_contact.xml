@@ -58,7 +58,7 @@
             android:layout_gravity="center"
             android:paddingStart="10dp">
             <TextView
-                android:id="@+id/postUsernameTop"
+                android:id="@+id/postUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username"
@@ -67,7 +67,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/postLocation"
+                android:id="@+id/chatMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chat Message"
