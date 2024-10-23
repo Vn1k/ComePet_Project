@@ -70,11 +70,33 @@
         <action
             android:id="@+id/navigation_post_to_navigation_camera"
             app:destination="@id/navigation_camera"/>
+
+        <action
+            android:id="@+id/navigation_post_to_navigation_home"
+            app:destination="@id/navigation_home"/>
     </fragment>
 
     <fragment
         android:id="@+id/navigation_camera"
         android:name="com.example.comepet.ui.post.camera.CameraFragment"
         android:label="Camera"
-        tools:layout="@layout/fragment_camera"/>
+        tools:layout="@layout/fragment_camera">
+
+        <action
+            android:id="@+id/navigation_camera_to_navigation_upload"
+            app:destination="@id/navigation_upload"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_upload"
+        android:name="com.example.comepet.ui.post.upload.UploadFragment"
+        android:label="Upload"
+        tools:layout="@layout/fragment_upload">
+
+        <action
+            android:id="@+id/navigation_upload_to_navigation_post"
+            app:destination="@id/navigation_post"/>
+    </fragment>
+
 </navigation>
