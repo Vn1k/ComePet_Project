@@ -44,4 +44,7 @@
     <string name="address2">LinggarJati, Kab. Kuningan, Jawa Barat</string>
     <string name="lousi">Lousi</string>
     <string name="persia">Persia</string>
+    <string name="gallery">Gallery</string>
+    <string name="capture_image">Capture Image</string>
+    <string name="choose_from_gallery">Choose From Gallery</string>
 </resources>

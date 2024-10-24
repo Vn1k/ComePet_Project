@@ -66,7 +66,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName"
+                android:id="@+id/locationName4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/university"
@@ -75,7 +75,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address"
+                android:id="@+id/address4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address"
@@ -91,7 +91,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName1"
+                android:id="@+id/locationNamee5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mountain"
@@ -100,7 +100,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address1"
+                android:id="@+id/address5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address1"
@@ -116,7 +116,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName2"
+                android:id="@+id/locationName6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mountain1"
@@ -125,7 +125,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address2"
+                android:id="@+id/address6"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address2"
@@ -141,7 +141,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName"
+                android:id="@+id/locationName7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/university"
@@ -150,7 +150,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address"
+                android:id="@+id/address7"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address"
@@ -166,7 +166,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName1"
+                android:id="@+id/locationName8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mountain"
@@ -175,7 +175,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address1"
+                android:id="@+id/address8"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address1"
@@ -191,7 +191,7 @@
             android:padding="17dp">
 
             <TextView
-                android:id="@+id/locationName2"
+                android:id="@+id/locationName9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/mountain1"
@@ -200,7 +200,7 @@
                 android:textSize="15sp"/>
 
             <TextView
-                android:id="@+id/address2"
+                android:id="@+id/address9"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/address2"

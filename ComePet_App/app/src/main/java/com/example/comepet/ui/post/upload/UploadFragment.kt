@@ -2,6 +2,7 @@ package com.example.comepet.ui.post.upload
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,6 +53,17 @@ class UploadFragment : Fragment() {
         // Jika ada gambar yang dikirim, tampilkan di ImageView
         capturedImage?.let {
             captureResult.setImageBitmap(it)
+        }
+
+        captureResult = view.findViewById(R.id.captureResult) // Initialize your ImageView
+
+        // Retrieve the image Uri passed from PostFragment
+        val imageUriString = arguments?.getString("capturedImageUri")
+
+        imageUriString?.let {
+            val imageUri = Uri.parse(it)
+            // Load the image using Glide or any other image loading library
+            Glide.with(this).load(imageUri).into(captureResult)
         }
 
         backButtonToPost = view.findViewById(R.id.backButtonToPost)

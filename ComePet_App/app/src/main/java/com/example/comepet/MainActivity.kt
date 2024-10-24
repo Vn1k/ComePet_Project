@@ -10,6 +10,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.comepet.databinding.ActivityMainBinding
+import com.example.comepet.ui.post.PostFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +39,22 @@ class MainActivity : AppCompatActivity() {
                 else -> showBottomNavigation()
             }
         }
+
+        // Tambahkan listener untuk item navbar
+//        navView.setOnNavigationItemSelectedListener { item ->
+//            when (item.itemId) {
+//                R.id.navigation_post -> {
+//                    // Tampilkan dialog untuk Post
+//                    val postDialog = PostFragment()
+//                    postDialog.show(supportFragmentManager, "PostDialog")
+//                    true
+//                }
+//                else -> {
+//                    navController.navigate(item.itemId)
+//                    true
+//                }
+//            }
+//        }
     }
 
     private fun hideBottomNavigation() {
@@ -47,4 +64,6 @@ class MainActivity : AppCompatActivity() {
     private fun showBottomNavigation() {
         navView.visibility = View.VISIBLE
     }
+
+
 }
