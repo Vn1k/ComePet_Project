@@ -81,22 +81,25 @@ class CameraFragment : Fragment() {
     }
 
     // open camera
-    private val takePictureLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val imageBitmap = data?.extras?.get("data") as? Bitmap
-            imageBitmap?.let {
-                capturedImageBitmap = it
+    private val takePictureLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                val imageBitmap = data?.extras?.get("data") as? Bitmap
+                imageBitmap?.let {
+                    capturedImageBitmap = it
 
-                // Kirim bitmap ke UploadFragment menggunakan NavController
-                val bundle = bundleOf("capturedImage" to it) // Simpan bitmap ke Bundle
+                    // Kirim bitmap ke UploadFragment menggunakan NavController
+                    val bundle = bundleOf("capturedImage" to it) // Simpan bitmap ke Bundle
 
-                // Ganti fragment ke UploadFragment menggunakan NavController
-                findNavController().navigate(R.id.navigation_camera_to_navigation_upload, bundle)
+                    // Ganti fragment ke UploadFragment menggunakan NavController
+                    findNavController().navigate(
+                        R.id.navigation_camera_to_navigation_upload,
+                        bundle
+                    )
+                }
             }
         }
-    }
-
 
 
     private fun openCamera() {
