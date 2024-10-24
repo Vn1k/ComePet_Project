@@ -4,41 +4,36 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.comepet.databinding.FragmentHomeBinding
-import com.example.comepet.ui.auth.BaseAuthFragment
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.comepet.R
 
-class HomeFragment : BaseAuthFragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+class HomeFragment : Fragment() {
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val homeViewModel =
-            ViewModelProvider(this).get(HomeViewModel::class.java)
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        recyclerView = view.findViewById(R.id.recyclerViewPosts)
+        recyclerView.layoutManager = LinearLayoutManager(context)
 
-//        val textView: TextView = binding.textHome
-//        homeViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-        return root
-    }
+        postAdapter = PostAdapter(mutableListOf())
+        recyclerView.adapter = postAdapter
 
+        homeViewModel.posts.observe(viewLifecycleOwner) { posts ->
+            postAdapter.updatePosts(posts)
+        }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+        return view
     }
 }
