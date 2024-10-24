@@ -40,6 +40,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+//        navigationPostButton.setOnClickListener {
+//            val postDialog = PostDialogFragment()
+//            postDialog.show(supportFragmentManager, "PostDialog")
+//        }
+
+
         // Tambahkan listener untuk item navbar
 //        navView.setOnNavigationItemSelectedListener { item ->
 //            when (item.itemId) {
