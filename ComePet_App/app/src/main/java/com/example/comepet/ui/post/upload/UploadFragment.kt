@@ -7,8 +7,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +26,10 @@ class UploadFragment : Fragment() {
 
     private lateinit var captureResult: ImageView
     private lateinit var backButtonToPost : ImageButton
+    private lateinit var tagPet : LinearLayout
+    private  lateinit var addLocation : LinearLayout
+    private lateinit var postFeeds: Button
+    private lateinit var postShelter: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,9 +54,29 @@ class UploadFragment : Fragment() {
         }
 
         backButtonToPost = view.findViewById(R.id.backButtonToPost)
+        tagPet = view.findViewById(R.id.tagPet)
+        addLocation = view.findViewById(R.id.addLocation)
+        postFeeds = view.findViewById(R.id.postFeeds)
+        postShelter = view.findViewById(R.id.postShelter)
 
         backButtonToPost.setOnClickListener {
             findNavController().navigate(R.id.navigation_upload_to_navigation_post)
+        }
+
+        tagPet.setOnClickListener {
+            findNavController().navigate(R.id.navigation_upload_to_navigation_tagpet)
+        }
+
+        addLocation.setOnClickListener {
+            findNavController().navigate(R.id.navigation_upload_to_navigation_location)
+        }
+
+        postFeeds.setOnClickListener {
+            findNavController().navigate(R.id.navigation_upload_to_navigation_postFeeds)
+        }
+
+        postShelter.setOnClickListener {
+            findNavController().navigate(R.id.navigation_upload_to_navigation_postShelter)
         }
 
     }

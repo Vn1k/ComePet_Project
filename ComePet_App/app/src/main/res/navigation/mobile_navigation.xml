@@ -74,6 +74,10 @@
         <action
             android:id="@+id/navigation_post_to_navigation_home"
             app:destination="@id/navigation_home"/>
+
+        <action
+            android:id="@+id/navigation_post_to_navigation_upload"
+            app:destination="@+id/navigation_upload"/>
     </fragment>
 
     <fragment
@@ -97,6 +101,47 @@
         <action
             android:id="@+id/navigation_upload_to_navigation_post"
             app:destination="@id/navigation_post"/>
+
+        <action
+            android:id="@+id/navigation_upload_to_navigation_tagpet"
+            app:destination="@id/navigation_tagpet"/>
+
+        <action
+            android:id="@+id/navigation_upload_to_navigation_location"
+            app:destination="@id/navigation_addlocation"/>
+
+        <action
+            android:id="@+id/navigation_upload_to_navigation_postFeeds"
+            app:destination="@+id/navigation_home"/>
+
+        <action
+            android:id="@+id/navigation_upload_to_navigation_postShelter"
+            app:destination="@+id/navigation_profile"/>
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_tagpet"
+        android:name="com.example.comepet.ui.post.tagpet.TagpetFragment"
+        android:label="Tagpet"
+        tools:layout="@layout/fragment_tagpet">
+
+        <action
+            android:id="@+id/navigation_tagpet_to_navigation_upload"
+            app:destination="@id/navigation_upload"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_addlocation"
+        android:name="com.example.comepet.ui.post.addlocation.AddlocationFragment"
+        android:label="Add Location"
+        tools:layout="@layout/fragment_addlocation">
+
+        <action
+            android:id="@+id/navigation_addlocation_to_navigation_upload"
+            app:destination="@id/navigation_upload"/>
+    </fragment>
+
+
+
 
 </navigation>

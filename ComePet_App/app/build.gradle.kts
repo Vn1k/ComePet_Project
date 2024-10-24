@@ -60,4 +60,6 @@ dependencies {
     implementation(libs.google.firebase.firestore)
     implementation(platform("com.google.firebase:firebase-bom:33.5.0"))
     implementation ("com.google.android.gms:play-services-auth:20.3.0")
+    implementation ("com.google.firebase:firebase-firestore:25.1.1")
+    implementation ("com.google.firebase:firebase-auth:21.0.1")
 }
