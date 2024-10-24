@@ -75,6 +75,7 @@
             android:orientation="vertical">
 
             <EditText
+                android:id="@+id/caption"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:background="@drawable/background_white"

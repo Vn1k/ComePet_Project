@@ -65,6 +65,8 @@ dependencies {
     implementation (libs.com.google.firebase.firebase.firestore)
     implementation(libs.com.google.firebase.firebase.analytics2)
     implementation (libs.com.google.firebase.firebase.auth)
+    implementation("com.google.firebase:firebase-storage-ktx:20.2.0")
+
 
     // glide
     implementation(libs.glide)
