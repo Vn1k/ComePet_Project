@@ -109,13 +109,47 @@
         <action
             android:id="@+id/navigation_profile_to_navigation_setting"
             app:destination="@id/navigation_setting"/>
+        <action
+            android:id="@+id/navigation_profile_to_navigation_edit_profile"
+            app:destination="@id/navigation_edit_profile"/>
+        <action
+            android:id="@+id/navigation_profile_to_navigation_editpet"
+            app:destination="@id/navigation_editpet"/>
+<!--        <action-->
+<!--            android:id="@+id/navigation_profile_to_navigation_add_pet"-->
+<!--            app:destination="@id/navigation_add_pet"/>-->
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_edit_profile"
+        android:name="com.example.comepet.ui.profile.subfragments.ProfileEditFragment"
+        android:label="Edit Profile"
+        tools:layout="@layout/fragment_profile_edit">
+
+        <action
+            android:id="@+id/navigation_edit_profile_to_navigation_profile"
+            app:destination="@id/navigation_profile"/>
+
+    </fragment>
+
+
+
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_add_pet"-->
+<!--        android:name="com.example.comepet.ui.profile.subfragments.AddPetFragment"-->
+<!--        android:label="Add Pet"-->
+<!--        tools:layout="@layout/fragment_add_pet"/>-->
 
     <fragment
         android:id="@+id/navigation_editpet"
         android:name="com.example.comepet.ui.profile.subfragments.EditPetFragment"
         android:label="Edit Pet"
-        tools:layout="@layout/fragment_edit_pet"/>
+        tools:layout="@layout/fragment_edit_pet">
+
+        <action
+            android:id="@+id/navigation_editpet_to_navigation_profile"
+            app:destination="@id/navigation_profile"/>
+    </fragment>
 
     <!--    ini tempat post     -->
     <fragment

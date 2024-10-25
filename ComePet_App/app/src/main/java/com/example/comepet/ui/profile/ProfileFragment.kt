@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -21,6 +22,8 @@ class ProfileFragment : BaseAuthFragment() {
     private val binding get() = _binding!!
     private val viewModel: ProfileViewModel by viewModels()
     private lateinit var settingButton: ImageButton
+    private lateinit var editProfileButton: Button
+    private lateinit var addPetButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +46,16 @@ class ProfileFragment : BaseAuthFragment() {
         settingButton = view.findViewById(R.id.settingButton)
         settingButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_profile_to_navigation_setting)
+        }
+
+        editProfileButton = view.findViewById(R.id.buttonEditProfile)
+        editProfileButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_profile_to_navigation_edit_profile)
+        }
+
+        addPetButton = view.findViewById(R.id.buttonAddPet)
+        addPetButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_profile_to_navigation_editpet)
         }
     }
 

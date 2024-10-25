@@ -11,10 +11,10 @@
         android:id="@+id/Profile_Header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/light_beige"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/light_beige">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
             android:id="@+id/imageView"
@@ -135,22 +135,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Status" />
 
+
         <Button
-            android:id="@+id/button"
+            android:id="@+id/buttonEditProfile"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/rounded_button"
             android:fontFamily="@font/montserrat_semibold"
             android:paddingHorizontal="20dp"
-            android:text="Edit Profile"
+            android:text="@string/edit_profile"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/buttonAddPet"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Bio" />
+
+        <Button
+            android:id="@+id/buttonAddPet"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingHorizontal="20dp"
+            android:text="@string/add_pet"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Profile_Bio" />
-
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonEditProfile"
+            app:layout_constraintTop_toTopOf="@+id/buttonEditProfile" />
 
         <ImageButton
             android:id="@+id/profile_paw"
@@ -164,7 +181,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/profile_shelter"
             app:layout_constraintStart_toEndOf="@+id/profile_grid"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
 
         <ImageButton
             android:id="@+id/profile_shelter"
@@ -178,7 +195,7 @@
             android:src="@drawable/profile_shelter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
 
         <ImageButton
             android:id="@+id/profile_grid"
@@ -192,7 +209,7 @@
             android:src="@drawable/profile_grid"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
