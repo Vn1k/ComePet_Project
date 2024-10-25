@@ -21,7 +21,7 @@
         android:id="@+id/cameraButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="null"
+        android:background="@null"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_camera_logo"
         app:layout_constraintBottom_toBottomOf="@+id/Profile_Picture"
