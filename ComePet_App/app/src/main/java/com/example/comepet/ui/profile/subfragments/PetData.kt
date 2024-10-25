@@ -1,4 +1,4 @@
-package com.example.comepet.ui.profile
+package com.example.comepet.ui.profile.subfragments
 
 data class PetData(
     val id: Int,

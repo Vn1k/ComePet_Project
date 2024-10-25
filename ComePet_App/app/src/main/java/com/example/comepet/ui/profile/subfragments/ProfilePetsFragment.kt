@@ -7,10 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.comepet.R
 import com.example.comepet.databinding.FragmentProfilePetsBinding
-import com.example.comepet.ui.profile.PetCarouselAdapter
-import com.example.comepet.ui.profile.PetData
 
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
