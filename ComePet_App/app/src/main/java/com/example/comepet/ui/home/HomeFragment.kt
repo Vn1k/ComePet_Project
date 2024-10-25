@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 
-
 class HomeFragment : Fragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
