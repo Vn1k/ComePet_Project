@@ -84,6 +84,7 @@
             android:layout_marginTop="8dp"
             android:src="@drawable/calista_circle"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.508"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Name" />
 
@@ -129,7 +130,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Open untuk penitipan hewan kecayanganmuu <3"
+            android:text="Open untuk penitipan hewan kecayanganmuu ♥"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Status" />
@@ -157,7 +158,7 @@
             android:layout_height="30dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:background="null"
+            android:background="@color/light_beige"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_paw"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -172,7 +173,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="8dp"
-            android:background="null"
+            android:background="@color/light_beige"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_shelter"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -186,33 +187,22 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:background="null"
+            android:background="@color/light_beige"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_grid"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/button" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <Button
-        android:id="@+id/logoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-<ScrollView
-    android:layout_width="409dp"
-    android:layout_height="281dp"
-    tools:layout_editor_absoluteX="1dp"
-    tools:layout_editor_absoluteY="401dp">
-
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/profile_content_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" />
-</ScrollView>
+        app:layout_constraintTop_toBottomOf="@id/Profile_Header"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
