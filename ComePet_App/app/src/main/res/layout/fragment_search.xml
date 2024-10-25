@@ -62,6 +62,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="Search..."
+                    android:fontFamily="@font/merriweather_light"
                     android:textSize="14dp"
                     android:paddingStart="10dp"
                     android:paddingEnd="140dp"
