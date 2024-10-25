@@ -4,36 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
+import com.example.comepet.ui.auth.BaseAuthFragment
 
+class HomeFragment : BaseAuthFragment() {
 
-class HomeFragment : Fragment() {
-
-    private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var postAdapter: PostAdapter
+    private lateinit var viewModel: HomeViewModel
+    private lateinit var imageViewChat : ImageView
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        recyclerView = view.findViewById(R.id.recyclerViewPosts)
-        recyclerView.layoutManager = LinearLayoutManager(context)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        postAdapter = PostAdapter(mutableListOf())
-        recyclerView.adapter = postAdapter
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        imageViewChat = view.findViewById(R.id.imageViewChat)
 
-        homeViewModel.posts.observe(viewLifecycleOwner) { posts ->
-            postAdapter.updatePosts(posts)
+        imageViewChat.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_chatFragment)
         }
 
-        return view
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewPosts)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
+        val adapter = PostAdapter(viewModel.getPosts())
+        recyclerView.adapter = adapter
     }
 }

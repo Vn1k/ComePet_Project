@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.example.comepet.R
 import com.example.comepet.databinding.FragmentProfileBinding
@@ -18,6 +20,7 @@ class ProfileFragment : BaseAuthFragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ProfileViewModel by viewModels()
+    private lateinit var settingButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,6 +39,11 @@ class ProfileFragment : BaseAuthFragment() {
         }
 
         setupClickListeners()
+
+        settingButton = view.findViewById(R.id.settingButton)
+        settingButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_profile_to_navigation_setting)
+        }
     }
 
     private fun setupClickListeners() {

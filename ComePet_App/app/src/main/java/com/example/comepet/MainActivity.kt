@@ -1,9 +1,13 @@
 package com.example.comepet
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnticipateInterpolator
+import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,9 +20,15 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
-
+    private val MainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val splashScreen = installSplashScreen()
+        splashScreen.apply {
+            setKeepOnScreenCondition{
+                !MainViewModel.isReady.value
+            }
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -34,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_register -> hideBottomNavigation()
                 R.id.navigation_boarding -> hideBottomNavigation()
                 R.id.navigation_welcome -> hideBottomNavigation()
-                R.id.navigation_post -> hideBottomNavigation()
+//                R.id.navigation_post -> hideBottomNavigation()
                 R.id.navigation_upload -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }

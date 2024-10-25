@@ -39,6 +39,6 @@ class WelcomeFragment : Fragment() {
 
         Handler(Looper.getMainLooper()).postDelayed({
             findNavController().navigate(R.id.navigation_welcome_to_navigation_home)
-        }, 1500)
+        }, 2000)
     }
 }

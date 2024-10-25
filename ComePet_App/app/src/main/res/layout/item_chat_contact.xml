@@ -61,7 +61,8 @@
                 android:id="@+id/postUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Username"
+                android:text="Calista Belva"
+                android:fontFamily="@font/montserrat"
                 android:textColor="@color/black"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -70,7 +71,8 @@
                 android:id="@+id/chatMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chat Message"
+                android:text="Apakah kamu bersedia?"
+                android:fontFamily="@font/montserrat"
                 android:textColor="@color/black"
                 android:textSize="10sp" />
         </LinearLayout>

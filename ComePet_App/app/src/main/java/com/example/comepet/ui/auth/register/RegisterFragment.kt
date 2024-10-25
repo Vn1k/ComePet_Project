@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
+import com.example.comepet.ui.auth.GlobalVar
 import com.example.comepet.ui.auth.register.model.User
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
@@ -68,45 +69,87 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(context, "Please enter your name", Toast.LENGTH_SHORT).show()
             }else if (username.isEmpty()) {
                 Toast.makeText(context, "Please enter your username", Toast.LENGTH_SHORT).show()
-            }else if (email.isEmpty()) {
+            } else if (email.isEmpty()) {
                 Toast.makeText(context, "Please enter your email", Toast.LENGTH_SHORT).show()
-            } else if (password == confirmPassword) {
-                    mAuth.createUserWithEmailAndPassword(email, password)
-                        .addOnCompleteListener(requireActivity()) { task ->
-                            if (task.isSuccessful) {
-                                Log.d("Register", "Authentication successful")
-                                val userId = mAuth.currentUser?.uid
-                                if (userId != null) {
-                                    val user = User(
-                                        name = name_input_Field.text.toString(),
-                                        username = username_input_Field.text.toString(),
-                                        email = email_input_Field.text.toString()
-                                    )
-
-                                    db.collection("users")
-                                        .document(userId)
-                                        .set(user)
-                                        .addOnSuccessListener {
-                                            Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT).show()
-                                            findNavController().navigate(R.id.navigation_register_to_navigation_boarding)
-                                        }
-                                        .addOnFailureListener { _ ->
-                                            Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
-                                        }
+            } else if (password != confirmPassword) {
+                Toast.makeText(context, "Password does not match", Toast.LENGTH_SHORT).show()
+            } else {
+                isUserRegistered(email, username) { isRegistered, message ->
+                    if (isRegistered) {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                    } else {
+                        mAuth.createUserWithEmailAndPassword(email, password)
+                            .addOnCompleteListener(requireActivity()) { task ->
+                                if (task.isSuccessful) {
+                                    val userId = mAuth.currentUser?.uid
+                                    if (userId != null) {
+                                        val user = User(
+                                            name = name_input_Field.text.toString(),
+                                            username = username_input_Field.text.toString(),
+                                            email = email_input_Field.text.toString()
+                                        )
+                                        db.collection("users").document(userId)
+                                            .set(user)
+                                            .addOnSuccessListener {
+                                                GlobalVar.currentUser = user
+                                                Toast.makeText(requireContext(), "Account Created", Toast.LENGTH_SHORT).show()
+                                                findNavController().navigate(R.id.navigation_register_to_navigation_boarding)
+                                            }
+                                            .addOnFailureListener {
+                                                Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
+                                            }
+                                    }
                                 } else {
-                                    Toast.makeText(requireContext(), "User ID is null", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
                                 }
-                            } else {
-                                Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
                             }
-                        }
-                } else {
-                    Toast.makeText(requireContext(), "Password does not match", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
         }
 
         login_button.setOnClickListener {
             findNavController().navigate(R.id.navigation_register_to_navigation_login)
         }
+    }
+
+    private fun isUserRegistered(email: String, username: String, onResult: (Boolean, String) -> Unit) {
+        mAuth.fetchSignInMethodsForEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val signInMethods = task.result?.signInMethods
+                    if (signInMethods != null && signInMethods.isNotEmpty()) {
+                        onResult(true, "Email already registered")
+                    } else {
+                        db.collection("users")
+                            .whereEqualTo("email", email)
+                            .get()
+                            .addOnSuccessListener { emailDocuments ->
+                                if (!emailDocuments.isEmpty) {
+                                    onResult(true, "Email already registered")
+                                } else {
+                                    db.collection("users")
+                                        .whereEqualTo("username", username)
+                                        .get()
+                                        .addOnSuccessListener { usernameDocuments ->
+                                            if (!usernameDocuments.isEmpty) {
+                                                onResult(true, "Username already taken")
+                                            } else {
+                                                onResult(false, "")
+                                            }
+                                        }
+                                        .addOnFailureListener {
+                                            onResult(false, "Failed to check username")
+                                        }
+                                }
+                            }
+                            .addOnFailureListener {
+                                onResult(false, "Failed to check email")
+                            }
+                    }
+                } else {
+                    onResult(false, "Failed to check email in Auth")
+                }
+            }
     }
 }

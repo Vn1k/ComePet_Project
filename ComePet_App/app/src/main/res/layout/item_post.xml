@@ -41,7 +41,8 @@
                     android:id="@+id/postUsernameTop"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
+                    android:text="Calista Belva"
+                    android:fontFamily="@font/montserrat"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -50,7 +51,8 @@
                     android:id="@+id/postLocation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Location"
+                    android:text="Tangerang, Indonesia"
+                    android:fontFamily="@font/montserrat"
                     android:textColor="@color/black"
                     android:textSize="10sp" />
             </LinearLayout>
@@ -60,7 +62,9 @@
             android:id="@+id/postImageView"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="Post Image"
+            android:src="@drawable/lousimini" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,7 +116,9 @@
                     android:id="@+id/postUsernameBottom"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Username"
+                    android:text="Calista Belva"
+                    android:paddingLeft="5dp"
+                    android:fontFamily="@font/montserrat"
                     android:textColor="@color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
@@ -121,7 +127,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:text="Caption"
+                    android:fontFamily="@font/montserrat"
+                    android:text="Lousi adalah kucing yang lucu"
                     android:textSize="14sp"
                     android:layout_marginBottom="4dp" />
             </LinearLayout>
@@ -130,7 +137,9 @@
                 android:id="@+id/postDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date"
+                android:paddingLeft="5dp"
+                android:text="2024-10-25"
+                android:fontFamily="@font/montserrat"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>

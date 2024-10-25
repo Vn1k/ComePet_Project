@@ -3,13 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_login">
+    app:startDestination="@+id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.comepet.ui.home.HomeFragment"
         android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_homeFragment_to_chatFragment"
+            app:destination="@id/navigation_chatsearch"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_chatsearch"
+        android:name="com.example.comepet.ui.chat.ChatSearchFragment"
+        android:label="Chat Search"
+        tools:layout="@layout/fragment_chat_search">
+
+        <action
+            android:id="@+id/action_chatSearchFragment_to_homeFragment"
+            app:destination="@id/navigation_home"/>
+
+        <action
+            android:id="@+id/action_chatSearchFragment_to_chatFragment"
+            app:destination="@id/navigation_chat"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_chat"
+        android:name="com.example.comepet.ui.chat.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat">
+
+        <action
+            android:id="@+id/action_chatFragment_to_homeFragment"
+            app:destination="@id/navigation_home"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_register"
@@ -42,7 +73,11 @@
         android:id="@+id/navigation_boarding"
         android:name="com.example.comepet.ui.boarding.BoardingFragment"
         android:label="@string/title_boarding"
-        tools:layout="@layout/fragment_boarding"/>
+        tools:layout="@layout/fragment_boarding">
+        <action
+            android:id="@+id/navigation_boarding_to_navigation_welcome"
+            app:destination="@id/navigation_welcome"/>
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_welcome"
@@ -55,10 +90,32 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.comepet.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/navigation_search_to_navigation_home"
+            app:destination="@id/navigation_home"/>
+    </fragment>
+
+<!--        ini tempat PROFILE      -->
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.comepet.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/navigation_profile_to_navigation_setting"
+            app:destination="@id/navigation_setting"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_editpet"
+        android:name="com.example.comepet.ui.profile.subfragments.EditPetFragment"
+        android:label="Edit Pet"
+        tools:layout="@layout/fragment_edit_pet"/>
 
     <!--    ini tempat post     -->
     <fragment
@@ -141,7 +198,10 @@
             app:destination="@id/navigation_upload"/>
     </fragment>
 
-
-
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.example.comepet.ui.setting.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting"/>
 
 </navigation>
