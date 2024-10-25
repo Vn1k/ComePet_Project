@@ -1,5 +1,12 @@
 # ComePet_Project
- 
+
+ ACJK
+ - Amanda Citra Dewanti: 00000066344
+ - Calista Belva: 00000067339
+ - Jose Andreas Lie: 00000067097
+ - Kevin Ken: 00000067060
+
+   
 ComePet adalah aplikasi Social Media yang ditujukan untuk mencari dan menyediakan jasa penitipan hewan peliharaan.
 
 terdapat fitur:
