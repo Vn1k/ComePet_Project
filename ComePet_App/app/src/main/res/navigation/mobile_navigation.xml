@@ -73,7 +73,11 @@
         android:id="@+id/navigation_profile"
         android:name="com.example.comepet.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
-        tools:layout="@layout/fragment_profile"/>
+        tools:layout="@layout/fragment_profile">
+        <action
+            android:id="@+id/navigation_profile_to_navigation_setting"
+            app:destination="@id/navigation_setting"/>
+    </fragment>
 
     <!--    ini tempat post     -->
     <fragment
@@ -156,7 +160,10 @@
             app:destination="@id/navigation_upload"/>
     </fragment>
 
-
-
+    <fragment
+        android:id="@+id/navigation_setting"
+        android:name="com.example.comepet.ui.setting.SettingFragment"
+        android:label="@string/title_setting"
+        tools:layout="@layout/fragment_setting"/>
 
 </navigation>
