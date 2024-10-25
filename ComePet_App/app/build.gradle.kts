@@ -55,6 +55,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.androidx.core.splashscreen)
 
     //google
     implementation(libs.google.firebase.auth)
@@ -72,5 +73,6 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
     implementation(libs.play.services.maps)
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
 
 }

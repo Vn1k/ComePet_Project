@@ -55,6 +55,17 @@
     </fragment>
 
     <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.example.comepet.ui.search.SearchFragment"
+        android:label="@string/title_search"
+        tools:layout="@layout/fragment_search">
+
+        <action
+            android:id="@+id/navigation_search_to_navigation_home"
+            app:destination="@id/navigation_home"/>
+    </fragment>
+
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.comepet.ui.profile.ProfileFragment"
         android:label="@string/title_profile"
