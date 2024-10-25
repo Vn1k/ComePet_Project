@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="630dp"
+        android:background="@drawable/rounded_corner_light_beige" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp"
+        android:orientation="vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:id="@+id/imageViewProfile"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:padding="12dp"
+                android:contentDescription="Profile Image"
+                android:src="@drawable/calista_circle"/>
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|end"
+                    android:translationY="-2dp"
+                    android:translationX="-8dp">
+                    <ImageView
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:background="@drawable/circle_white" />
+                    <ImageButton
+                        android:id="@+id/buttonCameraPet"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/camera"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="center" />
+                </FrameLayout>
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/divider1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="12dp"
+            android:background="@color/grey" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Pet Name" />
+                <EditText
+                    android:id="@+id/textViewPetName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:hint="Lousi" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Gender" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:id="@+id/imageButtonPetMale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/male"
+                        android:background="@drawable/circle_white"/>
+                    <ImageButton
+                        android:id="@+id/imageButtonPetFemale"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/female"
+                        android:background="@drawable/circle_white"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Birth" />
+                <EditText
+                    android:id="@+id/textViewPetDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:hint="Tanggal lahir" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Type" />
+                <EditText
+                    android:id="@+id/textViewPetType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:hint="Jenis Hewan" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Ras" />
+                <Spinner
+                    android:id="@+id/spinnerPetRas"
+                    android:layout_width="250dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_white"
+                    android:fontFamily="@font/montserrat" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat"
+                    android:textColor="@color/black"
+                    android:textStyle="bold"
+                    android:text="Descriptions"
+                    android:layout_marginBottom="12dp"/>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="10dp"
+                    android:layout_gravity="center">
+
+                    <EditText
+                        android:id="@+id/textViewPetDescription"
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:padding="10dp"
+                        android:gravity="top"
+                        android:background="@color/white"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat"
+                        android:hint="Lousi adalah kucing yang lucu" />
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="20dp"
+            android:background="@color/grey" />
+
+        <Button
+            android:id="@+id/buttonSaveProfilePet"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:background="@drawable/rounded_blue"
+            android:textColor="@color/white"
+            android:text="Save"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/montserrat"
+            app:layout_constraintTop_toBottomOf="@id/divider2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
