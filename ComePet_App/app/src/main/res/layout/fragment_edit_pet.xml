@@ -42,7 +42,7 @@
                     <ImageView
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:background="@drawable/circle_blue" />
+                        android:background="@drawable/circle_white" />
                     <ImageButton
                         android:id="@+id/buttonCameraPet"
                         android:layout_width="20dp"
@@ -80,6 +80,7 @@
                     android:textStyle="bold"
                     android:text="Pet Name" />
                 <EditText
+                    android:id="@+id/textViewPetName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
@@ -104,14 +105,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <ImageButton
-                        android:id="@+id/imageButtonMale"
+                        android:id="@+id/imageButtonPetMale"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:layout_marginRight="10dp"
                         android:src="@drawable/male"
                         android:background="@drawable/circle_white"/>
                     <ImageButton
-                        android:id="@+id/imageButtonFemale"
+                        android:id="@+id/imageButtonPetFemale"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
                         android:src="@drawable/female"
@@ -133,7 +134,7 @@
                     android:textStyle="bold"
                     android:text="Birth" />
                 <EditText
-                    android:id="@+id/textViewDate"
+                    android:id="@+id/textViewPetDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
@@ -154,6 +155,7 @@
                     android:textStyle="bold"
                     android:text="Type" />
                 <EditText
+                    android:id="@+id/textViewPetType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserrat"
@@ -175,7 +177,7 @@
                     android:textStyle="bold"
                     android:text="Ras" />
                 <Spinner
-                    android:id="@+id/spinnerRasHewan"
+                    android:id="@+id/spinnerPetRas"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:background="@drawable/rounded_white"
@@ -203,6 +205,7 @@
                     android:layout_gravity="center">
 
                     <EditText
+                        android:id="@+id/textViewPetDescription"
                         android:layout_width="match_parent"
                         android:layout_height="80dp"
                         android:padding="10dp"
