@@ -16,3 +16,9 @@ terdapat fitur:
 - search: untuk mencari user atau tempat penitipan hewan yang tersedia dan terdekat dari user
 - post: untuk melakukan share activity foto, dapat melalui capture image dengan camera atau dari gallery, disertai caption, lokasi, dan pet yang terdapat didalam foto tersebut. dapat di upload untuk feeds atau informasi temapt shelter.
 - profile: berisikan bio data user, kumpulan postingan user, jenis hewan peliharaan yamg dimiliki, dan lokasi tempat penitipan hewan apabila user bersedia untuk menampung hewan peliharaan, disertai setting user, edit user, dan edit pet.
+
+File Project Android Studio:
+https://drive.google.com/file/d/16n9LeJ1Cb08f4Pbpeclh1pNbyqXlR1mO/view?usp=sharing
+
+Video Penjelasan Aplikasi ComePet:
+https://drive.google.com/file/d/19K4m0xv7YiFzaNMZRJhtNYapTJVJTdM4/view?usp=sharing
