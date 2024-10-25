@@ -72,5 +72,6 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
     implementation(libs.play.services.maps)
+    implementation ("com.google.android.gms:play-services-maps:18.1.0")
 
 }
