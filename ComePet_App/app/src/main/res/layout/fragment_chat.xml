@@ -164,11 +164,12 @@
                 android:id="@+id/buttonSend"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:translationY="10dp"
-                android:translationX="10dp"
                 android:background="@android:color/transparent"
+                android:scaleType="fitCenter"
                 android:src="@drawable/message"
-                android:scaleType="fitCenter" />
+                android:translationX="10dp"
+                android:translationY="10dp"
+                tools:ignore="SpeakableTextPresentCheck" />
         </FrameLayout>
 
     </LinearLayout>

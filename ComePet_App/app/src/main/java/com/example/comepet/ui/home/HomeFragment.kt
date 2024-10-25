@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,7 +17,7 @@ import com.example.comepet.ui.auth.BaseAuthFragment
 class HomeFragment : BaseAuthFragment() {
 
     private lateinit var viewModel: HomeViewModel
-    private lateinit var imageViewChat : ImageView
+    private lateinit var ChatButton: ImageButton
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,10 +30,9 @@ class HomeFragment : BaseAuthFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
-        imageViewChat = view.findViewById(R.id.imageViewChat)
-
-        imageViewChat.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_chatFragment)
+        ChatButton = view.findViewById(R.id.ChatButton)
+        ChatButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_home_to_navigation_chat_search)
         }
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewPosts)

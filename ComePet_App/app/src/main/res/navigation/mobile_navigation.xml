@@ -12,8 +12,8 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_homeFragment_to_chatFragment"
-            app:destination="@id/navigation_chatsearch"/>
+            android:id="@+id/navigation_home_to_navigation_chat_search"
+            app:destination="@id/navigation_search"/>
     </fragment>
 
     <fragment

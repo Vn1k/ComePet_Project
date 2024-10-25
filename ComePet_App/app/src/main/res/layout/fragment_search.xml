@@ -36,11 +36,12 @@
                 android:orientation="horizontal"
                 android:layout_gravity="center">
 
-                <ImageView
-                    android:id="@+id/backPage"
+                <ImageButton
+                    android:id="@+id/backPageButton"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
+                    android:background="@null"
                     android:src="@drawable/back_green_vector" />
             </LinearLayout>
 

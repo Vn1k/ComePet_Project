@@ -6,13 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 
 class SearchFragment : Fragment() {
 
-    private lateinit var backPage: ImageView
+    private lateinit var backPageButton: ImageButton
 
     companion object {
         fun newInstance() = SearchFragment()
@@ -36,10 +37,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        backPage = view.findViewById(R.id.backPage)
-//
-//        backPage.setOnClickListener {
-//            findNavController().navigate(R.id.action_search_to_navigation_home)
-//        }
+        backPageButton = view.findViewById(R.id.backPageButton)
+
+        backPageButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

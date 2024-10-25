@@ -48,8 +48,8 @@
                     android:src="@drawable/comepet_font" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageViewChat"
+            <ImageButton
+                android:id="@+id/ChatButton"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
