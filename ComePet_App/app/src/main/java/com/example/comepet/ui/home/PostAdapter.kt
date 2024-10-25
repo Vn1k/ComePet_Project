@@ -31,6 +31,7 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     private val postDate = itemView.findViewById<TextView>(R.id.postDate)
     private val postLikeCount = itemView.findViewById<TextView>(R.id.postLikeCount)
     private val commentCount = itemView.findViewById<TextView>(R.id.commentCount)
+    private val postLike: ImageView = itemView.findViewById(R.id.postLike)
 
     fun bind(post: Post) {
         postUsernameTop.text = post.username
@@ -42,5 +43,35 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         commentCount.text = post.commentCount.toString()
         imageViewProfile.setImageResource(post.profileImage)
         postImageView.setImageResource(post.imageUrl)
+
+        setLikeColor(post.isLiked)
+        updateLikeDrawable(post.isLiked)
+
+        postLike.setOnClickListener {
+            post.isLiked = !post.isLiked
+            setLikeColor(post.isLiked)
+            updateLikeDrawable(post.isLiked)
+
+            post.likeCount += if (post.isLiked) 1 else -1
+            postLikeCount.text = post.likeCount.toString()
+        }
+    }
+
+    private fun setLikeColor(isLiked: Boolean) {
+        val color = if (isLiked) {
+            itemView.context.getColor(android.R.color.holo_red_dark)
+        } else {
+            itemView.context.getColor(android.R.color.black)
+        }
+        postLike.setColorFilter(color, android.graphics.PorterDuff.Mode.SRC_IN)
+    }
+
+    private fun updateLikeDrawable(isLiked: Boolean) {
+        val drawableRes = if (isLiked) {
+            R.drawable.heart
+        } else {
+            R.drawable.like
+        }
+        postLike.setImageResource(drawableRes)
     }
 }

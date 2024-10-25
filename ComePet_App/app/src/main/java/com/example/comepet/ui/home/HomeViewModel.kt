@@ -21,7 +21,7 @@ data class Post(
     val imageUrl: Int = 0,
     val date: String = "",
     var isLiked: Boolean = false,
-    val likeCount: Int = 0,
+    var likeCount: Int = 0,
     val commentCount: Int = 0,
     val profileImage: Int = 0,
     val address: String = "",
@@ -42,6 +42,26 @@ class HomeViewModel : ViewModel() {
                 profileImage = R.drawable.calista_circle,
                 likeCount = 0,
                 commentCount = 0
+            ),
+            Post(
+                username = "Calista Belva",
+                location = "Tangerang, Indonesia",
+                caption = "Lousi adalah kucing yang lucu",
+                date = "2024-10-25",
+                imageUrl = R.drawable.lousimini,
+                profileImage = R.drawable.calista_circle,
+                likeCount = 10,
+                commentCount = 4
+            ),
+            Post(
+                username = "Calista Belva",
+                location = "Tangerang, Indonesia",
+                caption = "Lousi adalah kucing yang lucu",
+                date = "2024-10-25",
+                imageUrl = R.drawable.lousimini,
+                profileImage = R.drawable.calista_circle,
+                likeCount = 100,
+                commentCount = 2
             )
         )
     }
