@@ -194,11 +194,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_text"
-                    android:textColor="@color/white"
+                    android:textColor="@color/dark_blue_gray"
                     android:fontFamily="@font/montserrat_bold"
                     android:layout_gravity="center"
-                    android:background="@drawable/login_button_style"
-                    app:backgroundTint="@color/dark_blue_gray"/>
+                    android:background="@drawable/outline_button_style" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>
