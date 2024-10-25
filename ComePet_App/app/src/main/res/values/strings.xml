@@ -48,4 +48,10 @@
     <string name="capture_image">Capture Image</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
     <string name="schedule">Schedule</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="phone">Phone</string>
+    <string name="bio">Bio</string>
+    <string name="location">Location</string>
+    <string name="save">Save</string>
 </resources>
