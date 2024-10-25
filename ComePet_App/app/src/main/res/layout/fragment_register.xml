@@ -40,7 +40,7 @@
                     android:textAlignment="center"
                     android:textSize="32sp"
                     android:fontFamily="@font/merriweather_bold"
-                    android:textColor="@color/black"
+                    android:textColor="@color/dark_blue_gray"
                     android:layout_marginBottom="20dp"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +60,10 @@
                         android:paddingStart="50dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="40dp"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="10dp"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -80,7 +83,10 @@
                         android:paddingStart="50dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="40dp"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="10dp"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -100,7 +106,10 @@
                         android:paddingStart="50dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="40dp"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="10dp"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -121,7 +130,10 @@
                         android:paddingStart="50dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="40dp"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="10dp"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -142,7 +154,10 @@
                         android:paddingStart="50dp"
                         android:paddingTop="10dp"
                         android:paddingEnd="40dp"
-                        android:paddingBottom="10dp" />
+                        android:paddingBottom="10dp"
+                        android:inputType="textPassword"
+                        android:maxLines="1"
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <Button
                     android:id="@+id/registerButton"
@@ -194,11 +209,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/login_account_text"
-                    android:textColor="@color/white"
+                    android:textColor="@color/dark_blue_gray"
                     android:fontFamily="@font/montserrat_bold"
                     android:layout_gravity="center"
-                    android:background="@drawable/login_button_style"
-                    app:backgroundTint="@color/dark_blue_gray"/>
+                    android:background="@drawable/outline_button_style" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

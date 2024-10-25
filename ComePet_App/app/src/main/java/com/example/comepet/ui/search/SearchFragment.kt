@@ -36,10 +36,10 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        backPage = view.findViewById(R.id.backPage)
-
-        backPage.setOnClickListener {
-            findNavController().navigate(R.id.action_search_to_navigation_home)
-        }
+//        backPage = view.findViewById(R.id.backPage)
+//
+//        backPage.setOnClickListener {
+//            findNavController().navigate(R.id.action_search_to_navigation_home)
+//        }
     }
 }
