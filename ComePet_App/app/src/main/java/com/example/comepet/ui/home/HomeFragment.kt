@@ -9,8 +9,9 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
+import com.example.comepet.ui.auth.BaseAuthFragment
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseAuthFragment() {
 
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
