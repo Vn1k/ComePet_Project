@@ -5,34 +5,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 
 class HomeFragment : Fragment() {
 
-    private val homeViewModel: HomeViewModel by viewModels()
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var postAdapter: PostAdapter
+    private lateinit var viewModel: HomeViewModel
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_home, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
+    }
 
-        recyclerView = view.findViewById(R.id.recyclerViewPosts)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewPosts)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        postAdapter = PostAdapter(mutableListOf())
-        recyclerView.adapter = postAdapter
-
-        homeViewModel.posts.observe(viewLifecycleOwner) { posts ->
-            postAdapter.updatePosts(posts)
-        }
-
-        return view
+        val adapter = PostAdapter(viewModel.getPosts())
+        recyclerView.adapter = adapter
     }
 }
