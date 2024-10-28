@@ -67,8 +67,20 @@
         <action
             android:id="@+id/navigation_login_to_navigation_welcome"
             app:destination="@id/navigation_welcome"/>
+        <action
+            android:id="@+id/navigation_login_to_navigation_forgot"
+            app:destination="@id/navigation_forgot"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/navigation_forgot"
+        android:name="com.example.comepet.ui.auth.login.forgot_password.ForgotFragment"
+        android:label="@string/title_forgot"
+        tools:layout="@layout/fragment_forgot">
+        <action
+            android:id="@+id/navigation_forgot_to_navigation_login"
+            app:destination="@id/navigation_login"/>
+    </fragment>
     <fragment
         android:id="@+id/navigation_boarding"
         android:name="com.example.comepet.ui.boarding.BoardingFragment"

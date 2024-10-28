@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_beige"
+    android:paddingStart="16dp"
+    android:paddingTop="40dp"
+    android:paddingEnd="16dp"
+    android:paddingBottom="16dp"
     tools:context=".ui.setting.SettingFragment">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_bold"
+        android:text="@string/setting_title"
+        android:textAlignment="center"
+        android:textColor="@color/dark_blue_gray"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/logout_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/logout_text"/>
+        android:layout_marginTop="252dp"
+        android:text="@string/logout_text"
+        app:layout_constraintTop_toBottomOf="@id/textView2"/>
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
