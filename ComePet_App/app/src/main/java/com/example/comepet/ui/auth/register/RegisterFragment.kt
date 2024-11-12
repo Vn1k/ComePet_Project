@@ -118,7 +118,7 @@ class RegisterFragment : Fragment() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val signInMethods = task.result?.signInMethods
-                    if (signInMethods != null && signInMethods.isNotEmpty()) {
+                    if (!signInMethods.isNullOrEmpty()) {
                         onResult(true, "Email already registered")
                     } else {
                         db.collection("users")

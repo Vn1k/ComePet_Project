@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.example.comepet.ui.auth.BaseAuthFragment
@@ -16,6 +17,7 @@ import com.google.firebase.auth.auth
 class SettingFragment : BaseAuthFragment() {
 
     private lateinit var logoutButton: View
+    private lateinit var cancelButton: ImageButton
 
     companion object {
         fun newInstance() = SettingFragment()
@@ -38,6 +40,12 @@ class SettingFragment : BaseAuthFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        cancelButton = view.findViewById(R.id.cancelButton)
+        cancelButton.setOnClickListener{
+            findNavController().popBackStack()
+        }
+
         logoutButton = view.findViewById(R.id.logout_button)
             val user = Firebase.auth.currentUser
             if (user == null) {
