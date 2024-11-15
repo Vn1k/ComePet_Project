@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
@@ -25,6 +26,7 @@ class LoginFragment : Fragment() {
     private lateinit var loginButton: Button
     private lateinit var email_input_field: TextInputEditText
     private lateinit var password_input_field: TextInputEditText
+    private lateinit var forgotPassword: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +56,11 @@ class LoginFragment : Fragment() {
         }
         registerButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_login_to_navigation_register)
+        }
+
+        forgotPassword = view.findViewById(R.id.forgotPassword)
+        forgotPassword.setOnClickListener {
+            findNavController().navigate(R.id.navigation_login_to_navigation_forgot)
         }
     }
 

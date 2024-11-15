@@ -59,4 +59,12 @@
     <string name="title_setting">Setting\n</string>
     <string name="add_pet">Add Pet</string>
     <string name="edit_profile">Edit Profile</string>
+    <string name="setting_title">Settings</string>
+    <string name="forgot_password_text">forgot password?</string>
+    <string name="title_forgot">forgot password</string>
+    <string name="forgot_password_text2">Forgot Password?</string>
+    <string name="forgot_password_desc">Don\'t worry! Please enter the address associated with your account</string>
+    <string name="send_button_text">Send</string>
+    <string name="verified_email">verified email</string>
+    <string name="resend_verifEmail_button">Resend</string>
 </resources>

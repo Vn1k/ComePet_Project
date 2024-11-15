@@ -49,6 +49,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:startIconDrawable="@drawable/user"
+                    app:startIconTint="@color/dark_blue_gray"
                     app:startIconContentDescription="@string/icon_description">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -102,6 +103,17 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/login_button_style"
                     app:backgroundTint="@color/dark_blue_gray"/>
+
+                <TextView
+                    android:id="@+id/forgotPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/forgot_password_text"
+                    android:textColor="@color/dark_blue_gray"
+                    android:fontFamily="@font/montserrat_bold"
+                    android:textAlignment="textEnd"
+                    android:layout_marginTop="16dp"
+                    android:clickable="true"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"

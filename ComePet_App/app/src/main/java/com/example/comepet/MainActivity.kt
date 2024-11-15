@@ -44,34 +44,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_register -> hideBottomNavigation()
                 R.id.navigation_boarding -> hideBottomNavigation()
                 R.id.navigation_welcome -> hideBottomNavigation()
-//                R.id.navigation_post -> hideBottomNavigation()
                 R.id.navigation_upload -> hideBottomNavigation()
                 R.id.navigation_search -> hideBottomNavigation()
+                R.id.navigation_forgot -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }
-
-//        navigationPostButton.setOnClickListener {
-//            val postDialog = PostDialogFragment()
-//            postDialog.show(supportFragmentManager, "PostDialog")
-//        }
-
-
-        // Tambahkan listener untuk item navbar
-//        navView.setOnNavigationItemSelectedListener { item ->
-//            when (item.itemId) {
-//                R.id.navigation_post -> {
-//                    // Tampilkan dialog untuk Post
-//                    val postDialog = PostFragment()
-//                    postDialog.show(supportFragmentManager, "PostDialog")
-//                    true
-//                }
-//                else -> {
-//                    navController.navigate(item.itemId)
-//                    true
-//                }
-//            }
-//        }
     }
 
     private fun hideBottomNavigation() {
