@@ -74,8 +74,15 @@ class SettingFragment : BaseAuthFragment() {
             if (task.isSuccessful) {
                 val isVerified = Firebase.auth.currentUser?.isEmailVerified == true
                 statusEmail.text = if (isVerified) "Verified" else "Not Verified"
+
+                // Set the color based on the verification status
+                val verifiedColor = resources.getColor(R.color.verified_color, null)
+                val notVerifiedColor = resources.getColor(R.color.not_verified_color, null)
+
+                statusEmail.setTextColor(if (isVerified) verifiedColor else notVerifiedColor)
             } else {
                 statusEmail.text = "Not Verified"
+                statusEmail.setTextColor(resources.getColor(R.color.not_verified_color, null))
             }
         }
 
