@@ -48,7 +48,7 @@
     <string name="capture_image">Capture Image</string>
     <string name="choose_from_gallery">Choose From Gallery</string>
     <string name="schedule">Schedule</string>
-    
+
     <!-- Ini Punya Jose buat profile :>-->
     <string name="name">Name</string>
     <string name="username">Username</string>
@@ -67,4 +67,16 @@
     <string name="send_button_text">Send</string>
     <string name="verified_email">verified email</string>
     <string name="resend_verifEmail_button">Resend</string>
+    <string name="password_title">Password</string>
+    <string name="update_password">Update your password</string>
+    <string name="update_password_description">Please enter your existing password and your new password.</string>
+    <string name="current_password">Current Password</string>
+    <string name="new_password">New Password</string>
+    <string name="change_password">Change Password</string>
+    <string name="change_email">Change Email</string>
+    <string name="update_email">Update your email</string>
+    <string name="update_email_description">Please enter your existing email address and your new email address</string>
+    <string name="current_email">Current Email</string>
+    <string name="new_email">New Email</string>
+    <string name="email_title">Email Address</string>
 </resources>

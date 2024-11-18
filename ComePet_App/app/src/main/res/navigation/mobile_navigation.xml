@@ -248,6 +248,24 @@
         android:id="@+id/navigation_setting"
         android:name="com.example.comepet.ui.setting.SettingFragment"
         android:label="@string/title_setting"
-        tools:layout="@layout/fragment_setting"/>
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/navigation_setting_to_navigation_change_password"
+            app:destination="@id/navigation_change_password"/>
+        <action
+            android:id="@+id/navigation_setting_to_navigation_change_email"
+            app:destination="@id/navigation_change_email"/>
+    </fragment>
 
+    <fragment
+        android:id="@+id/navigation_change_password"
+        android:name="com.example.comepet.ui.setting.subfragments.ChangePasswordFragment"
+        android:label="Change Password"
+        tools:layout="@layout/fragment_change_password"/>
+
+    <fragment
+        android:id="@+id/navigation_change_email"
+        android:name="com.example.comepet.ui.setting.subfragments.ChangeEmailFragment"
+        android:label="Change Email"
+        tools:layout="@layout/fragment_change_email"/>
 </navigation>

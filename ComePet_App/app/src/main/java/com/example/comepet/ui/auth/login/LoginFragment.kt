@@ -44,6 +44,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val user = mAuth.currentUser
+        if (user != null) {
+            findNavController().navigate(R.id.navigation_home)
+            return
+        }
+
         registerButton = view.findViewById(R.id.registerButton)
         loginButton = view.findViewById(R.id.loginButton)
         email_input_field = view.findViewById(R.id.email_input_Field)
@@ -86,6 +92,8 @@ class LoginFragment : Fragment() {
                         }.addOnFailureListener { exception ->
                             Log.d("LoginFragment", "Error: ${exception.message}")
                         }
+                    } else {
+                        Toast.makeText(requireContext(), "Password and email is incorrect", Toast.LENGTH_SHORT).show()
                     }
                 }
         }

@@ -47,6 +47,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_upload -> hideBottomNavigation()
                 R.id.navigation_search -> hideBottomNavigation()
                 R.id.navigation_forgot -> hideBottomNavigation()
+                R.id.navigation_setting -> hideBottomNavigation()
+                R.id.navigation_change_email -> hideBottomNavigation()
+                R.id.navigation_change_password -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }
