@@ -1,9 +1,14 @@
 package com.example.comepet.ui.profile.subfragments
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +16,13 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-
+import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 
 class ProfileEditFragment : Fragment() {
@@ -28,12 +36,30 @@ class ProfileEditFragment : Fragment() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
+    private lateinit var storage: FirebaseStorage
 
+    private var selectedImageUri: Uri? = null
+
+    // Register activity result launchers
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            selectedImageUri = result.data?.data
+            uploadImageToFirebase()
+        }
+    }
+
+    private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            selectedImageUri = result.data?.data
+            uploadImageToFirebase()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
+        storage = FirebaseStorage.getInstance()
     }
 
     override fun onCreateView(
@@ -47,12 +73,13 @@ class ProfileEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         saveButton = view.findViewById(R.id.buttonSave)
+        cameraButton = view.findViewById(R.id.cameraButton)
         saveButton.setOnClickListener {
             saveUserData()
             findNavController().navigate(R.id.navigation_edit_profile_to_navigation_profile)
         }
         cameraButton.setOnClickListener {
-
+            showImagePickerDialog()
         }
 
         editTextName = view.findViewById(R.id.editTextName)
@@ -62,6 +89,9 @@ class ProfileEditFragment : Fragment() {
         editTextLocation = view.findViewById(R.id.editTextLocation)
         getCurrentUserData()
 
+        cameraButton.setOnClickListener {
+            showImagePickerDialog()
+        }
     }
 
     private fun getCurrentUserData() {
@@ -125,6 +155,71 @@ class ProfileEditFragment : Fragment() {
                 }
         }
     }
+
+    private fun showImagePickerDialog(){
+        val options = arrayOf("Take Photo", "Choose from Gallery")
+        AlertDialog.Builder(requireContext())
+            .setTitle("Choose Profile Picture")
+            .setItems(options) { _, which ->
+                when (which) {
+                    0 -> openCamera()
+                    1 -> openGallery()
+                }
+            }
+            .show()
+    }
+
+    private fun openCamera() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraLauncher.launch(intent)
+    }
+
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        galleryLauncher.launch(intent)
+    }
+
+    private fun uploadImageToFirebase(){
+        selectedImageUri?.let { uri ->
+            // Show loading indicator
+            // You might want to add a ProgressBar to your layout and show it here
+
+            val filename = UUID.randomUUID().toString()
+            val ref = storage.reference.child("profile_pictures/$filename")
+
+            ref.putFile(uri)
+                .addOnSuccessListener {
+                    // Get the download URL
+                    ref.downloadUrl.addOnSuccessListener { downloadUri ->
+                        // Update user's profile picture URL in Firestore
+                        updateProfilePictureUrl(downloadUri.toString())
+                    }
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
+                    Log.e("ProfileEditFragment", "Error uploading image", e)
+                }
+        }
+
+    }
+
+    private fun updateProfilePictureUrl(imageUrl: String) {
+        val currentUser = mAuth.currentUser
+
+        if (currentUser != null) {
+            db.collection("users")
+                .document(currentUser.uid)
+                .update("profilePicture", imageUrl)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Profile picture updated", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    Toast.makeText(requireContext(), "Failed to update profile picture", Toast.LENGTH_SHORT).show()
+                    Log.e("ProfileEditFragment", "Error updating profile picture URL", e)
+                }
+        }
+    }
+
 
     companion object {
         /**
