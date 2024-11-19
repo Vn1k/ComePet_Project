@@ -15,6 +15,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.comepet.databinding.ActivityMainBinding
 import com.example.comepet.ui.post.PostFragment
+import com.example.comepet.utils.SessionManager
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +54,13 @@ class MainActivity : AppCompatActivity() {
                 else -> showBottomNavigation()
             }
         }
+
+        val token = SessionManager.getToken(this)
+        if (token != null) {
+            navigateToMainScreen()
+        } else {
+            navigateToLoginScreen()
+        }
     }
 
     private fun hideBottomNavigation() {
@@ -63,5 +71,14 @@ class MainActivity : AppCompatActivity() {
         navView.visibility = View.VISIBLE
     }
 
+    private fun navigateToMainScreen() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_home)
+    }
+
+    private fun navigateToLoginScreen() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_login)
+    }
 
 }

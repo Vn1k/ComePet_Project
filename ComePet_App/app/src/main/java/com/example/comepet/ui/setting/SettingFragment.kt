@@ -1,6 +1,7 @@
 package com.example.comepet.ui.setting
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.media.Image
 import androidx.fragment.app.viewModels
 import android.os.Bundle
@@ -15,9 +16,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import android.widget.ToggleButton
+import androidx.appcompat.widget.SwitchCompat
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.example.comepet.ui.auth.BaseAuthFragment
+import com.example.comepet.utils.SessionManager
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -34,7 +37,7 @@ class SettingFragment : BaseAuthFragment() {
     private lateinit var resendEmailButton: Button
     private lateinit var changePasswordButton: ImageButton
     private lateinit var changeEmailButton: ImageButton
-    private lateinit var accountStatusButton: ToggleButton
+    private lateinit var accountStatusButton: SwitchCompat
     private lateinit var db: FirebaseFirestore
     private lateinit var user: CollectionReference
 
@@ -72,7 +75,8 @@ class SettingFragment : BaseAuthFragment() {
             } else {
                 logoutButton.visibility = View.VISIBLE
                 logoutButton.setOnClickListener {
-                    Firebase.auth.signOut()
+                    SessionManager.clearToken(requireContext())
+                    mAuth.signOut()
                     findNavController().navigate(R.id.navigation_login)
                 }
             }

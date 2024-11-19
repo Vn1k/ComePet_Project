@@ -1,5 +1,6 @@
 package com.example.comepet.ui.auth.login
 
+import android.content.Context
 import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.example.comepet.ui.auth.GlobalVar
 import com.example.comepet.ui.auth.register.model.User
+import com.example.comepet.utils.SessionManager
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,7 +23,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 class LoginFragment : Fragment() {
 
     private lateinit var mAuth: FirebaseAuth
-
     private lateinit var registerButton: Button
     private lateinit var loginButton: Button
     private lateinit var email_input_field: TextInputEditText
@@ -31,7 +32,6 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        // TODO: Use the ViewModel
     }
 
     override fun onCreateView(
@@ -54,12 +54,14 @@ class LoginFragment : Fragment() {
         loginButton = view.findViewById(R.id.loginButton)
         email_input_field = view.findViewById(R.id.email_input_Field)
         password_input_field = view.findViewById(R.id.password_input_Field)
+
         loginButton.setOnClickListener {
             val email = email_input_field.text.toString().trim()
             val password = password_input_field.text.toString().trim()
 
             Login(email, password)
         }
+
         registerButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_login_to_navigation_register)
         }
@@ -86,7 +88,10 @@ class LoginFragment : Fragment() {
                                 val user = document.toObject(User::class.java)
                                 if (user != null) {
                                     GlobalVar.currentUser = user
-                                    findNavController().navigate(R.id.navigation_login_to_navigation_welcome)
+                                    val token = FirebaseAuth.getInstance().currentUser?.uid
+                                    if (token != null) {
+                                        onLoginSuccess(token)
+                                    }
                                 }
                             }
                         }.addOnFailureListener { exception ->
@@ -97,5 +102,11 @@ class LoginFragment : Fragment() {
                     }
                 }
         }
+    }
+
+    private fun onLoginSuccess(token: String) {
+        SessionManager.saveToken(requireContext(), token)
+        val navController = findNavController()
+        navController.navigate(R.id.navigation_home)
     }
 }
