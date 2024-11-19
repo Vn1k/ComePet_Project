@@ -108,6 +108,6 @@
         android:background="@drawable/background_blue"
         android:textColor="@color/white"
         android:textAllCaps="false"
-        android:letterSpacing="0.05"/>>
+        android:letterSpacing="0.05"/>
 
 </LinearLayout>
