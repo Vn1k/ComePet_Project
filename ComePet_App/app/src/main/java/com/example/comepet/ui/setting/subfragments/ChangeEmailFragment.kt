@@ -14,7 +14,6 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.google.android.material.textfield.TextInputEditText
-import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -40,12 +39,12 @@ class ChangeEmailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_change_email, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         cancelButton = view.findViewById(R.id.cancelButton)
         cancelButton.setOnClickListener {
             findNavController().popBackStack()
@@ -53,8 +52,10 @@ class ChangeEmailFragment : Fragment() {
 
         currentEmailField = view.findViewById(R.id.currentEmailField)
         currentEmailField.text = Editable.Factory.getInstance().newEditable(mAuth.currentUser?.email)
-        changeEmailButton = view.findViewById(R.id.changeEmailButton)
+
         newEmailField = view.findViewById(R.id.newEmailField)
+        changeEmailButton = view.findViewById(R.id.changeEmailButton)
+
         changeEmailButton.setOnClickListener {
             val newEmail = newEmailField.text.toString().trim()
             if (newEmail.isEmpty()) {
@@ -82,36 +83,33 @@ class ChangeEmailFragment : Fragment() {
                         ).show()
                     }
 
-                    FirebaseAuth.getInstance().addAuthStateListener { auth ->
-                        val updatedUser = auth.currentUser
-                        if (updatedUser != null && updatedUser.email == newEmail) {
-                            user.document(updatedUser.uid).update("email", newEmail)
-                                .addOnSuccessListener {
-                                    if (isAdded) {
-                                        Log.d("Firestore", "Email updated in Firestore successfully.")
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Email updated in Firestore.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
-                                .addOnFailureListener { e ->
-                                    if (isAdded) {
-                                        Log.e("Firestore", "Failed to update Firestore: ${e.localizedMessage}")
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Failed to update Firestore.",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-                                }
+                    Handler().postDelayed({
+                        if (isAdded) {
+                            mAuth.signOut()
+                            findNavController().navigate(R.id.navigation_login)
                         }
-                    }
+                    }, 2000)
+
                 } else {
-                    val errorMessage = task.exception?.localizedMessage ?: "Failed to update email"
+                    val errorMessage = task.exception?.localizedMessage ?: "Failed to send verification email."
                     newEmailField.error = errorMessage
                 }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mAuth.addAuthStateListener { auth ->
+            val updatedUser = auth.currentUser
+            if (updatedUser != null && updatedUser.isEmailVerified) {
+                user.document(updatedUser.uid).update("email", updatedUser.email)
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "Email updated is successfully.")
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("Firestore", "Failed to update Firestore: ${e.localizedMessage}")
+                    }
             }
         }
     }
