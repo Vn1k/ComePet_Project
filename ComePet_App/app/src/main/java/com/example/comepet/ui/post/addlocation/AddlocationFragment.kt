@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 
@@ -32,7 +33,14 @@ class AddlocationFragment : Fragment() {
 
         backButtonToUpload = view.findViewById(R.id.backButtonToUpload)
 
+        // Contoh lokasi yang dipilih
+        val selectedLocation = "Jakarta, Indonesia" // Ganti sesuai input pengguna
+
         backButtonToUpload.setOnClickListener {
+            // Mengirimkan lokasi yang dipilih
+            setFragmentResult("LOCATION_REQUEST", Bundle().apply {
+                putString("location", selectedLocation)
+            })
             findNavController().navigate(R.id.navigation_addlocation_to_navigation_upload)
         }
     }

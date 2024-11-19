@@ -139,9 +139,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:clickable="true"
+                    android:focusable="true">
 
                     <TextView
+                        android:id="@+id/selectedLocationText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/add_location"
@@ -161,7 +164,7 @@
                         android:layout_marginTop="5dp"
                         android:layout_marginStart="185dp"
                         android:src="@drawable/back_green_vector"
-                        android:rotation="180"/>
+                        android:rotation="180" />
                 </LinearLayout>
 
                 <View
