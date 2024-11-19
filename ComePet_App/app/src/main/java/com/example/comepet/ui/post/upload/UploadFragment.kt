@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.widget.addTextChangedListener
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.comepet.R
@@ -27,6 +29,9 @@ class UploadFragment : Fragment() {
     private lateinit var postFeeds: Button
     private lateinit var postShelter: Button
     private lateinit var captionEditText: EditText
+    private var selectedLocation: String? = null
+
+    private lateinit var uploadViewModel: UploadViewModel
 
     private lateinit var db: FirebaseFirestore
     private lateinit var auth: FirebaseAuth
@@ -49,21 +54,58 @@ class UploadFragment : Fragment() {
         addLocation = view.findViewById(R.id.addLocation)
         postFeeds = view.findViewById(R.id.postFeeds)
         postShelter = view.findViewById(R.id.postShelter)
+        uploadViewModel = ViewModelProvider(requireActivity()).get(UploadViewModel::class.java)
+
 
         // Inisialisasi Firebase
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
 
-        // Ambil data gambar dari argumen
-        val capturedImage = arguments?.getParcelable<Bitmap>("capturedImage")
-        val imageUriString = arguments?.getString("capturedImageUri")
+//        // Ambil data gambar dari argumen
+//        val capturedImage = arguments?.getParcelable<Bitmap>("capturedImage")
+//        val imageUriString = arguments?.getString("capturedImageUri")
+//
+//        // Tampilkan gambar
+//        capturedImage?.let { captureResult.setImageBitmap(it) }
+//            ?: imageUriString?.let {
+//                val imageUri = Uri.parse(it)
+//                Glide.with(this).load(imageUri).into(captureResult)
+//            } ?: Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show()
 
-        // Tampilkan gambar
-        capturedImage?.let { captureResult.setImageBitmap(it) }
-            ?: imageUriString?.let {
-                val imageUri = Uri.parse(it)
-                Glide.with(this).load(imageUri).into(captureResult)
+
+        uploadViewModel.selectedImageBitmap?.let {
+            captureResult.setImageBitmap(it)
+        } ?: uploadViewModel.selectedImageUri?.let {
+            val imageUri = Uri.parse(it)
+            Glide.with(this).load(imageUri).into(captureResult)
+        }
+
+//        uploadViewModel.caption?.let { captionEditText.setText(it) }
+        uploadViewModel.selectedLocation?.let {
+            view.findViewById<TextView>(R.id.selectedLocationText).text = it
+        }
+        // Simpan caption ke ViewModel
+        captionEditText.addTextChangedListener {
+            uploadViewModel.caption = it.toString()
+        }
+
+        parentFragmentManager.setFragmentResultListener("LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
+            val location = bundle.getString("location")
+            uploadViewModel.selectedLocation = location
+            view.findViewById<TextView>(R.id.selectedLocationText).text =
+                location ?: getString(R.string.add_location)
+        }
+
+        // Ambil data gambar dari argumen (hanya jika pertama kali dibuka)
+        if (uploadViewModel.selectedImageBitmap == null && uploadViewModel.selectedImageUri == null) {
+            arguments?.getParcelable<Bitmap>("capturedImage")?.let { bitmap ->
+                uploadViewModel.selectedImageBitmap = bitmap
+                captureResult.setImageBitmap(bitmap)
+            } ?: arguments?.getString("capturedImageUri")?.let { uriString ->
+                uploadViewModel.selectedImageUri = uriString
+                Glide.with(this).load(Uri.parse(uriString)).into(captureResult)
             } ?: Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show()
+        }
 
         // Navigasi tombol
         backButtonToPost.setOnClickListener {
@@ -80,13 +122,23 @@ class UploadFragment : Fragment() {
 
         // Tombol post feeds
         postFeeds.setOnClickListener {
-            handleUpload("feeds", capturedImage, imageUriString)
+            handleUpload("feeds", uploadViewModel.selectedImageBitmap, uploadViewModel.selectedImageUri)
         }
 
         // Tombol post shelter
         postShelter.setOnClickListener {
-            handleUpload("shelters", capturedImage, imageUriString)
+            handleUpload("shelters", uploadViewModel.selectedImageBitmap, uploadViewModel.selectedImageUri)
         }
+
+        addLocation.setOnClickListener {
+            findNavController().navigate(R.id.navigation_upload_to_navigation_location)
+        }
+
+        captionEditText.addTextChangedListener {
+            uploadViewModel.caption = it.toString()
+        }
+
+
     }
 
     private fun handleUpload(collection: String, capturedImage: Bitmap?, imageUriString: String?) {
@@ -98,17 +150,21 @@ class UploadFragment : Fragment() {
             return
         }
 
-        if (capturedImage != null) {
-            uploadBitmapToFirebaseStorage(capturedImage, collection, captionText, userId) {
+        val bitmap = uploadViewModel.selectedImageBitmap
+        val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
+
+        if (bitmap != null) {
+            // Upload bitmap
+            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, userId) {
+                navigateToPost(collection)
+            }
+        } else if (uri != null) {
+            // Upload URI
+            uploadImageToFirebaseStorage(uri, collection, captionText, userId) {
                 navigateToPost(collection)
             }
         } else {
-            imageUriString?.let { uriString ->
-                val imageUri = Uri.parse(uriString)
-                uploadImageToFirebaseStorage(imageUri, collection, captionText, userId) {
-                    navigateToPost(collection)
-                }
-            }
+            Toast.makeText(context, "No image to upload", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -171,11 +227,15 @@ class UploadFragment : Fragment() {
         val imageData = mapOf(
             "imageUrl" to downloadUrl,
             "caption" to captionText,
-            "timestamp" to System.currentTimeMillis()
+            "date" to System.currentTimeMillis(),
+            "location" to (selectedLocation ?: "")
         )
 
         imagesCollection.add(imageData).addOnSuccessListener {
             onUploadSuccess()
         }
     }
+
+
+
 }

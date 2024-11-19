@@ -51,7 +51,6 @@
         android:layout_marginTop="32dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Akbar Wijaya"
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Profile_Picture" />
 
@@ -76,7 +75,6 @@
         android:ems="10"
         android:fontFamily="@font/montserrat_medium"
         android:inputType="text"
-        android:text="ak_bar"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toBottomOf="@+id/editTextName" />
@@ -102,7 +100,6 @@
         android:ems="10"
         android:fontFamily="@font/montserrat_medium"
         android:inputType="phone"
-        android:text="08123456789"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/editTextUsername"
         app:layout_constraintTop_toBottomOf="@id/editTextUsername" />
@@ -113,9 +110,9 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
         android:textSize="15sp"
-        android:text="@string/bio"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
+        android:text="Bio"
         app:layout_constraintBottom_toBottomOf="@+id/editTextBio"
         app:layout_constraintEnd_toEndOf="@+id/textViewPhone"
         app:layout_constraintTop_toTopOf="@+id/editTextBio" />
@@ -129,7 +126,6 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="text"
-        android:text="Animal Loperss ♥"
         app:layout_constraintStart_toStartOf="@+id/editTextPhone"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
@@ -155,7 +151,6 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="text"
-        android:text="UMN"
         app:layout_constraintStart_toStartOf="@+id/editTextBio"
         app:layout_constraintTop_toBottomOf="@+id/editTextBio" />
 
