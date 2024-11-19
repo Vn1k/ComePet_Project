@@ -85,24 +85,26 @@ class SettingFragment : BaseAuthFragment() {
         emailView.text = Firebase.auth.currentUser?.email
 
         statusEmail = view.findViewById(R.id.statusEmail)
+        statusEmail.text = "Checking..."
         resendEmailButton = view.findViewById(R.id.resendEmailButton)
+        resendEmailButton.visibility = View.GONE
         Firebase.auth.currentUser?.reload()?.addOnCompleteListener { task ->
             if (!isAdded) return@addOnCompleteListener
 
             if (task.isSuccessful) {
                 val isVerified = Firebase.auth.currentUser?.isEmailVerified == true
                 statusEmail.text = if (isVerified) "Verified" else "Not Verified"
-
                 val verifiedColor = if (isVerified) {
                     requireContext().getColor(R.color.verified_color)
                 } else {
                     requireContext().getColor(R.color.not_verified_color)
                 }
-
                 statusEmail.setTextColor(verifiedColor)
+                resendEmailButton.visibility = if (isVerified) View.GONE else View.VISIBLE
             } else {
-                statusEmail.text = "Not Verified"
+                statusEmail.text = "Status unknown"
                 statusEmail.setTextColor(requireContext().getColor(R.color.not_verified_color))
+                resendEmailButton.visibility = View.VISIBLE
             }
         }
 
