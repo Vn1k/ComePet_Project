@@ -32,8 +32,11 @@ firebaseAuthKtx = "23.1.0"
 firebaseFirestoreKtx = "25.1.1"
 firebaseDatabaseKtx = "21.0.0"
 navigationUiKtxVersion = "2.8.3"
+places = "4.1.0"
 playServicesAuth = "21.2.0"
+playServicesLocation = "21.0.1"
 playServicesMaps = "19.0.0"
+playServicesMapsVersion = "18.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -75,8 +78,11 @@ androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", ve
 firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
+places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+play-services-maps-v1810 = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -1,47 +1,56 @@
 package com.example.comepet.ui.post.addlocation
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
-
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.tasks.OnSuccessListener
+import java.util.*
 
 class AddlocationFragment : Fragment() {
 
-    private lateinit var backButtonToUpload : ImageButton
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private lateinit var locationRecyclerView: RecyclerView
+    private lateinit var adapter: LocationAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_addlocation, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_addlocation, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        // Initialize RecyclerView
+        locationRecyclerView = view.findViewById(R.id.locationRecyclerView)
+        locationRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        backButtonToUpload = view.findViewById(R.id.backButtonToUpload)
+        // Sample Data
+        val sampleLocations = listOf(
+            Location("University", "123 University Street"),
+            Location("Mountain", "45 Mountain Road"),
+            Location("Beach", "78 Beachside Avenue")
+        )
 
-        // Contoh lokasi yang dipilih
-        val selectedLocation = "Jakarta, Indonesia" // Ganti sesuai input pengguna
+        // Set up Adapter
+        adapter = LocationAdapter(sampleLocations)
+        locationRecyclerView.adapter = adapter
 
-        backButtonToUpload.setOnClickListener {
-            // Mengirimkan lokasi yang dipilih
-            setFragmentResult("LOCATION_REQUEST", Bundle().apply {
-                putString("location", selectedLocation)
-            })
-            findNavController().navigate(R.id.navigation_addlocation_to_navigation_upload)
-        }
+        return view
     }
 }
+
+data class Location(val name: String, val address: String)
+
+

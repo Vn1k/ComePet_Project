@@ -80,4 +80,6 @@
     <string name="new_email">New Email</string>
     <string name="email_title">Email Address</string>
     <string name="change_acc_status">Personal Account?</string>
+    <string name="location_name">Location Name</string>
+    <string name="location_address">Location Address</string>
 </resources>
