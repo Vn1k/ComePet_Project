@@ -99,6 +99,7 @@ class RegisterFragment : Fragment() {
                                                 Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
                                             }
                                     }
+
                                 } else {
                                     Toast.makeText(requireContext(), "Failed to create account", Toast.LENGTH_SHORT).show()
                                 }

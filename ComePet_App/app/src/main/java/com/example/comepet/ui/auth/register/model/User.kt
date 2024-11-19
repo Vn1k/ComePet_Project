@@ -7,5 +7,6 @@ data class User(
     var phone: String = "",
     var bio: String = "",
     var location: String = "",
-    var profilePicture: String = ""
+    var profilePicture: String = "",
+    var accountStatus: Boolean = false
 )

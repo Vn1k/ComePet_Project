@@ -1,21 +1,29 @@
 package com.example.comepet.ui.setting
 
+import android.animation.ObjectAnimator
 import android.media.Image
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.CycleInterpolator
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.example.comepet.ui.auth.BaseAuthFragment
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.log
 
 class SettingFragment : BaseAuthFragment() {
 
@@ -26,6 +34,9 @@ class SettingFragment : BaseAuthFragment() {
     private lateinit var resendEmailButton: Button
     private lateinit var changePasswordButton: ImageButton
     private lateinit var changeEmailButton: ImageButton
+    private lateinit var accountStatusButton: ToggleButton
+    private lateinit var db: FirebaseFirestore
+    private lateinit var user: CollectionReference
 
     companion object {
         fun newInstance() = SettingFragment()
@@ -35,7 +46,8 @@ class SettingFragment : BaseAuthFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO: Use the ViewModel
+        db = FirebaseFirestore.getInstance()
+        user = db.collection("users")
     }
 
     override fun onCreateView(
@@ -71,29 +83,38 @@ class SettingFragment : BaseAuthFragment() {
         statusEmail = view.findViewById(R.id.statusEmail)
         resendEmailButton = view.findViewById(R.id.resendEmailButton)
         Firebase.auth.currentUser?.reload()?.addOnCompleteListener { task ->
+            if (!isAdded) return@addOnCompleteListener
+
             if (task.isSuccessful) {
                 val isVerified = Firebase.auth.currentUser?.isEmailVerified == true
                 statusEmail.text = if (isVerified) "Verified" else "Not Verified"
 
-                // Set the color based on the verification status
-                val verifiedColor = resources.getColor(R.color.verified_color, null)
-                val notVerifiedColor = resources.getColor(R.color.not_verified_color, null)
+                val verifiedColor = if (isVerified) {
+                    requireContext().getColor(R.color.verified_color)
+                } else {
+                    requireContext().getColor(R.color.not_verified_color)
+                }
 
-                statusEmail.setTextColor(if (isVerified) verifiedColor else notVerifiedColor)
+                statusEmail.setTextColor(verifiedColor)
             } else {
                 statusEmail.text = "Not Verified"
-                statusEmail.setTextColor(resources.getColor(R.color.not_verified_color, null))
+                statusEmail.setTextColor(requireContext().getColor(R.color.not_verified_color))
             }
         }
 
         resendEmailButton.setOnClickListener {
+            if (!isAdded) return@setOnClickListener
+
             Firebase.auth.currentUser?.sendEmailVerification()
                 ?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Verification email sent", Toast.LENGTH_SHORT).show()
+                    if (!isAdded) return@addOnCompleteListener
+
+                    val message = if (task.isSuccessful) {
+                        "Verification email sent"
                     } else {
-                        Toast.makeText(requireContext(), "Failed to send email", Toast.LENGTH_SHORT).show()
+                        "Failed to send email"
                     }
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -106,5 +127,41 @@ class SettingFragment : BaseAuthFragment() {
         changeEmailButton.setOnClickListener{
             findNavController().navigate(R.id.navigation_setting_to_navigation_change_email)
         }
+
+        accountStatusButton = view.findViewById(R.id.accountStatusButton)
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        val userCollection = FirebaseFirestore.getInstance().collection("users")
+
+        accountStatusButton.setOnCheckedChangeListener { _, isChecked ->
+            if (currentUserId != null) {
+                userCollection.document(currentUserId).update("accountStatus", isChecked)
+                    .addOnSuccessListener {
+                    }
+                    .addOnFailureListener { e ->
+                        accountStatusButton.isChecked = !isChecked
+                        shakeView(accountStatusButton)
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update account status: ${e.localizedMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } else {
+                accountStatusButton.isChecked = !isChecked
+                shakeView(accountStatusButton)
+                Toast.makeText(
+                    requireContext(),
+                    "User not authenticated.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun shakeView(view: View) {
+        val animator = ObjectAnimator.ofFloat(view, "translationX", 0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f)
+        animator.duration = 500
+        animator.interpolator = CycleInterpolator(1f)
+        animator.start()
     }
 }
