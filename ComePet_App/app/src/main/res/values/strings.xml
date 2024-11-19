@@ -79,4 +79,5 @@
     <string name="current_email">Current Email</string>
     <string name="new_email">New Email</string>
     <string name="email_title">Email Address</string>
+    <string name="change_acc_status">Personal Account?</string>
 </resources>

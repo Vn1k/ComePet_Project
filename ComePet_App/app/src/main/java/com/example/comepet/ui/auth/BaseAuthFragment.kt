@@ -8,7 +8,7 @@ import com.example.comepet.R
 import com.google.firebase.auth.FirebaseAuth
 
 open class BaseAuthFragment : Fragment() {
-    private lateinit var mAuth: FirebaseAuth
+    lateinit var mAuth: FirebaseAuth
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
