@@ -11,12 +11,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ChangeEmailFragment : Fragment() {
 
@@ -39,12 +43,12 @@ class ChangeEmailFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_change_email, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         cancelButton = view.findViewById(R.id.cancelButton)
         cancelButton.setOnClickListener {
             findNavController().popBackStack()
@@ -52,12 +56,11 @@ class ChangeEmailFragment : Fragment() {
 
         currentEmailField = view.findViewById(R.id.currentEmailField)
         currentEmailField.text = Editable.Factory.getInstance().newEditable(mAuth.currentUser?.email)
-
-        newEmailField = view.findViewById(R.id.newEmailField)
         changeEmailButton = view.findViewById(R.id.changeEmailButton)
-
+        newEmailField = view.findViewById(R.id.newEmailField)
         changeEmailButton.setOnClickListener {
             val newEmail = newEmailField.text.toString().trim()
+
             if (newEmail.isEmpty()) {
                 newEmailField.error = "Please enter your new email"
                 return@setOnClickListener
@@ -83,33 +86,45 @@ class ChangeEmailFragment : Fragment() {
                         ).show()
                     }
 
-                    Handler().postDelayed({
+                    FirebaseAuth.getInstance().addAuthStateListener { auth ->
+                        val updatedUser = auth.currentUser
+                        if (updatedUser != null && updatedUser.email == newEmail) {
+                            user.document(mAuth.currentUser?.uid!!).update("email", newEmail)
+                                .addOnSuccessListener {
+                                    if (isAdded) {
+                                        Log.d("Firestore", "Email updated in Firestore successfully.")
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Email updated in Firestore.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    if (isAdded) {
+                                        Log.e("Firestore", "Failed to update Firestore: ${e.localizedMessage}")
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Failed to update Firestore.",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                        }
+                    }
+
+                    // Use lifecycle-aware delay with Coroutine instead of Handler
+                    viewLifecycleOwner.lifecycleScope.launch {
+                        delay(2000)
                         if (isAdded) {
                             mAuth.signOut()
                             findNavController().navigate(R.id.navigation_login)
                         }
-                    }, 2000)
-
+                    }
                 } else {
-                    val errorMessage = task.exception?.localizedMessage ?: "Failed to send verification email."
+                    val errorMessage = task.exception?.localizedMessage ?: "Failed to update email"
                     newEmailField.error = errorMessage
                 }
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        mAuth.addAuthStateListener { auth ->
-            val updatedUser = auth.currentUser
-            if (updatedUser != null && updatedUser.isEmailVerified) {
-                user.document(updatedUser.uid).update("email", updatedUser.email)
-                    .addOnSuccessListener {
-                        Log.d("Firestore", "Email updated is successfully.")
-                    }
-                    .addOnFailureListener { e ->
-                        Log.e("Firestore", "Failed to update Firestore: ${e.localizedMessage}")
-                    }
             }
         }
     }
