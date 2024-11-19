@@ -70,29 +70,38 @@ class SettingFragment : BaseAuthFragment() {
         statusEmail = view.findViewById(R.id.statusEmail)
         resendEmailButton = view.findViewById(R.id.resendEmailButton)
         Firebase.auth.currentUser?.reload()?.addOnCompleteListener { task ->
+            if (!isAdded) return@addOnCompleteListener
+
             if (task.isSuccessful) {
                 val isVerified = Firebase.auth.currentUser?.isEmailVerified == true
                 statusEmail.text = if (isVerified) "Verified" else "Not Verified"
 
-                // Set the color based on the verification status
-                val verifiedColor = resources.getColor(R.color.verified_color, null)
-                val notVerifiedColor = resources.getColor(R.color.not_verified_color, null)
+                val verifiedColor = if (isVerified) {
+                    requireContext().getColor(R.color.verified_color)
+                } else {
+                    requireContext().getColor(R.color.not_verified_color)
+                }
 
-                statusEmail.setTextColor(if (isVerified) verifiedColor else notVerifiedColor)
+                statusEmail.setTextColor(verifiedColor)
             } else {
                 statusEmail.text = "Not Verified"
-                statusEmail.setTextColor(resources.getColor(R.color.not_verified_color, null))
+                statusEmail.setTextColor(requireContext().getColor(R.color.not_verified_color))
             }
         }
 
         resendEmailButton.setOnClickListener {
+            if (!isAdded) return@setOnClickListener
+
             Firebase.auth.currentUser?.sendEmailVerification()
                 ?.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        Toast.makeText(requireContext(), "Verification email sent", Toast.LENGTH_SHORT).show()
+                    if (!isAdded) return@addOnCompleteListener
+
+                    val message = if (task.isSuccessful) {
+                        "Verification email sent"
                     } else {
-                        Toast.makeText(requireContext(), "Failed to send email", Toast.LENGTH_SHORT).show()
+                        "Failed to send email"
                     }
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 }
         }
 

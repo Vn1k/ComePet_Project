@@ -112,7 +112,7 @@ class ChangeEmailFragment : Fragment() {
                                 }
                         }
                     }
-                    
+
                     viewLifecycleOwner.lifecycleScope.launch {
                         delay(2000)
                         if (isAdded) {
