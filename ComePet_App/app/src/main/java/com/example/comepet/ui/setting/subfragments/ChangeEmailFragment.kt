@@ -112,8 +112,7 @@ class ChangeEmailFragment : Fragment() {
                                 }
                         }
                     }
-
-                    // Use lifecycle-aware delay with Coroutine instead of Handler
+                    
                     viewLifecycleOwner.lifecycleScope.launch {
                         delay(2000)
                         if (isAdded) {
