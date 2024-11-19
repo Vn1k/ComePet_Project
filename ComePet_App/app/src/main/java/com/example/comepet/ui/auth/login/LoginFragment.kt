@@ -107,6 +107,6 @@ class LoginFragment : Fragment() {
     private fun onLoginSuccess(token: String) {
         SessionManager.saveToken(requireContext(), token)
         val navController = findNavController()
-        navController.navigate(R.id.navigation_home)
+        navController.navigate(R.id.navigation_welcome)
     }
 }
