@@ -1,21 +1,29 @@
 package com.example.comepet.ui.setting
 
+import android.animation.ObjectAnimator
 import android.media.Image
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.CycleInterpolator
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.ToggleButton
 import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.example.comepet.ui.auth.BaseAuthFragment
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.math.log
 
 class SettingFragment : BaseAuthFragment() {
 
@@ -26,6 +34,9 @@ class SettingFragment : BaseAuthFragment() {
     private lateinit var resendEmailButton: Button
     private lateinit var changePasswordButton: ImageButton
     private lateinit var changeEmailButton: ImageButton
+    private lateinit var accountStatusButton: ToggleButton
+    private lateinit var db: FirebaseFirestore
+    private lateinit var user: CollectionReference
 
     companion object {
         fun newInstance() = SettingFragment()
@@ -35,6 +46,8 @@ class SettingFragment : BaseAuthFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        db = FirebaseFirestore.getInstance()
+        user = db.collection("users")
     }
 
     override fun onCreateView(
@@ -114,5 +127,41 @@ class SettingFragment : BaseAuthFragment() {
         changeEmailButton.setOnClickListener{
             findNavController().navigate(R.id.navigation_setting_to_navigation_change_email)
         }
+
+        accountStatusButton = view.findViewById(R.id.accountStatusButton)
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
+        val userCollection = FirebaseFirestore.getInstance().collection("users")
+
+        accountStatusButton.setOnCheckedChangeListener { _, isChecked ->
+            if (currentUserId != null) {
+                userCollection.document(currentUserId).update("accountStatus", isChecked)
+                    .addOnSuccessListener {
+                    }
+                    .addOnFailureListener { e ->
+                        accountStatusButton.isChecked = !isChecked
+                        shakeView(accountStatusButton)
+                        Toast.makeText(
+                            requireContext(),
+                            "Failed to update account status: ${e.localizedMessage}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+            } else {
+                accountStatusButton.isChecked = !isChecked
+                shakeView(accountStatusButton)
+                Toast.makeText(
+                    requireContext(),
+                    "User not authenticated.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun shakeView(view: View) {
+        val animator = ObjectAnimator.ofFloat(view, "translationX", 0f, 25f, -25f, 25f, -25f, 15f, -15f, 6f, -6f, 0f)
+        animator.duration = 500
+        animator.interpolator = CycleInterpolator(1f)
+        animator.start()
     }
 }
