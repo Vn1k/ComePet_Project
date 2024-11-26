@@ -1,25 +1,20 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/light_beige">
+    android:padding="16dp">
 
     <TextView
         android:id="@+id/locationName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/location_name"
-        android:textSize="15sp"
-        android:fontFamily="@font/montserrat_semibold"
-        android:textColor="@color/black" />
+        android:text="Location Name"
+        android:textSize="18sp"/>
 
     <TextView
         android:id="@+id/locationAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/location_address"
-        android:textSize="12sp"
-        android:fontFamily="@font/montserrat_regular" />
+        android:text="Location Address"
+        android:textSize="16sp"/>
 </LinearLayout>

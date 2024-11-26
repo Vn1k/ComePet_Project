@@ -48,14 +48,15 @@
             android:padding="16dp">
 
             <EditText
+                android:id="@+id/searchEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/background_white"
                 android:hint="@string/search"
                 android:padding="10dp"
                 android:fontFamily="@font/merriweather_light"
-                android:textSize="11dp"
-                android:drawableLeft="@drawable/search"
+                android:textSize="14sp"
+                android:drawableStart="@drawable/search"
                 android:drawablePadding="10dp" />
         </LinearLayout>
 

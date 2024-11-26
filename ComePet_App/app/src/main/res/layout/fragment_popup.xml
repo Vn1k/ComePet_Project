@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="@drawable/background_cream"
+    android:orientation="vertical"
+    android:elevation="10dp"
+    android:gravity="center">
+
+    <!-- Camera Button -->
+    <TextView
+        android:id="@+id/btnCamera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/camera_full"
+        android:background="@color/soft_blue"
+        android:padding="10dp"
+        android:text="@string/capture_image"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="16dp" />
+
+    <!-- Gallery Button -->
+    <TextView
+        android:id="@+id/btnGallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/gallery_white"
+        android:background="@color/soft_blue"
+        android:padding="10dp"
+        android:text="@string/choose_from_gallery"
+        android:fontFamily="@font/montserrat_semibold"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="8dp" />
+</LinearLayout>

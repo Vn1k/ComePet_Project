@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.comepet.databinding.ActivityMainBinding
 import com.example.comepet.ui.post.PostFragment
 import com.example.comepet.utils.SessionManager
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val MainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Timber.plant(Timber.DebugTree())
         val splashScreen = installSplashScreen()
         splashScreen.apply {
             setKeepOnScreenCondition{

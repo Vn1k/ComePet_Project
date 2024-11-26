@@ -78,6 +78,14 @@ dependencies {
     implementation (libs.play.services.maps.v1810)
     implementation (libs.play.services.location)
     implementation (libs.places)
+    implementation (libs.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.kotlinx.coroutines.android)
+    implementation (libs.timber)
+
+    //post
+//    implementation (libs.blurview)
+
 
 
 

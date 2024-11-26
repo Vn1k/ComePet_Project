@@ -175,12 +175,17 @@
             app:destination="@id/navigation_camera"/>
 
         <action
+            android:id="@+id/navigation_post_to_navigation_upload"
+            app:destination="@+id/navigation_upload"/>
+
+        <action
             android:id="@+id/navigation_post_to_navigation_home"
             app:destination="@id/navigation_home"/>
 
-        <action
-            android:id="@+id/navigation_post_to_navigation_upload"
-            app:destination="@+id/navigation_upload"/>
+<!--        <action-->
+<!--            android:id="@+id/navigation_post_to_popupFragment"-->
+<!--            app:destination="@id/navigation_popup" />-->
+
     </fragment>
 
     <fragment
@@ -244,6 +249,12 @@
             app:destination="@id/navigation_upload"/>
     </fragment>
 
+<!--    <fragment-->
+<!--        android:id="@+id/navigation_popup"-->
+<!--        android:name="com.example.comepet.ui.post.PopupFragment"-->
+<!--        android:label="Popup"-->
+<!--        tools:layout="@layout/fragment_popup" />-->
+
     <fragment
         android:id="@+id/navigation_setting"
         android:name="com.example.comepet.ui.setting.SettingFragment"
@@ -256,6 +267,8 @@
             android:id="@+id/navigation_setting_to_navigation_change_email"
             app:destination="@id/navigation_change_email"/>
     </fragment>
+
+
 
     <fragment
         android:id="@+id/navigation_change_password"

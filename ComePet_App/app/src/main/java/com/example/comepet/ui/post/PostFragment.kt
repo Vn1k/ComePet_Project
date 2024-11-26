@@ -5,9 +5,14 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Color
+import android.graphics.RenderEffect
+import android.graphics.Shader
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +23,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -26,8 +32,10 @@ import com.example.comepet.R
 import com.example.comepet.databinding.FragmentPostBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+//import android.graphics.Color
+//import com.eightbitlab.blurlibrary.BlurView
 
-class PostFragment : Fragment() {
+class PostFragment : DialogFragment() {
 
     private lateinit var binding: FragmentPostBinding
     private lateinit var auth: FirebaseAuth
@@ -54,6 +62,13 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+//        val blurView = view.findViewById<BlurView>(R.id.blurView)
+//        blurView?.let {
+//            it.setupWith(requireActivity().window.decorView)
+//                .setBlurRadius(10f)  // Mengatur radius blur
+//                .setOverlayColor(Color.parseColor("#AA000000")) // Warna overlay hitam transparan
+//        }
 
         cameraButton = binding.cameraButton
         galleryButton = binding.galleryButton
@@ -91,5 +106,24 @@ class PostFragment : Fragment() {
         // Launch the image picker for the gallery
         pickImageLauncher.launch("image/*")
     }
+
+//    override fun onStart() {
+//        super.onStart()
+//        val blurView = view?.findViewById<BlurView>(R.id.blurView)
+//        blurView?.let {
+//            it.setupWith(requireActivity().window.decorView)
+//                .setBlurRadius(10f)  // Anda bisa menyesuaikan blur radius
+//                .setOverlayColor(Color.parseColor("#AA000000")) // Warna transparan hitam
+//        }
+
+        // Set layout popup jauh dari navbar
+//        val dialog = dialog
+//        dialog?.window?.setGravity(Gravity.CENTER)
+//        val layoutParams = dialog?.window?.attributes
+//        layoutParams?.y = 150 // Jarak dari navbar
+//        dialog?.window?.attributes = layoutParams
+//    }
+
+
 
 }
