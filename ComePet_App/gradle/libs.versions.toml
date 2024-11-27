@@ -13,12 +13,14 @@ firebaseFirestore = "25.1.1"
 firebaseStorageKtx = "21.2.0"
 glide = "4.14.2"
 googleFirebaseBom = "33.5.1"
+googlePlayServicesMaps = "17.0.0"
 kotlin = "1.9.24"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
+kotlinBom = "1.5.31"
 kotlinxCoroutinesAndroid = "1.3.9"
 lifecycleLivedataKtxVersion = "2.8.6"
 lifecycleViewmodelKtxVersion = "2.8.6"
@@ -36,11 +38,13 @@ firebaseFirestoreKtx = "25.1.1"
 firebaseDatabaseKtx = "21.0.0"
 navigationUiKtxVersion = "2.8.3"
 places = "4.1.0"
+placesVersion = "3.5.0"
 playServicesAuth = "21.2.0"
 playServicesLocation = "21.0.1"
 playServicesMaps = "19.0.0"
 playServicesMapsVersion = "18.1.0"
 retrofit = "2.9.0"
+secretsGradlePlugin = "2.0.1"
 timber = "4.7.1"
 
 [libraries]
@@ -74,6 +78,7 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlinBom" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
@@ -87,11 +92,14 @@ firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx",
 firebase-firestore-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx", version.ref = "firebaseFirestoreKtx" }
 firebase-database-ktx = { group = "com.google.firebase", name = "firebase-database-ktx", version.ref = "firebaseDatabaseKtx" }
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
+places-v350 = { module = "com.google.android.libraries.places:places", version.ref = "placesVersion" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
+play-services-maps-v1700 = { module = "com.google.android.gms:play-services-maps", version.ref = "googlePlayServicesMaps" }
 play-services-maps-v1810 = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMapsVersion" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+secrets-gradle-plugin = { module = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin", version.ref = "secretsGradlePlugin" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
 [plugins]

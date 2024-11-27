@@ -240,7 +240,7 @@
 
     <fragment
         android:id="@+id/navigation_addlocation"
-        android:name="com.example.comepet.ui.post.addlocation.AddlocationFragment"
+        android:name="com.example.comepet.ui.post.location.LocationFragment"
         android:label="Add Location"
         tools:layout="@layout/fragment_addlocation">
 

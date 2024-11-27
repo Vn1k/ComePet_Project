@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.post.location.LocationFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:textColor="@color/dark_blue_gray"
+        android:fontFamily="@font/merriweather_bold"
+        android:text="@string/input_location" />
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/search_location"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/search"
+        android:padding="10dp"
+        android:textSize="14sp"
+        android:textColor="@color/dark_blue_gray"
+        android:fontFamily="@font/merriweather_regular" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_places"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:visibility="gone" />
+</LinearLayout>
