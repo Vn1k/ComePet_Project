@@ -32,13 +32,11 @@ class LocationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Initialize PlacesClient
         placesClient = Places.createClient(requireContext())
 
         // Setup the search location text input
         searchLocation = view.findViewById(R.id.search_location)
 
-        // Add a listener to perform a search when user types in the search field
         searchLocation.setOnEditorActionListener { _, _, _ ->
             val query = searchLocation.text.toString()
             if (query.isNotEmpty()) {

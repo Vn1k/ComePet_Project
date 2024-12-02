@@ -19,9 +19,10 @@ import com.example.comepet.ui.post.PostFragment
 import com.example.comepet.utils.SessionManager
 import com.google.android.libraries.places.api.Places
 import com.google.android.datatransport.runtime.BuildConfig
+import com.google.android.libraries.places.api.net.PlacesClient
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var placesClient: PlacesClient
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
     private val MainViewModel: MainViewModel by viewModels()
@@ -71,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             finish()
             return
         }
-        Places.initializeWithNewPlacesApiEnabled(applicationContext, apiKey)
+        Places.initialize(applicationContext, apiKey)
         val placesClient = Places.createClient(this)
     }
 
