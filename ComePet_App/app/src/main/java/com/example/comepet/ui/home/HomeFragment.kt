@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,7 +16,11 @@ import com.example.comepet.ui.auth.BaseAuthFragment
 
 class HomeFragment : BaseAuthFragment() {
 
-    private lateinit var viewModel: HomeViewModel
+    private val homeViewModel: HomeViewModel by viewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var postAdapter: PostAdapter
+//    private lateinit var recyclerViewComments: RecyclerView
+//    private lateinit var commentAdapter: CommentAdapter
     private lateinit var ChatButton: ImageButton
 
     override fun onCreateView(
@@ -29,16 +33,27 @@ class HomeFragment : BaseAuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         ChatButton = view.findViewById(R.id.ChatButton)
         ChatButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_home_to_navigation_chat_search)
         }
 
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewPosts)
+        postAdapter = PostAdapter(mutableListOf())
+        recyclerView = view.findViewById(R.id.recyclerViewPosts)
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = postAdapter
 
-        val adapter = PostAdapter(viewModel.getPosts())
-        recyclerView.adapter = adapter
+        homeViewModel.posts.observe(viewLifecycleOwner) { postList ->
+            postAdapter.updatePosts(postList)
+        }
+
+//        commentAdapter = CommentAdapter(mutableListOf())
+//        recyclerViewComments = view.findViewById(R.id.recyclerViewComments)
+//        recyclerViewComments.layoutManager = LinearLayoutManager(context)
+//        recyclerViewComments.adapter = commentAdapter
+//
+//        homeViewModel.comments.observe(viewLifecycleOwner) { commentList ->
+//            commentAdapter.updateComments(commentList)
+//        }
     }
 }
