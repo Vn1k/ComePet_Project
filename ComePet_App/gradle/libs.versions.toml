@@ -5,6 +5,7 @@ compiler = "4.14.2"
 converterGson = "2.9.0"
 coreKtxVersion = "1.13.1"
 coreSplashscreen = "1.0.1"
+dimamountlibrary = "latest_version"
 firebaseAnalytics = "VERSION"
 firebaseAuth = "23.1.0"
 firebaseBom = "33.5.1"
@@ -55,6 +56,7 @@ androidx-lifecycle-livedata-ktx-v262 = { module = "androidx.lifecycle:lifecycle-
 androidx-lifecycle-viewmodel-ktx-v262 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtxVersion" }
 androidx-navigation-fragment-ktx-v275 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
 androidx-navigation-ui-ktx-v275 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
+blurlibrary = { module = "com.eightbitlab:blurlibrary", version.ref = "blurview" }
 blurview = { module = "com.eightbitlab:blurview", version.ref = "blurview" }
 com-google-firebase-firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 com-google-firebase-firebase-analytics2 = { module = "com.google.firebase:firebase-analytics" }
@@ -63,6 +65,7 @@ com-google-firebase-firebase-auth = { module = "com.google.firebase:firebase-aut
 com-google-firebase-firebase-firestore = { module = "com.google.firebase:firebase-firestore", version.ref = "firebaseFirestore" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
+dimamountlibrary = { module = "com.github.dimamount:dimamountlibrary", version.ref = "dimamountlibrary" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-auth = { module = "com.google.firebase:firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
