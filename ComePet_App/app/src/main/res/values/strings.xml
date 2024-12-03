@@ -82,4 +82,6 @@
     <string name="change_acc_status">Personal Account?</string>
     <string name="location_name">Location Name</string>
     <string name="location_address">Location Address</string>
+    <string name="google_maps_key">AIzaSyClBxyjJR18Ur2fyMR9SJSVxvQsVIhqby4</string>
+    <string name="input_location">Input your location</string>
 </resources>

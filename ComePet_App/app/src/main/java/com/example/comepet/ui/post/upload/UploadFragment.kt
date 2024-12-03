@@ -19,6 +19,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class UploadFragment : Fragment() {
 
@@ -224,10 +227,12 @@ class UploadFragment : Fragment() {
     ) {
         val imagesCollection = db.collection("users").document(userId).collection(collection)
 
+        val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
         val imageData = mapOf(
             "imageUrl" to downloadUrl,
             "caption" to captionText,
-            "date" to System.currentTimeMillis(),
+            "date" to date,
             "location" to (selectedLocation ?: "")
         )
 

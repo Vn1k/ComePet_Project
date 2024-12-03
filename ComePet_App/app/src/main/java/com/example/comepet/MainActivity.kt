@@ -2,6 +2,7 @@ package com.example.comepet
 
 import android.animation.ObjectAnimator
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.animation.AnticipateInterpolator
 import androidx.activity.viewModels
@@ -16,9 +17,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.comepet.databinding.ActivityMainBinding
 import com.example.comepet.ui.post.PostFragment
 import com.example.comepet.utils.SessionManager
+import com.google.android.libraries.places.api.Places
+import com.google.android.datatransport.runtime.BuildConfig
+import com.google.android.libraries.places.api.net.PlacesClient
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var placesClient: PlacesClient
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
     private val MainViewModel: MainViewModel by viewModels()
@@ -61,6 +65,15 @@ class MainActivity : AppCompatActivity() {
         } else {
             navigateToLoginScreen()
         }
+
+        val apiKey = com.example.comepet.BuildConfig.PLACES_API_KEY
+        if (apiKey.isEmpty() || apiKey == "DEFAULT_API_KEY") {
+            Log.d("Places test", "API key is missing: $apiKey")
+            finish()
+            return
+        }
+        Places.initialize(applicationContext, apiKey)
+        val placesClient = Places.createClient(this)
     }
 
     private fun hideBottomNavigation() {

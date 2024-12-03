@@ -2,7 +2,9 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
+val placesApiKey = if (project.hasProperty("PLACES_API_KEY")) project.property("PLACES_API_KEY") as String else ""
 
 android {
     namespace = "com.example.comepet"
@@ -16,6 +18,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "PLACES_API_KEY", "\"${placesApiKey}\"")
     }
 
     buildTypes {
@@ -36,7 +39,25 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
+    secrets {
+        // To add your Maps API key to this project:
+        // 1. If the secrets.properties file does not exist, create it in the same folder as the local.properties file.
+        // 2. Add this line, where YOUR_API_KEY is your API key:
+        //        MAPS_API_KEY=YOUR_API_KEY
+        propertiesFileName = "secrets.properties"
+
+        // A properties file containing default secret values. This file can be
+        // checked in version control.
+        defaultPropertiesFileName = "local.defaults.properties"
+
+        // Configure which keys should be ignored by the plugin by providing regular expressions.
+        // "sdk.dir" is ignored by default.
+        ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+        ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
+    }
+
 }
 
 dependencies {
@@ -68,17 +89,16 @@ dependencies {
     implementation (libs.com.google.firebase.firebase.auth)
     implementation("com.google.firebase:firebase-storage-ktx:20.2.0")
 
-
     // glide
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
 
-    //map
-    implementation(libs.play.services.maps)
-    implementation (libs.play.services.maps.v1810)
-    implementation (libs.play.services.location)
-    implementation (libs.places)
+    //post
+//    implementation (libs.blurview)
+//    implementation (libs.dimamountlibrary)
+//    implementation (libs.blurlibrary)
 
-
-
+    implementation (libs.play.services.maps.v1700)
+    implementation(platform(libs.kotlin.bom))
+    implementation(libs.places.v350)
 }
