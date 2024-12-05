@@ -12,6 +12,9 @@ import com.bumptech.glide.Glide
 import com.example.comepet.R
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
@@ -75,10 +78,6 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
             postLikeCount.text = post.likeCount.toString()
             commentCount.text = post.commentCount.toString()
 
-//            postComment.setOnClickListener {
-//                onCommentClick(post)
-//            }
-
             db.collection("users").document(post.userId)
                 .get()
                 .addOnSuccessListener { document ->
@@ -128,10 +127,20 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 updateLikeCountInFirestore(post.userId, post.id, post.isLiked)
             }
 
-            itemView.findViewById<View>(R.id.commentButton).setOnClickListener {
-                val commentText = "User's comment here"
-                val commenterId = "currentUserId"
-                addCommentToFirestore(post.userId, post.id, commentText, commenterId)
+            postComment.setOnClickListener {
+                val activity = itemView.context as? AppCompatActivity
+                if (activity != null) {
+                    val commentFragment = CommentFragment.newInstance(post.id)
+
+                    commentFragment.setOnCommentAddedListener(object : CommentFragment.OnCommentAddedListener {
+                        override fun onCommentAdded(commentText: String) {
+                            val username = post.username
+                            addCommentToFirestore(post.userId, post.id, commentText, username)
+                        }
+                    })
+
+                    commentFragment.show(activity.supportFragmentManager, "CommentFragment")
+                }
             }
         }
 
@@ -187,11 +196,13 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 }
         }
 
-        private fun addCommentToFirestore(userId: String, postId: String, commentText: String, commenterId: String) {
+        private fun addCommentToFirestore(userId: String, postId: String, commentText: String, username: String) {
+            val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+
             val commentData = hashMapOf(
                 "commentText" to commentText,
-                "commenterId" to commenterId,
-                "timestamp" to FieldValue.serverTimestamp()
+                "username" to username,
+                "date" to date,
             )
 
             val commentRef = db.collection("users").document(userId)
@@ -207,30 +218,5 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                     Log.e("PostAdapter", "Failed to add comment to Firestore: ${error.message}")
                 }
         }
-
-//        private fun onCommentClick(post: Post) {
-//            val commentsFragment = CommentsFragment.newInstance(post.id)
-//
-//            val fragmentTransaction = (itemView.context as AppCompatActivity).supportFragmentManager.beginTransaction()
-//            fragmentTransaction.replace(R.id.fragment_container, commentsFragment)
-//            fragmentTransaction.addToBackStack(null)
-//            fragmentTransaction.commit()
-//        }
-
-
-//        private fun removeCommentFromFirestore(userId: String, postId: String, commentId: String) {
-//            val commentRef = db.collection("users").document(userId)
-//                .collection("feeds").document(postId)
-//                .collection("comments").document(commentId)
-//
-//            commentRef.delete()
-//                .addOnSuccessListener {
-//                    Log.d("PostAdapter", "Comment removed successfully from Firestore")
-//                    updateCommentCountInFirestore(userId, postId, false)
-//                }
-//                .addOnFailureListener { error ->
-//                    Log.e("PostAdapter", "Failed to remove comment from Firestore: ${error.message}")
-//                }
-//        }
     }
 }

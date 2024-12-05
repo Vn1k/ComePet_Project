@@ -11,6 +11,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 data class Post(
@@ -24,6 +27,7 @@ data class Post(
     val date: String = "",
     var isLiked: Boolean = false,
     var likeCount: Int = 0,
+    var isCommented: Boolean = false,
     val commentCount: Int = 0,
     val profileImage: String = "",
     val address: String = "",
@@ -72,6 +76,8 @@ class HomeViewModel : ViewModel() {
                                 val likeCount = feedDoc.getLong("likeCount")?.toInt() ?: 0
                                 val commentCount = feedDoc.getLong("commentCount")?.toInt() ?: 0
 
+                                val date = feedDoc.getString("date") ?: getCurrentDate()
+
                                 val post = Post(
                                     userId = userId,
                                     email = email,
@@ -81,15 +87,22 @@ class HomeViewModel : ViewModel() {
                                     location = location,
                                     profileImage = profileImageUrl,
                                     imageUrl = imageUrl,
-                                    date = "2024-11-19", // yang ini juga
+                                    date = date,
                                     isLiked = false,
+                                    isCommented = false,
                                     likeCount = likeCount,
                                     commentCount = commentCount,
                                     id = feedId
                                 )
                                 postList.add(post)
                             }
-                            _posts.value = postList
+
+                            val sortedPosts = postList.sortedBy { post ->
+                                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                dateFormat.parse(post.date)
+                            }.toMutableList().reversed()
+
+                            _posts.value = sortedPosts
                         }
                         .addOnFailureListener { error: Exception ->
                             Log.e("HomeViewModel", "Failed to fetch feeds: ${error.message}")
@@ -101,20 +114,8 @@ class HomeViewModel : ViewModel() {
             }
     }
 
-//    fun getCommentsForPost(postId: String): LiveData<List<Comment>> {
-//        val commentsLiveData = MutableLiveData<List<Comment>>()
-//
-//        db.collection("posts").document(postId)
-//            .collection("comments")
-//            .get()
-//            .addOnSuccessListener { snapshot ->
-//                val comments = snapshot.documents.mapNotNull { it.toObject(Comment::class.java) }
-//                commentsLiveData.value = comments
-//            }
-//            .addOnFailureListener { error ->
-//                Log.e("HomeViewModel", "Failed to fetch comments: ${error.message}")
-//            }
-//
-//        return commentsLiveData
-//    }
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
+    }
 }

@@ -142,6 +142,25 @@
             android:id="@+id/navigation_edit_profile_to_navigation_profile"
             app:destination="@id/navigation_profile"/>
 
+        <action
+            android:id="@+id/navigation_edit_profile_to_navigation_crop"
+            app:destination="@+id/navigation_crop"/>
+            />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_crop"
+        android:name="com.example.comepet.ui.profile.subfragments.CropImageFragment"
+        android:label="Crop Image">
+
+        <action
+            android:id="@+id/navigation_crop_to_navigation_edit_profile"
+            app:destination="@+id/navigation_edit_profile" />
+            />
+        <argument
+            android:name="IMAGE_URI"
+            app:argType="android.net.Uri" />
     </fragment>
 
 

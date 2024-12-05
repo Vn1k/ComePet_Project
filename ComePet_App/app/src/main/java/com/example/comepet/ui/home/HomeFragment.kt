@@ -19,8 +19,6 @@ class HomeFragment : BaseAuthFragment() {
     private val homeViewModel: HomeViewModel by viewModels()
     private lateinit var recyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
-//    private lateinit var recyclerViewComments: RecyclerView
-//    private lateinit var commentAdapter: CommentAdapter
     private lateinit var ChatButton: ImageButton
 
     override fun onCreateView(
@@ -46,14 +44,5 @@ class HomeFragment : BaseAuthFragment() {
         homeViewModel.posts.observe(viewLifecycleOwner) { postList ->
             postAdapter.updatePosts(postList)
         }
-
-//        commentAdapter = CommentAdapter(mutableListOf())
-//        recyclerViewComments = view.findViewById(R.id.recyclerViewComments)
-//        recyclerViewComments.layoutManager = LinearLayoutManager(context)
-//        recyclerViewComments.adapter = commentAdapter
-//
-//        homeViewModel.comments.observe(viewLifecycleOwner) { commentList ->
-//            commentAdapter.updateComments(commentList)
-//        }
     }
 }

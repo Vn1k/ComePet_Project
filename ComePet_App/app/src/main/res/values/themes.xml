@@ -1,14 +1,24 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Theme.ComePet" parent="Theme.AppCompat.Light.NoActionBar"/>
+    <!-- Base application theme using Material Components -->
+    <style name="Theme.ComePet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize Material Components theme if necessary -->
+    </style>
+
+    <!-- Splash Screen Theme -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/light_beige</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.ComePet</item>
     </style>
-    
-    <style name="DialogAnimation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_animation</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_animation</item>
+
+    <!-- Custom Bottom Sheet Dialog Theme -->
+    <style name="CustomBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>
+
+    <!-- Custom Bottom Sheet Style -->
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_corner_top_white</item>
+    </style>
+
 </resources>

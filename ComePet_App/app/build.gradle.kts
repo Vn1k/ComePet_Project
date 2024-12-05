@@ -94,10 +94,16 @@ dependencies {
     implementation(libs.glide)
     annotationProcessor(libs.compiler)
 
-    //post
-//    implementation (libs.blurview)
-//    implementation (libs.dimamountlibrary)
-//    implementation (libs.blurlibrary)
+    //map
+    implementation(libs.play.services.maps)
+    implementation (libs.play.services.maps.v1810)
+    implementation (libs.play.services.location)
+    implementation (libs.places)
+
+    // image cropper
+    implementation("com.vanniktech:android-image-cropper:4.6.0")
+
+    implementation ("androidx.appcompat:appcompat:1.6.1")
 
     implementation (libs.play.services.maps.v1700)
     implementation(platform(libs.kotlin.bom))

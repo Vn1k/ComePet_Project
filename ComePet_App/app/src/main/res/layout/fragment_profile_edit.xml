@@ -7,62 +7,85 @@
     android:background="@color/light_beige"
     tools:context=".ui.profile.subfragments.ProfileEditFragment">
 
-    <ImageView
-        android:id="@+id/Profile_Picture"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginTop="32dp"
-        android:src="@drawable/calista_circle"
+    <ProgressBar
+        android:id="@+id/loadingProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/Profile_Picture_Canvas"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="32dp"
+        app:cardCornerRadius="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/Profile_Picture"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/calista_circle" />
+
+    </androidx.cardview.widget.CardView>
 
     <ImageButton
         android:id="@+id/cameraButton"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:background="@null"
+        android:elevation="8dp"
+        android:translationZ="8dp"
         android:scaleType="centerCrop"
         android:src="@drawable/profile_camera_logo"
-        app:layout_constraintBottom_toBottomOf="@+id/Profile_Picture"
-        app:layout_constraintEnd_toEndOf="@+id/Profile_Picture" />
+        app:layout_constraintBottom_toBottomOf="@id/Profile_Picture_Canvas"
+        app:layout_constraintEnd_toEndOf="@id/Profile_Picture_Canvas" />
 
     <TextView
         android:id="@+id/textViewName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
         android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
-        android:layout_marginEnd="-100dp"
         android:text="@string/name"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextName"
-        app:layout_constraintEnd_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editTextName"
         app:layout_constraintTop_toTopOf="@+id/editTextName" />
 
     <EditText
         android:id="@+id/editTextName"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
-        android:layout_marginStart="-280dp"
         android:layout_marginTop="32dp"
         android:ems="10"
+        android:fontFamily="@font/montserrat_medium"
         android:inputType="text"
-        app:layout_constraintStart_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Profile_Picture" />
+        android:textSize="15sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.7"
+        app:layout_constraintTop_toBottomOf="@+id/Profile_Picture_Canvas" />
 
     <TextView
         android:id="@+id/textViewUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
         android:text="@string/username"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextUsername"
         app:layout_constraintEnd_toEndOf="@+id/textViewName"
         app:layout_constraintTop_toTopOf="@+id/editTextUsername" />
@@ -84,10 +107,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
         android:text="@string/phone"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextPhone"
         app:layout_constraintEnd_toEndOf="@+id/textViewUsername"
         app:layout_constraintTop_toTopOf="@+id/editTextPhone" />
@@ -109,10 +132,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
+        android:text="Bio"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
-        android:text="Bio"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextBio"
         app:layout_constraintEnd_toEndOf="@+id/textViewPhone"
         app:layout_constraintTop_toTopOf="@+id/editTextBio" />
@@ -121,11 +144,11 @@
         android:id="@+id/editTextBio"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:fontFamily="@font/montserrat_medium"
         android:inputType="text"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/editTextPhone"
         app:layout_constraintTop_toBottomOf="@+id/editTextPhone" />
 
@@ -134,10 +157,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
         android:text="@string/location"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="@+id/editTextLocation"
         app:layout_constraintEnd_toEndOf="@+id/textView7"
         app:layout_constraintTop_toTopOf="@+id/editTextLocation" />
@@ -146,11 +169,11 @@
         android:id="@+id/editTextLocation"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat_medium"
-        android:textSize="15sp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:fontFamily="@font/montserrat_medium"
         android:inputType="text"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="@+id/editTextBio"
         app:layout_constraintTop_toBottomOf="@+id/editTextBio" />
 
@@ -181,5 +204,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView14" />
 
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/cropImageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
