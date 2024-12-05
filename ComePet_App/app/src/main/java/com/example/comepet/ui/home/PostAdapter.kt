@@ -81,10 +81,10 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
             db.collection("users").document(post.userId)
                 .get()
                 .addOnSuccessListener { document ->
-                    val profileImageUrl = document.getString("profileImageUrl")
-                    if (profileImageUrl != null) {
+                    val profilePicture = document.getString("profilePicture")
+                    if (profilePicture != null) {
                         Glide.with(itemView.context)
-                            .load(profileImageUrl)
+                            .load(profilePicture)
                             .circleCrop()
                             .into(imageViewProfile)
                     } else {
