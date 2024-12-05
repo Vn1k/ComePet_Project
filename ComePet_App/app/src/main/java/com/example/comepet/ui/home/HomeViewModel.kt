@@ -24,6 +24,7 @@ data class Post(
     val date: String = "",
     var isLiked: Boolean = false,
     var likeCount: Int = 0,
+    var isCommented: Boolean = false,
     val commentCount: Int = 0,
     val profileImage: String = "",
     val address: String = "",
@@ -83,6 +84,7 @@ class HomeViewModel : ViewModel() {
                                     imageUrl = imageUrl,
                                     date = "2024-11-19", // yang ini juga
                                     isLiked = false,
+                                    isCommented = false,
                                     likeCount = likeCount,
                                     commentCount = commentCount,
                                     id = feedId
@@ -100,21 +102,4 @@ class HomeViewModel : ViewModel() {
                 Log.e("HomeViewModel", "Failed to fetch users: ${error.message}")
             }
     }
-
-//    fun getCommentsForPost(postId: String): LiveData<List<Comment>> {
-//        val commentsLiveData = MutableLiveData<List<Comment>>()
-//
-//        db.collection("posts").document(postId)
-//            .collection("comments")
-//            .get()
-//            .addOnSuccessListener { snapshot ->
-//                val comments = snapshot.documents.mapNotNull { it.toObject(Comment::class.java) }
-//                commentsLiveData.value = comments
-//            }
-//            .addOnFailureListener { error ->
-//                Log.e("HomeViewModel", "Failed to fetch comments: ${error.message}")
-//            }
-//
-//        return commentsLiveData
-//    }
 }
