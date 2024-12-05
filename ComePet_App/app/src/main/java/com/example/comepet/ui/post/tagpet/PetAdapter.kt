@@ -11,7 +11,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.comepet.R
 
-class PetAdapter(private val petList: List<Pet>) : RecyclerView.Adapter<PetAdapter.PetViewHolder>() {
+class PetAdapter(
+    private val petList: List<Pet>,
+    private val onItemClick: (Pet) -> Unit
+) : RecyclerView.Adapter<PetAdapter.PetViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PetViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pet, parent, false)
@@ -20,7 +23,7 @@ class PetAdapter(private val petList: List<Pet>) : RecyclerView.Adapter<PetAdapt
 
     override fun onBindViewHolder(holder: PetViewHolder, position: Int) {
         val pet = petList[position]
-        holder.bind(pet)
+        holder.bind(pet, onItemClick)
     }
 
     override fun getItemCount(): Int = petList.size
@@ -30,7 +33,7 @@ class PetAdapter(private val petList: List<Pet>) : RecyclerView.Adapter<PetAdapt
         private val nameTextView: TextView = itemView.findViewById(R.id.username1)
         private val typeTextView: TextView = itemView.findViewById(R.id.typepet1)
 
-        fun bind(pet: Pet) {
+        fun bind(pet: Pet, onItemClick: (Pet) -> Unit) {
             nameTextView.text = pet.name
             typeTextView.text = pet.ras
 
@@ -38,6 +41,11 @@ class PetAdapter(private val petList: List<Pet>) : RecyclerView.Adapter<PetAdapt
                 .load(pet.petProfilePicture)
                 .placeholder(R.drawable.cat)
                 .into(profileImageView)
+
+            itemView.setOnClickListener {
+                onItemClick(pet)
+            }
         }
     }
 }
+
