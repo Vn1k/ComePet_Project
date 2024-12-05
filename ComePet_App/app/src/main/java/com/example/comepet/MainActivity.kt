@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.Window
 import android.view.animation.AnticipateInterpolator
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
+    private lateinit var likeButton: ImageView
     private var capturedImageUri: Uri? = null
     private val MainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
