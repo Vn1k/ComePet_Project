@@ -11,6 +11,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.UUID
 
 data class Post(
@@ -73,6 +76,8 @@ class HomeViewModel : ViewModel() {
                                 val likeCount = feedDoc.getLong("likeCount")?.toInt() ?: 0
                                 val commentCount = feedDoc.getLong("commentCount")?.toInt() ?: 0
 
+                                val date = feedDoc.getString("date") ?: getCurrentDate()
+
                                 val post = Post(
                                     userId = userId,
                                     email = email,
@@ -82,7 +87,7 @@ class HomeViewModel : ViewModel() {
                                     location = location,
                                     profileImage = profileImageUrl,
                                     imageUrl = imageUrl,
-                                    date = "2024-11-19", // yang ini juga
+                                    date = date,
                                     isLiked = false,
                                     isCommented = false,
                                     likeCount = likeCount,
@@ -91,7 +96,13 @@ class HomeViewModel : ViewModel() {
                                 )
                                 postList.add(post)
                             }
-                            _posts.value = postList
+
+                            val sortedPosts = postList.sortedBy { post ->
+                                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                                dateFormat.parse(post.date)
+                            }.toMutableList().reversed()
+
+                            _posts.value = sortedPosts
                         }
                         .addOnFailureListener { error: Exception ->
                             Log.e("HomeViewModel", "Failed to fetch feeds: ${error.message}")
@@ -101,5 +112,10 @@ class HomeViewModel : ViewModel() {
             .addOnFailureListener { error: Exception ->
                 Log.e("HomeViewModel", "Failed to fetch users: ${error.message}")
             }
+    }
+
+    private fun getCurrentDate(): String {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        return dateFormat.format(Date())
     }
 }
