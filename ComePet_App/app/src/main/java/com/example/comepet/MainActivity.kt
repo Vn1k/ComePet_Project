@@ -22,7 +22,6 @@ import com.google.android.datatransport.runtime.BuildConfig
 import com.google.android.libraries.places.api.net.PlacesClient
 
 class MainActivity : AppCompatActivity() {
-    lateinit var placesClient: PlacesClient
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
     private val MainViewModel: MainViewModel by viewModels()
@@ -66,14 +65,14 @@ class MainActivity : AppCompatActivity() {
             navigateToLoginScreen()
         }
 
-        val apiKey = com.example.comepet.BuildConfig.PLACES_API_KEY
-        if (apiKey.isEmpty() || apiKey == "DEFAULT_API_KEY") {
-            Log.d("Places test", "API key is missing: $apiKey")
-            finish()
-            return
-        }
-        Places.initialize(applicationContext, apiKey)
-        val placesClient = Places.createClient(this)
+//        val apiKey = com.example.comepet.BuildConfig.PLACES_API_KEY
+//        if (apiKey.isEmpty() || apiKey == "DEFAULT_API_KEY") {
+//            Log.d("Places test", "API key is missing: $apiKey")
+//            finish()
+//            return
+//        }
+//        Places.initialize(applicationContext, apiKey)
+//        val placesClient = Places.createClient(this)
     }
 
     private fun hideBottomNavigation() {

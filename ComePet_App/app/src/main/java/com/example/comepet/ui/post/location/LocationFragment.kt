@@ -6,69 +6,50 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.libraries.places.api.net.SearchByTextRequest
-import com.google.android.material.textfield.TextInputEditText
-import java.util.Arrays
-
 
 class LocationFragment : Fragment() {
-    private lateinit var searchLocation: TextInputEditText
+
     private lateinit var placesClient: PlacesClient
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if (!Places.isInitialized()) {
+            Places.initialize(requireContext(), "AIzaSyC4FeUXCDHBa4TXiSWHy1qwtwzyTQ_6so0")
+        }
+        placesClient = Places.createClient(requireContext())
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate the layout for this fragment
+        fetchPlacePredictions("cafe") // Example: Fetch predictions for "cafe"
         return inflater.inflate(R.layout.fragment_location, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        placesClient = Places.createClient(requireContext())
-
-        // Setup the search location text input
-        searchLocation = view.findViewById(R.id.search_location)
-
-        searchLocation.setOnEditorActionListener { _, _, _ ->
-            val query = searchLocation.text.toString()
-            if (query.isNotEmpty()) {
-                searchForPlaces(query)
-            }
-            true
-        }
-    }
-
-    private fun searchForPlaces(query: String) {
-        val placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME)
-
-        val request = SearchByTextRequest.builder(query, placeFields)
-            .setMaxResultCount(10)
+    private fun fetchPlacePredictions(query: String) {
+        val request = FindAutocompletePredictionsRequest.builder()
+            .setQuery(query)
+            .setTypeFilter(null)
+            .setCountry("US")
             .build()
 
-        placesClient.searchByText(request)
+        placesClient.findAutocompletePredictions(request)
             .addOnSuccessListener { response ->
-                val places: List<Place> = response.getPlaces()
-                // Handle the places here, e.g., update your RecyclerView
-                showSearchResults(places)
+                for (prediction: AutocompletePrediction in response.autocompletePredictions) {
+                    Log.d("LocationFragment", "Place: ${prediction.getPrimaryText(null)}")
+                }
             }
             .addOnFailureListener { exception ->
-                Log.e("LocationFragment", "Place search failed: ${exception.message}")
+                Log.e("LocationFragment", "Place prediction fetch failed: $exception")
             }
-    }
-
-    private fun showSearchResults(places: List<Place>) {
-        val recyclerView: RecyclerView = view?.findViewById(R.id.recycler_view_places) ?: return
-        recyclerView.visibility = View.VISIBLE
-
-        val adapter = PlacesAdapter(places)
-        recyclerView.adapter = adapter
     }
 }
