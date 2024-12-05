@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.comepet.R
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
@@ -19,6 +20,7 @@ import java.util.Locale
 class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -163,22 +165,32 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
         }
 
         private fun updateLikeCountInFirestore(userId: String, postId: String, isLiked: Boolean) {
-            val postRef =
-                db.collection("users").document(userId).collection("feeds").document(postId)
+            val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+            val postRef = db.collection("users").document(userId).collection("feeds").document(postId)
 
-            postRef.update(
-                "likeCount",
-                if (isLiked) FieldValue.increment(1) else FieldValue.increment(-1)
-            )
-                .addOnSuccessListener {
-                    Log.d("PostAdapter", "Like count updated successfully in Firestore")
-                }
-                .addOnFailureListener { error ->
-                    Log.e(
-                        "PostAdapter",
-                        "Failed to update like count in Firestore: ${error.message}"
-                    )
-                }
+            if (isLiked) {
+                postRef.update(
+                    "likeCount", FieldValue.increment(1),
+                    "likedBy", FieldValue.arrayUnion(currentUserId)
+                )
+                    .addOnSuccessListener {
+                        Log.d("PostAdapter", "User added to likedBy and likeCount incremented")
+                    }
+                    .addOnFailureListener { error ->
+                        Log.e("PostAdapter", "Failed to update likedBy: ${error.message}")
+                    }
+            } else {
+                postRef.update(
+                    "likeCount", FieldValue.increment(-1),
+                    "likedBy", FieldValue.arrayRemove(currentUserId)
+                )
+                    .addOnSuccessListener {
+                        Log.d("PostAdapter", "User removed from likedBy and likeCount decremented")
+                    }
+                    .addOnFailureListener { error ->
+                        Log.e("PostAdapter", "Failed to update likedBy: ${error.message}")
+                    }
+            }
         }
 
         private fun updateCommentCountInFirestore(userId: String, postId: String, isCommented: Boolean) {

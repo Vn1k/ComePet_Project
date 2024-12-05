@@ -27,6 +27,7 @@ data class Post(
     val date: String = "",
     var isLiked: Boolean = false,
     var likeCount: Int = 0,
+    var likedBy: MutableList<String> = mutableListOf(),
     var isCommented: Boolean = false,
     val commentCount: Int = 0,
     val profileImage: String = "",
@@ -77,6 +78,8 @@ class HomeViewModel : ViewModel() {
                                 val commentCount = feedDoc.getLong("commentCount")?.toInt() ?: 0
 
                                 val date = feedDoc.getString("date") ?: getCurrentDate()
+                                val likedByList = feedDoc.get("likedBy") as? List<String> ?: emptyList()
+                                val isLiked = FirebaseAuth.getInstance().currentUser?.uid in likedByList
 
                                 val post = Post(
                                     userId = userId,
@@ -88,11 +91,12 @@ class HomeViewModel : ViewModel() {
                                     profileImage = profileImageUrl,
                                     imageUrl = imageUrl,
                                     date = date,
-                                    isLiked = false,
+                                    isLiked = isLiked,
                                     isCommented = false,
                                     likeCount = likeCount,
                                     commentCount = commentCount,
-                                    id = feedId
+                                    id = feedId,
+                                    likedBy = likedByList.toMutableList()
                                 )
                                 postList.add(post)
                             }
