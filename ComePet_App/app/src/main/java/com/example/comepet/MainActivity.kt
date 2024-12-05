@@ -88,42 +88,24 @@ class MainActivity : AppCompatActivity() {
         binding.navView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    navHome()
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_home)
                     true
                 }
                 R.id.navigation_search -> {
-                    navSearch()
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_search)
                     true
                 }
                 R.id.navigation_post -> {
-                    val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
-                    if (currentDestination != R.id.navigation_upload) {
-                        showBottomDialog()
-                    }
+                    showBottomDialog()
                     true
                 }
                 R.id.navigation_profile -> {
-                    navProf()
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_profile)
                     true
                 }
                 else -> false
             }
         }
-    }
-
-    private fun navHome() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_home)
-    }
-
-    private fun navSearch() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_search)
-    }
-
-    private fun navProf() {
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_profile)
     }
 
     private fun hideBottomNavigation() {
@@ -153,18 +135,31 @@ class MainActivity : AppCompatActivity() {
         val galleryButton: TextView = dialog.findViewById(R.id.galleryButton)
 
         cameraButton.setOnClickListener {
+            val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
+
+            val bundle = Bundle().apply {
+                putInt("sourceFragment", currentDestination ?: R.id.navigation_home)
+            }
+
             findNavController(R.id.nav_host_fragment_activity_main).navigate(
                 R.id.navigation_camera,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.navigation_post, true).build()
+                bundle
             )
             dialog.dismiss()
         }
 
-
         galleryButton.setOnClickListener {
+            val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
+
+            val bundle = Bundle().apply {
+                putInt("sourceFragment", currentDestination ?: R.id.navigation_home)
+            }
+
+            findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                R.id.navigation_upload,
+                bundle
+            )
             dialog.dismiss()
-            openGallery()
         }
 
         dialog.show()
@@ -192,5 +187,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun openGallery() {
         pickImageLauncher.launch("image/*")
+    }
+
+    fun navHome() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_home)
+    }
+
+    fun navSearch() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_search)
+    }
+
+    fun navProf() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_profile)
     }
 }

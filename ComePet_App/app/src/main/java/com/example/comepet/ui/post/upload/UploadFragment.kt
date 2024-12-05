@@ -84,15 +84,6 @@ class UploadFragment : Fragment() {
             val imageUri = Uri.parse(it)
             Glide.with(this).load(imageUri).into(captureResult)
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            findNavController().navigate(
-                R.id.navigation_home,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.navigation_post, true).build()
-            )
-        }
-
 //        uploadViewModel.caption?.let { captionEditText.setText(it) }
         uploadViewModel.selectedLocation?.let {
             view.findViewById<TextView>(R.id.selectedLocationText).text = it
@@ -120,13 +111,9 @@ class UploadFragment : Fragment() {
             } ?: Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show()
         }
 
-        // Navigasi tombol
         backButtonToPost.setOnClickListener {
-            findNavController().navigate(
-                R.id.navigation_home,
-                null,
-                NavOptions.Builder().setPopUpTo(R.id.navigation_post, true).build()
-            )
+            val sourceFragment = arguments?.getInt("sourceFragment", R.id.navigation_home) ?: R.id.navigation_home
+            findNavController().popBackStack(sourceFragment, false)
         }
 
         tagPet.setOnClickListener {
