@@ -1,11 +1,13 @@
 package com.example.comepet.ui.post.tagpet
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -69,7 +71,9 @@ class TagpetFragment : Fragment() {
                     view?.let { nonNullView ->
                         val recyclerView: RecyclerView = nonNullView.findViewById(R.id.petProfileRecyclerView)
                         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                        recyclerView.adapter = PetAdapter(petList)
+                        recyclerView.adapter = PetAdapter(petList) { pet ->
+                            onPetSelected(pet)
+                        }
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -78,5 +82,20 @@ class TagpetFragment : Fragment() {
         } else {
             println("User is not logged in")
         }
+    }
+
+    private fun onPetSelected(pet: Pet) {
+        // Kirim data pet yang dipilih ke UploadFragment menggunakan setFragmentResult
+
+        Log.d("TagpetFragment", "Pet selected: Name = ${pet.name}, Type = ${pet.ras}, Image URL = ${pet.petProfilePicture}")
+
+        parentFragmentManager.setFragmentResult("SELECTED_PET_REQUEST", bundleOf(
+            "selectedPetName" to pet.name,
+            "selectedPetProfilePicture" to pet.petProfilePicture,
+            "selectedPetRas" to pet.ras
+        ))
+
+        // Pindah ke UploadFragment
+        findNavController().navigate(R.id.navigation_tagpet_to_navigation_upload)
     }
 }
