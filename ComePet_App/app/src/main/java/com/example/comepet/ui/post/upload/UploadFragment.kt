@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.comepet.R
@@ -83,6 +85,14 @@ class UploadFragment : Fragment() {
             Glide.with(this).load(imageUri).into(captureResult)
         }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(
+                R.id.navigation_home,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.navigation_post, true).build()
+            )
+        }
+
 //        uploadViewModel.caption?.let { captionEditText.setText(it) }
         uploadViewModel.selectedLocation?.let {
             view.findViewById<TextView>(R.id.selectedLocationText).text = it
@@ -112,7 +122,11 @@ class UploadFragment : Fragment() {
 
         // Navigasi tombol
         backButtonToPost.setOnClickListener {
-            findNavController().navigate(R.id.navigation_upload_to_navigation_post)
+            findNavController().navigate(
+                R.id.navigation_home,
+                null,
+                NavOptions.Builder().setPopUpTo(R.id.navigation_post, true).build()
+            )
         }
 
         tagPet.setOnClickListener {

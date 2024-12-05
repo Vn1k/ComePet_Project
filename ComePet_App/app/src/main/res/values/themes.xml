@@ -6,4 +6,9 @@
         <item name="windowSplashScreenAnimatedIcon">@drawable/logo_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.ComePet</item>
     </style>
+    
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_animation</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_animation</item>
+    </style>
 </resources>
