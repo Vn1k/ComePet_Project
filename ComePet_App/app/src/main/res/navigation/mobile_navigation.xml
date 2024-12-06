@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_login">
+    app:startDestination="@+id/navigation_home">
 
     <fragment
         android:id="@+id/navigation_home"
@@ -235,7 +235,7 @@
 
         <action
             android:id="@+id/navigation_upload_to_navigation_location"
-            app:destination="@id/navigation_addlocation"/>
+            app:destination="@id/navigation_location"/>
 
         <action
             android:id="@+id/navigation_upload_to_navigation_postFeeds"
@@ -258,10 +258,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_addlocation"
+        android:id="@+id/navigation_location"
         android:name="com.example.comepet.ui.post.location.LocationFragment"
         android:label="Add Location"
-        tools:layout="@layout/fragment_addlocation">
+        tools:layout="@layout/fragment_location">
 
         <action
             android:id="@+id/navigation_addlocation_to_navigation_upload"
