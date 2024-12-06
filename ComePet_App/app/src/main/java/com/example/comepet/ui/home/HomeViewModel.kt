@@ -33,7 +33,7 @@ data class Post(
     val address: String = "",
     val phoneNumber: String = "",
     val bio: String = "",
-    val id: String = ""
+    val idPost: String = ""
 )
 
 class HomeViewModel : ViewModel() {
@@ -92,7 +92,7 @@ class HomeViewModel : ViewModel() {
                                     isCommented = false,
                                     likeCount = likeCount,
                                     commentCount = commentCount,
-                                    id = feedId
+                                    idPost = feedId
                                 )
                                 postList.add(post)
                             }

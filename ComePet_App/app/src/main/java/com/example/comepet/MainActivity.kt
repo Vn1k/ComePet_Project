@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_search -> hideBottomNavigation()
                 R.id.navigation_forgot -> hideBottomNavigation()
                 R.id.navigation_setting -> hideBottomNavigation()
+                R.id.navigation_chat -> hideBottomNavigation()
                 R.id.navigation_change_email -> hideBottomNavigation()
                 R.id.navigation_change_password -> hideBottomNavigation()
                 else -> showBottomNavigation()
@@ -86,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToMainScreen() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_home)
+        navController.navigate(R.id.navigation_chat)
     }
 
     private fun navigateToLoginScreen() {
