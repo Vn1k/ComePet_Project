@@ -1,9 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme using Material Components -->
-    <style name="Theme.ComePet" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Customize Material Components theme if necessary -->
-    </style>
-
+    <style name="Theme.ComePet" parent="Theme.AppCompat.Light.NoActionBar"/>
     <!-- Splash Screen Theme -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/light_beige</item>
