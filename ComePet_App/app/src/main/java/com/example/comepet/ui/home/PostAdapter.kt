@@ -126,18 +126,18 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 post.likeCount += if (post.isLiked) 1 else -1
                 postLikeCount.text = post.likeCount.toString()
 
-                updateLikeCountInFirestore(post.userId, post.idPost, post.isLiked)
+                updateLikeCountInFirestore(post.userId, post.id, post.isLiked)
             }
 
             postComment.setOnClickListener {
                 val activity = itemView.context as? AppCompatActivity
                 if (activity != null) {
-                    val commentFragment = CommentFragment.newInstance(post.idPost)
+                    val commentFragment = CommentFragment.newInstance(post.id)
 
                     commentFragment.setOnCommentAddedListener(object : CommentFragment.OnCommentAddedListener {
                         override fun onCommentAdded(commentText: String) {
                             val username = post.username
-                            addCommentToFirestore(post.userId, post.idPost, commentText, username)
+                            addCommentToFirestore(post.userId, post.id, commentText, username)
                         }
                     })
 

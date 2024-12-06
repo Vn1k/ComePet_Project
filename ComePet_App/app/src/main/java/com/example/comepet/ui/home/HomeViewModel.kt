@@ -34,7 +34,7 @@ data class Post(
     val address: String = "",
     val phoneNumber: String = "",
     val bio: String = "",
-    val idPost: String = ""
+    val id: String = ""
 )
 
 class HomeViewModel : ViewModel() {

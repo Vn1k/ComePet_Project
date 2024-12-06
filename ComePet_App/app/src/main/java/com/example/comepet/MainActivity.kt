@@ -87,7 +87,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun navigateToMainScreen() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        navController.navigate(R.id.navigation_chat)
+        navController.navigate(R.id.navigation_home)
     }
 
     private fun navigateToLoginScreen() {
