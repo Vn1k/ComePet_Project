@@ -91,6 +91,8 @@ dependencies {
     implementation("com.google.firebase:firebase-storage-ktx:20.2.0")
     implementation (libs.play.services.auth.v2001)
     implementation (libs.play.services.location)
+    implementation (libs.androidx.core.ktx.v1101)
+
 
     // glide
     implementation(libs.glide)

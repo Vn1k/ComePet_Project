@@ -4,6 +4,7 @@ import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -45,25 +46,31 @@ class SearchFragment : Fragment() {
         val adapter = UserIdAdapter()
         recyclerView.adapter = adapter
 
-        adapter.onItemClick = { userId ->
-            // Navigasi ke fragment detail, atau tampilkan toast
-            Toast.makeText(context, "User ID: $userId", Toast.LENGTH_SHORT).show()
-        }
-
-        // Observe the user IDs LiveData
-        viewModel.userIds.observe(viewLifecycleOwner, Observer { userIds ->
-            adapter.submitList(userIds)
+        // Observe hasil pencarian
+        viewModel.filteredUserIds.observe(viewLifecycleOwner, Observer { userIds ->
+            Log.d("SearchFragment", "Observed filtered user IDs: $userIds")
+            adapter.submitList(userIds) // Perbarui daftar RecyclerView
         })
 
-        // Search when user types in the search bar
         searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Tidak diperlukan, bisa dibiarkan kosong
+            }
+
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s.toString()
+                val query = s?.toString() ?: ""
+                Log.d("SearchFragment", "Search query: $query")
                 viewModel.searchUserIds(query)
             }
-            override fun afterTextChanged(s: Editable?) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                // Tidak diperlukan, bisa dibiarkan kosong
+            }
         })
+
+        // Fetch semua data user
+        viewModel.fetchAllUserIds()
+
 
     }
 
