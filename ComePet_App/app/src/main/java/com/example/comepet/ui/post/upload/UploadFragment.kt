@@ -233,6 +233,7 @@ class UploadFragment : Fragment() {
         petSelectedName: String?,
         onUploadSuccess: () -> Unit
     ) {
+
         val imagesCollection = db.collection("users").document(userId).collection(collection)
 
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
@@ -241,11 +242,11 @@ class UploadFragment : Fragment() {
             "imageUrl" to downloadUrl,
             "caption" to captionText,
             "date" to date,
-            "petName" to (petSelectedName ?: "Unknown"),
+            "petName" to (petSelectedName ?: ""),
             "location" to (selectedLocation ?: "")
         )
 
-        db.collection(collection)
+        imagesCollection
             .add(postData)
             .addOnSuccessListener {
                 Toast.makeText(context, "Post uploaded successfully!", Toast.LENGTH_SHORT).show()
@@ -256,6 +257,7 @@ class UploadFragment : Fragment() {
                 Log.e("UploadFragment", "Error uploading post", e)
             }
     }
+
 
 
 

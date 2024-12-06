@@ -41,6 +41,7 @@ navigationUiKtxVersion = "2.8.3"
 places = "4.1.0"
 placesVersion = "3.5.0"
 playServicesAuth = "21.2.0"
+playServicesAuthVersion = "20.0.1"
 playServicesLocation = "21.0.1"
 playServicesMaps = "19.0.0"
 playServicesMapsVersion = "18.1.0"
@@ -98,6 +99,7 @@ firebase-database-ktx = { group = "com.google.firebase", name = "firebase-databa
 places = { module = "com.google.android.libraries.places:places", version.ref = "places" }
 places-v350 = { module = "com.google.android.libraries.places:places", version.ref = "placesVersion" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
+play-services-auth-v2001 = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuthVersion" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 play-services-maps-v1700 = { module = "com.google.android.gms:play-services-maps", version.ref = "googlePlayServicesMaps" }
