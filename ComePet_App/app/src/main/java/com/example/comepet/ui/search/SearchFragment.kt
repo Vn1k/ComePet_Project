@@ -4,7 +4,6 @@ import androidx.fragment.app.viewModels
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,69 +14,51 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 
 class SearchFragment : Fragment() {
+    private lateinit var viewModel: SearchViewModel
+    private lateinit var userAdapter: UserAdapter
+    private lateinit var searchBar: EditText
 
-    private lateinit var searchInput: EditText
-    private lateinit var recyclerView: RecyclerView
-    private val viewModel: SearchViewModel by viewModels()
-
-    companion object {
-        fun newInstance() = SearchFragment()
-    }
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        searchInput = view.findViewById(R.id.searchBar)
-        recyclerView = view.findViewById(R.id.recyclerViewChats)
+        viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+        userAdapter = UserAdapter()
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewChats)
+        searchBar = view.findViewById(R.id.searchBar)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        val adapter = UserIdAdapter()
-        recyclerView.adapter = adapter
+        recyclerView.adapter = userAdapter
 
-        // Observe hasil pencarian
-        viewModel.filteredUserIds.observe(viewLifecycleOwner, Observer { userIds ->
-            Log.d("SearchFragment", "Observed filtered user IDs: $userIds")
-            adapter.submitList(userIds) // Perbarui daftar RecyclerView
+        viewModel.userList.observe(viewLifecycleOwner, { users ->
+            userAdapter.submitList(users)
         })
 
-        searchInput.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Tidak diperlukan, bisa dibiarkan kosong
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val query = s?.toString() ?: ""
-                Log.d("SearchFragment", "Search query: $query")
-                viewModel.searchUserIds(query)
-            }
-
+        searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
-                // Tidak diperlukan, bisa dibiarkan kosong
+                val query = s.toString().lowercase()
+                val filteredList = viewModel.userList.value?.filter {
+                    it.name.lowercase().contains(query) || it.username.lowercase().contains(query)
+                }
+                if (filteredList != null) {
+                    userAdapter.submitList(filteredList)
+                }
             }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
-
-        // Fetch semua data user
-        viewModel.fetchAllUserIds()
-
-
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        return inflater.inflate(R.layout.fragment_search, container, false)
     }
 }
