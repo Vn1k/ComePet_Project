@@ -113,6 +113,7 @@
     </fragment>
 
 <!--        ini tempat PROFILE      -->
+
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.comepet.ui.profile.ProfileFragment"
@@ -125,11 +126,11 @@
             android:id="@+id/navigation_profile_to_navigation_edit_profile"
             app:destination="@id/navigation_edit_profile"/>
         <action
-            android:id="@+id/navigation_profile_to_navigation_editpet"
-            app:destination="@id/navigation_editpet"/>
-<!--        <action-->
-<!--            android:id="@+id/navigation_profile_to_navigation_add_pet"-->
-<!--            app:destination="@id/navigation_add_pet"/>-->
+            android:id="@+id/navigation_profile_to_navigation_edit_pet"
+            app:destination="@id/navigation_edit_pet"/>
+        <action
+            android:id="@+id/navigation_profile_to_navigation_add_pet"
+            app:destination="@id/navigation_add_pet"/>
     </fragment>
 
     <fragment
@@ -145,31 +146,21 @@
         <action
             android:id="@+id/navigation_edit_profile_to_navigation_crop"
             app:destination="@+id/navigation_crop"/>
-            />
 
     </fragment>
+
+
+
 
     <fragment
-        android:id="@+id/navigation_crop"
-        android:name="com.example.comepet.ui.profile.subfragments.CropImageFragment"
-        android:label="Crop Image">
+        android:id="@+id/navigation_add_pet"
+        android:name="com.example.comepet.ui.profile.subfragments.AddPetFragment"
+        android:label="Add Pet"
+        tools:layout="@layout/fragment_add_pet">
 
-        <action
-            android:id="@+id/navigation_crop_to_navigation_edit_profile"
-            app:destination="@+id/navigation_edit_profile" />
-            />
-        <argument
-            android:name="IMAGE_URI"
-            app:argType="android.net.Uri" />
+
+
     </fragment>
-
-
-
-<!--    <fragment-->
-<!--        android:id="@+id/navigation_add_pet"-->
-<!--        android:name="com.example.comepet.ui.profile.subfragments.AddPetFragment"-->
-<!--        android:label="Add Pet"-->
-<!--        tools:layout="@layout/fragment_add_pet"/>-->
 
     <fragment
         android:id="@+id/navigation_editpet"

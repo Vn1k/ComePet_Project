@@ -63,6 +63,27 @@ class SettingFragment : BaseAuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Get Current User Data (Status aja)
+        val currentUser = mAuth.currentUser
+
+        currentUser?.let {
+            db.collection("users").document(currentUser.uid).get()
+                .addOnSuccessListener { document ->
+                    if (document != null) {
+                        val accountStatus = document.getBoolean("accountStatus")
+                        accountStatus?.let {
+                            accountStatusButton.isChecked = it
+                        }
+                    } else {
+                        Log.d("SettingFragment", "No such document")
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    Log.d("SettingFragment", "get failed with ", exception)
+                }
+        }
+
+
         cancelButton = view.findViewById(R.id.cancelButton)
         cancelButton.setOnClickListener{
             findNavController().popBackStack()

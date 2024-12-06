@@ -33,7 +33,7 @@
             android:id="@+id/Profile_Picture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/calista_circle" />
+            android:src="@drawable/defaultprofilepicture" />
 
     </androidx.cardview.widget.CardView>
 
