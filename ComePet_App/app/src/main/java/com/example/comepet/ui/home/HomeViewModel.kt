@@ -27,9 +27,10 @@ data class Post(
     val date: String = "",
     var isLiked: Boolean = false,
     var likeCount: Int = 0,
+    var likedBy: MutableList<String> = mutableListOf(),
     var isCommented: Boolean = false,
     val commentCount: Int = 0,
-    val profilePicture: String = "",
+    val profileImage: String = "",
     val address: String = "",
     val phoneNumber: String = "",
     val bio: String = "",
@@ -67,7 +68,7 @@ class HomeViewModel : ViewModel() {
                                 val caption = feedDoc.getString("caption") ?: ""
                                 val location = feedDoc.getString("location") ?: ""
                                 val imageUrl = feedDoc.getString("imageUrl")?: ""
-                                val profilePicture = userDoc.getString("profilePicture") ?: ""
+                                val profileImageUrl = userDoc.getString("profileImage") ?: ""
 
                                 Log.d("HomeViewModel", "imageUrl: $imageUrl")
                                 Log.d("HomeViewModel", "location: $location")
@@ -77,6 +78,8 @@ class HomeViewModel : ViewModel() {
                                 val commentCount = feedDoc.getLong("commentCount")?.toInt() ?: 0
 
                                 val date = feedDoc.getString("date") ?: getCurrentDate()
+                                val likedByList = feedDoc.get("likedBy") as? List<String> ?: emptyList()
+                                val isLiked = FirebaseAuth.getInstance().currentUser?.uid in likedByList
 
                                 val post = Post(
                                     userId = userId,
@@ -85,22 +88,23 @@ class HomeViewModel : ViewModel() {
                                     name = name,
                                     caption = caption,
                                     location = location,
-                                    profilePicture = profilePicture,
+                                    profileImage = profileImageUrl,
                                     imageUrl = imageUrl,
                                     date = date,
-                                    isLiked = false,
+                                    isLiked = isLiked,
                                     isCommented = false,
                                     likeCount = likeCount,
                                     commentCount = commentCount,
-                                    idPost = feedId
+                                    id = feedId,
+                                    likedBy = likedByList.toMutableList()
                                 )
                                 postList.add(post)
                             }
 
-                            val sortedPosts = postList.sortedByDescending { post ->
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                            val sortedPosts = postList.sortedBy { post ->
+                                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
                                 dateFormat.parse(post.date)
-                            }
+                            }.toMutableList().reversed()
 
                             _posts.value = sortedPosts
                         }
@@ -115,7 +119,7 @@ class HomeViewModel : ViewModel() {
     }
 
     private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         return dateFormat.format(Date())
     }
 }
