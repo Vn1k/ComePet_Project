@@ -19,5 +19,5 @@ data class User(
     var bio: String = "",
     var location: String = "",
     var profilePicture: String = "",
-    var accountStatus: Boolean = false,
+    var accountStatus: Boolean = false
 )
