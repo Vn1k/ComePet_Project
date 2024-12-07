@@ -76,9 +76,7 @@ class CommentFragment : BottomSheetDialogFragment() {
         val db = FirebaseFirestore.getInstance()
 
         // Ambil data komentar
-        db.collection("users")
-            .document(postId!!)
-            .collection("feeds")
+        db.collection("feeds")
             .document(postId!!)
             .collection("comments")
             .addSnapshotListener { snapshot, error ->
@@ -90,8 +88,8 @@ class CommentFragment : BottomSheetDialogFragment() {
                 if (snapshot != null && !snapshot.isEmpty) {
                     val comments = snapshot.documents.mapNotNull { document ->
                         val commentText = document.getString("commentText")
-                        val username = document.getString("username") // Ambil username dari komentar
-                        Comment(commentText, username)  // Buat objek Comment
+                        val username = document.getString("username")
+                        Comment(commentText, username)
                     }
                     commentAdapter.submitList(comments)
                 }
@@ -101,22 +99,21 @@ class CommentFragment : BottomSheetDialogFragment() {
             val commentText = commentInput.text.toString()
             val currentUser = mAuth.currentUser?.uid
 
-            if (commentText.isNotBlank()) {
+            if (commentText.isNotBlank() && postId != null) {
                 db.collection("users")
                     .document(currentUser!!)
                     .get()
                     .addOnSuccessListener { userDocument ->
                         val username = userDocument.getString("username") ?: "Unknown"
 
+                        // Buat data komentar
                         val commentData = mapOf(
                             "commentText" to commentText,
                             "username" to username,
                             "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                         )
 
-                        db.collection("users")
-                            .document(postId!!)
-                            .collection("feeds")
+                        db.collection("feeds")  // Akses feeds langsung
                             .document(postId!!)
                             .collection("comments")
                             .add(commentData)
@@ -129,6 +126,11 @@ class CommentFragment : BottomSheetDialogFragment() {
                                 Log.e("CommentFragment", "Error adding comment: ${error.message}")
                             }
                     }
+                    .addOnFailureListener { error ->
+                        Log.e("CommentFragment", "Error fetching user data: ${error.message}")
+                    }
+            } else {
+                Log.e("CommentFragment", "Comment text is empty or postId is null")
             }
         }
     }

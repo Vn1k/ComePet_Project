@@ -2,24 +2,25 @@ package com.example.comepet.ui.chat
 
 import androidx.fragment.app.viewModels
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
+import com.example.comepet.ui.auth.BaseAuthFragment
 
-class ChatSearchFragment : Fragment() {
+class ChatSearchFragment : BaseAuthFragment() {
 
+    private val chatSearchViewModel: ChatSearchViewModel by viewModels()
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var chatSearchAdapter: ChatSearchAdapter
     private lateinit var backbuttonTohome: ImageView
     private lateinit var imageViewSearch: ImageView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +41,16 @@ class ChatSearchFragment : Fragment() {
 
         imageViewSearch.setOnClickListener {
             findNavController().navigate(R.id.action_chatSearchFragment_to_chatFragment)
+        }
+
+        chatSearchAdapter = ChatSearchAdapter(mutableListOf())
+        recyclerView = view.findViewById(R.id.recyclerViewChatContact)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = chatSearchAdapter
+
+        chatSearchViewModel.chats.observe(viewLifecycleOwner) { chatList ->
+            Log.d("ChatSearchFragment", "Chat List Size: ${chatList.size}")
+            chatSearchAdapter.updateChats(chatList)
         }
     }
 }

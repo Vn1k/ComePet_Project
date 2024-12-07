@@ -38,7 +38,7 @@ class WelcomeFragment : Fragment() {
         welcomeText.text = "Welcome, ${GlobalVar.currentUser.name}"
 
         Handler(Looper.getMainLooper()).postDelayed({
-            findNavController().navigate(R.id.navigation_welcome_to_navigation_home)
+            findNavController().navigate(R.id.navigation_home)
         }, 2000)
     }
 }
