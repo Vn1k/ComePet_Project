@@ -25,6 +25,7 @@ import com.example.comepet.ui.profile.subfragments.ProfileShelterFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 class ProfileFragment : BaseAuthFragment() {
     private var _binding: FragmentProfileBinding? = null

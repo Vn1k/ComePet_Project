@@ -7,7 +7,8 @@ data class Pet(
     val dateOfBirth: String = "",
     val species: String = "",
     val breed: String = "",
-    val description: String = ""
+    val description: String = "",
+    var profilePicture: String = ""
 )
 
 data class User(
@@ -19,5 +20,4 @@ data class User(
     var location: String = "",
     var profilePicture: String = "",
     var accountStatus: Boolean = false,
-    var petIdLists: List<Pet> = listOf()
 )

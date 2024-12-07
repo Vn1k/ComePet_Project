@@ -23,15 +23,16 @@
         android:id="@+id/imageViewProfilePet"
         android:layout_width="120dp"
         android:layout_height="120dp"
+        android:layout_marginTop="24dp"
         android:contentDescription="Profile Image"
         android:padding="12dp"
-        android:src="@drawable/calista_circle"
+        android:src="@drawable/defaultprofilepicture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/view" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ChangePetProfilePictureImageView"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:background="@drawable/circle_white"
@@ -45,10 +46,10 @@
         android:layout_gravity="center"
         android:background="@android:color/transparent"
         android:src="@drawable/camera"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintEnd_toEndOf="@+id/imageView2"
-        app:layout_constraintStart_toStartOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2" />
+        app:layout_constraintBottom_toBottomOf="@+id/ChangePetProfilePictureImageView"
+        app:layout_constraintEnd_toEndOf="@+id/ChangePetProfilePictureImageView"
+        app:layout_constraintStart_toStartOf="@+id/ChangePetProfilePictureImageView"
+        app:layout_constraintTop_toTopOf="@+id/ChangePetProfilePictureImageView" />
 
 
     <View
@@ -65,7 +66,7 @@
 
     <TextView
         android:id="@+id/PetNameTextView"
-        android:layout_width="120dp"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
@@ -77,7 +78,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider1" />
 
     <EditText
-        android:id="@+id/textViewPetName"
+        android:id="@+id/PetNameEditText"
         android:layout_height="wrap_content"
         android:layout_width="0dp"
         android:fontFamily="@font/montserrat"
@@ -94,13 +95,14 @@
         android:id="@+id/SexTextView"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="76dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="@font/montserrat"
-        android:text="Gender"
+        android:text="Sex"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/PetNameTextView"
-        app:layout_constraintStart_toStartOf="@+id/PetNameTextView"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/PetNameTextView" />
 
     <ImageButton
@@ -109,9 +111,11 @@
         android:layout_height="40dp"
         android:background="@drawable/circle_white"
         android:src="@drawable/male"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintBottom_toBottomOf="@+id/SexTextView"
+        app:layout_constraintStart_toEndOf="@+id/PetNameTextView"
+        app:layout_constraintTop_toTopOf="@+id/SexTextView" />
 
     <ImageButton
         android:id="@+id/imageButtonPetFemale"
@@ -119,112 +123,172 @@
         android:layout_height="40dp"
         android:background="@drawable/circle_white"
         android:src="@drawable/female"
-        app:layout_constraintBottom_toBottomOf="@+id/textView4"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/SexTextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageButtonPetMale"
-        app:layout_constraintTop_toTopOf="@+id/textView4" />
+        app:layout_constraintTop_toTopOf="@+id/SexTextView" />
 
 
-    <!--                <TextView-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:text="Birth" />-->
-<!--                <EditText-->
-<!--                    android:id="@+id/textViewPetDate"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textSize="15sp"-->
-<!--                    android:hint="Tanggal lahir" />-->
+    <TextView
+        android:id="@+id/DateOfBirthTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Date of Birth"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/SexTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SexTextView" />
+
+    <TextView
+        android:id="@+id/DateOfBirthSelectedDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/montserrat"
+        android:hint="Birthdate"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/DateOfBirthTextView"
+        app:layout_constraintEnd_toStartOf="@+id/Pick_Date_Button"
+        app:layout_constraintStart_toEndOf="@+id/DateOfBirthTextView"
+        app:layout_constraintTop_toTopOf="@+id/DateOfBirthTextView" />
+
+    <Button
+        android:id="@+id/Pick_Date_Button"
+        android:layout_width="80dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/rounded_white"
+        android:fontFamily="@font/montserrat"
+        android:text="Pick Date"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/DateOfBirthTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/DateOfBirthTextView" />
+
+    <TextView
+        android:id="@+id/SpeciesTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Species"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/DateOfBirthTextView" />
+
+    <EditText
+        android:id="@+id/SpeciesEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat"
+        android:hint="Dog, Cat, etc"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/SpeciesTextView"
+        app:layout_constraintEnd_toEndOf="@+id/view"
+        app:layout_constraintStart_toEndOf="@+id/SpeciesTextView"
+        app:layout_constraintTop_toTopOf="@+id/SpeciesTextView" />
 
 
-<!--                <TextView-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:text="Type" />-->
-<!--                <EditText-->
-<!--                    android:id="@+id/textViewPetType"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textSize="15sp"-->
-<!--                    android:hint="Jenis Hewan" />-->
+    <TextView
+        android:id="@+id/BreedTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Breed"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SpeciesTextView" />
 
+    <EditText
+        android:id="@+id/BreedEditText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/montserrat"
+        android:hint="Golden Retriever, Short Hair, etc"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toBottomOf="@+id/BreedTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/BreedTextView"
+        app:layout_constraintTop_toTopOf="@+id/BreedTextView" />
 
+    <TextView
+        android:id="@+id/DescriptionTextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="@font/montserrat"
+        android:text="Descriptions"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/BreedTextView" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:text="Ras" />-->
-<!--                <Spinner-->
-<!--                    android:id="@+id/spinnerPetRas"-->
-<!--                    android:layout_width="250dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:textSize="15sp"-->
-<!--                    android:background="@drawable/rounded_white"-->
-<!--                    android:fontFamily="@font/montserrat" />-->
+    <EditText
+        android:id="@+id/PetDescriptionEditText"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/background_white"
+        android:fontFamily="@font/montserrat"
+        android:gravity="top"
+        android:hint="A friendly and playful dog!"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginVertical="20dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/DescriptionTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/DescriptionTextView"
+        app:layout_constraintTop_toTopOf="@+id/DescriptionTextView" />
 
-<!--                <TextView-->
-<!--                    android:layout_width="100dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:fontFamily="@font/montserrat"-->
-<!--                    android:textColor="@color/black"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:text="Descriptions"-->
-<!--                    android:layout_marginBottom="12dp"/>-->
-
-<!--                <androidx.cardview.widget.CardView-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    app:cardCornerRadius="10dp"-->
-<!--                    android:layout_gravity="center">-->
-
-<!--                    <EditText-->
-<!--                        android:id="@+id/textViewPetDescription"-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="80dp"-->
-<!--                        android:padding="10dp"-->
-<!--                        android:gravity="top"-->
-<!--                        android:background="@color/white"-->
-<!--                        android:textColor="@color/black"-->
-<!--                        android:fontFamily="@font/montserrat"-->
-<!--                        android:textSize="12sp"-->
-<!--                        android:hint="Lousi adalah kucing yang lucu" />-->
-<!--                </androidx.cardview.widget.CardView>-->
-
-<!--        <View-->
-<!--            android:id="@+id/divider2"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="1dp"-->
-<!--            android:layout_marginVertical="20dp"-->
-<!--            android:background="@color/grey" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/buttonSaveProfilePet"-->
-<!--            android:layout_width="80dp"-->
-<!--            android:layout_height="30dp"-->
-<!--            android:layout_gravity="center"-->
-<!--            android:background="@drawable/rounded_blue"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:text="Save"-->
-<!--            android:textSize="12dp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:fontFamily="@font/montserrat"-->
-<!--            app:layout_constraintTop_toBottomOf="@id/divider2"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
+    <Button
+        android:id="@+id/SavePetButton"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:background="@drawable/rounded_blue"
+        android:fontFamily="@font/montserrat"
+        android:text="Save"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PetDescriptionEditText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

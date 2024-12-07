@@ -113,7 +113,6 @@
     </fragment>
 
 <!--        ini tempat PROFILE      -->
-
     <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.comepet.ui.profile.ProfileFragment"
@@ -149,28 +148,26 @@
 
     </fragment>
 
-
-
-
     <fragment
         android:id="@+id/navigation_add_pet"
         android:name="com.example.comepet.ui.profile.subfragments.AddPetFragment"
         android:label="Add Pet"
         tools:layout="@layout/fragment_add_pet">
-
-
-
+        <action
+            android:id="@+id/navigation_add_pet_to_navigation_profile"
+            app:destination="@id/navigation_profile"/>
     </fragment>
 
     <fragment
-        android:id="@+id/navigation_editpet"
+        android:id="@+id/navigation_edit_pet"
         android:name="com.example.comepet.ui.profile.subfragments.EditPetFragment"
         android:label="Edit Pet"
         tools:layout="@layout/fragment_edit_pet">
 
         <action
-            android:id="@+id/navigation_editpet_to_navigation_profile"
+            android:id="@+id/navigation_edit_pet_to_navigation_profile"
             app:destination="@id/navigation_profile"/>
+
     </fragment>
 
     <!--    ini tempat post     -->
