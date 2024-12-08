@@ -17,7 +17,7 @@
 
         <action
             android:id="@+id/navigation_home_to_navigation_chat_search"
-            app:destination="@id/navigation_search"/>
+            app:destination="@id/navigation_chatsearch"/>
     </fragment>
 
     <fragment
