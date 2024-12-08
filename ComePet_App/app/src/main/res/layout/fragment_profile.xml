@@ -158,10 +158,25 @@
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/buttonAddPet"
+            app:layout_constraintEnd_toStartOf="@+id/buttonMessage"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Bio" />
+
+        <Button
+            android:id="@+id/buttonMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingHorizontal="20dp"
+            android:text="Message"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonEditProfile"
+            app:layout_constraintTop_toTopOf="@+id/buttonEditProfile"
+            tools:layout_editor_absoluteX="157dp" />
 
         <Button
             android:id="@+id/buttonAddPet"
@@ -176,7 +191,7 @@
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/buttonMessage"
             app:layout_constraintTop_toTopOf="@+id/buttonEditProfile" />
 
         <ImageButton
