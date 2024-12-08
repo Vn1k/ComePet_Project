@@ -34,6 +34,7 @@ class ProfileFragment : BaseAuthFragment() {
     private lateinit var settingButton: ImageButton
     private lateinit var editProfileButton: Button
     private lateinit var addPetButton: Button
+    private lateinit var messageButton: Button
 
     private lateinit var Profile_Name: TextView
     private lateinit var Profile_Picture: ImageView
@@ -45,12 +46,17 @@ class ProfileFragment : BaseAuthFragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-    override fun onCreate(savedInstanceState: Bundle?){
+    private var userId: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         storage = FirebaseStorage.getInstance()
+
+        // Retrieve userId passed as an argument
+        userId = arguments?.getString("userId") ?: mAuth.currentUser?.uid
     }
 
     override fun onCreateView(
@@ -64,45 +70,56 @@ class ProfileFragment : BaseAuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // For the profile page
         initViews(view)
 
-        // Set default fragment
         if (savedInstanceState == null) {
             loadPostsFragment()
         }
-        // Set up click listeners for buttons and tabs
+
         setupClickListeners()
 
-        // Load user data
-        getCurrentUserData()
+        getUserData()
+
+        updateUIBasedOnProfileOwner()
     }
 
-    private fun getCurrentUserData() {
-        val currentUser = mAuth.currentUser
+    private fun updateUIBasedOnProfileOwner() {
+        val isCurrentUserProfile = userId == mAuth.currentUser?.uid
 
-        currentUser?.let {
-            db.collection("users").document(currentUser.uid).get()
+        editProfileButton.visibility = if (isCurrentUserProfile) View.VISIBLE else View.GONE
+        addPetButton.visibility = if (isCurrentUserProfile) View.VISIBLE else View.GONE
+        settingButton.visibility = if (isCurrentUserProfile) View.VISIBLE else View.GONE
+
+        if (!isCurrentUserProfile) {
+            messageButton.visibility = View.VISIBLE
+            messageButton.text = "Message" // or "Follow" depending on your app's design
+        } else {
+            messageButton.visibility = View.GONE
+        }
+    }
+
+    private fun getUserData() {
+        val userToFetch = userId ?: mAuth.currentUser?.uid
+        userToFetch?.let {
+            db.collection("users").document(it).get()
                 .addOnSuccessListener { document ->
                     if (document != null) {
                         val name = document.getString("name") ?: ""
                         val username = document.getString("username") ?: ""
-                        val status = document.getBoolean("accountStatus") ?: ""
+                        val status = document.getBoolean("accountStatus") ?: false
                         val bio = document.getString("bio") ?: ""
                         val profile_picture = document.getString("profilePicture") ?: ""
 
                         // Fill the profile page with user data
                         Profile_Name.text = name
                         Profile_Username.text = username
-                        // Set the status text
-                        if (status == true) {
-                            Profile_Status.text = "Available"
-                            Profile_Status.setTextColor(ContextCompat.getColor(requireContext(), R.color.green)) // Replace with your green color resource
-                        } else {
-                            Profile_Status.text = "Unavailable"
-                            Profile_Status.setTextColor(ContextCompat.getColor(requireContext(), R.color.red)) // Replace with your red color resource
-                        }
-
+                        Profile_Status.text = if (status) "Available" else "Unavailable"
+                        Profile_Status.setTextColor(
+                            ContextCompat.getColor(
+                                requireContext(),
+                                if (status) R.color.green else R.color.red
+                            )
+                        )
                         Profile_Bio.text = bio
 
                         if (profile_picture.isNotEmpty()) {
@@ -110,8 +127,7 @@ class ProfileFragment : BaseAuthFragment() {
                                 .load(profile_picture)
                                 .placeholder(R.drawable.defaultprofilepicture)
                                 .into(Profile_Picture)
-                        }
-                        else {
+                        } else {
                             Profile_Picture.setImageResource(R.drawable.defaultprofilepicture)
                         }
                     }
@@ -133,6 +149,7 @@ class ProfileFragment : BaseAuthFragment() {
         settingButton = view.findViewById(R.id.settingButton)
         editProfileButton = view.findViewById(R.id.buttonEditProfile)
         addPetButton = view.findViewById(R.id.buttonAddPet)
+        messageButton = view.findViewById(R.id.buttonMessage)
     }
 
     private fun setupClickListeners() {
@@ -144,6 +161,9 @@ class ProfileFragment : BaseAuthFragment() {
         }
         addPetButton.setOnClickListener {
             findNavController().navigate(R.id.navigation_profile_to_navigation_add_pet)
+        }
+        messageButton.setOnClickListener {
+            findNavController().navigate(R.id.navigation_profile_to_navigation_message)
         }
 
         binding.apply {
@@ -197,5 +217,17 @@ class ProfileFragment : BaseAuthFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val ARG_USER_ID = "userId"
+
+        fun newInstance(userId: String): ProfileFragment {
+            val fragment = ProfileFragment()
+            val args = Bundle()
+            args.putString(ARG_USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
     }
 }

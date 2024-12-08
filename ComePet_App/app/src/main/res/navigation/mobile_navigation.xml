@@ -12,6 +12,10 @@
         tools:layout="@layout/fragment_home">
 
         <action
+            android:id="@+id/navigation_home_to_navigation_profile"
+            app:destination="@id/navigation_profile"/>
+
+        <action
             android:id="@+id/navigation_home_to_navigation_chat_search"
             app:destination="@id/navigation_search"/>
     </fragment>
@@ -130,6 +134,13 @@
         <action
             android:id="@+id/navigation_profile_to_navigation_add_pet"
             app:destination="@id/navigation_add_pet"/>
+        <action
+            android:id="@+id/navigation_profile_to_navigation_message"
+            app:destination="@id/navigation_chat"/>
+
+        <action
+            android:id="@+id/action_profile_to_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 
     <fragment

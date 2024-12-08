@@ -1,5 +1,8 @@
 package com.example.comepet.ui.home
 
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.provider.Settings.Global.putString
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,9 +10,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.comepet.R
+import com.example.comepet.ui.profile.ProfileFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,6 +33,7 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
         return PostViewHolder(view)
     }
 
+    @SuppressLint("ResourceType")
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = postList[position]
         holder.getPostUsernameTop().text = post.username
@@ -37,6 +43,18 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
         holder.getPostDate().text = post.date
         holder.getPostLikeCount().text = post.likeCount.toString()
         holder.getCommentCount().text = post.commentCount.toString()
+
+        val context = holder.itemView.context
+        holder.getPostUsernameTop().setOnClickListener {
+            val bundle = Bundle().apply {
+                putString("userId", post.userId)
+            }
+
+            (context as? AppCompatActivity)?.findNavController(R.id.nav_host_fragment_activity_main)?.navigate(
+                R.id.navigation_profile,
+                bundle
+            )
+        }
 
         holder.bind(post)
     }
@@ -145,6 +163,7 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 }
             }
         }
+
 
         private fun setLikeColor(isLiked: Boolean) {
             val color = if (isLiked) {
