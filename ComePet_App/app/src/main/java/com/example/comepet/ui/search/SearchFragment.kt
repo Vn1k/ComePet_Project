@@ -36,16 +36,23 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-        userAdapter = UserAdapter()
+
+        userAdapter = UserAdapter { userId ->
+            val bundle = Bundle().apply {
+                putString("userId", userId)
+            }
+            findNavController().navigate(R.id.navigation_profile, bundle)
+        }
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewSearch)
         searchBar = view.findViewById(R.id.searchBar)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = userAdapter
 
-        viewModel.userList.observe(viewLifecycleOwner, { users ->
+        viewModel.userList.observe(viewLifecycleOwner) { users ->
             userAdapter.submitList(users)
-        })
+        }
 
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

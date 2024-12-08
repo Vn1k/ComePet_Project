@@ -12,6 +12,7 @@ data class Pet(
 )
 
 data class User(
+    val userId: String = "",
     var name: String = "",
     var username: String = "",
     var email: String = "",

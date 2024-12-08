@@ -25,7 +25,9 @@ class SearchViewModel : ViewModel() {
             .addOnSuccessListener { result ->
                 val users = mutableListOf<User>()
                 for (document in result) {
-                    val user = document.toObject(User::class.java)
+                    val user = document.toObject(User::class.java).copy(
+                        userId = document.id
+                    )
                     users.add(user)
                 }
                 _userList.postValue(users)
