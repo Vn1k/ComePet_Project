@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.comepet.R
@@ -33,6 +35,9 @@ class UploadFragment : Fragment() {
     private lateinit var postShelter: Button
     private lateinit var captionEditText: EditText
     private var selectedLocation: String? = null
+    private lateinit var selectedPetNameTextView: TextView
+    private lateinit var selectedPetImageView: ImageView
+    private lateinit var selectedPetTypeTextView: TextView
 
     private lateinit var uploadViewModel: UploadViewModel
 
@@ -59,22 +64,11 @@ class UploadFragment : Fragment() {
         postShelter = view.findViewById(R.id.postShelter)
         uploadViewModel = ViewModelProvider(requireActivity()).get(UploadViewModel::class.java)
 
+        selectedPetNameTextView = view.findViewById(R.id.petSelectedName)
 
         // Inisialisasi Firebase
         db = FirebaseFirestore.getInstance()
         auth = FirebaseAuth.getInstance()
-
-//        // Ambil data gambar dari argumen
-//        val capturedImage = arguments?.getParcelable<Bitmap>("capturedImage")
-//        val imageUriString = arguments?.getString("capturedImageUri")
-//
-//        // Tampilkan gambar
-//        capturedImage?.let { captureResult.setImageBitmap(it) }
-//            ?: imageUriString?.let {
-//                val imageUri = Uri.parse(it)
-//                Glide.with(this).load(imageUri).into(captureResult)
-//            } ?: Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show()
-
 
         uploadViewModel.selectedImageBitmap?.let {
             captureResult.setImageBitmap(it)
@@ -82,14 +76,9 @@ class UploadFragment : Fragment() {
             val imageUri = Uri.parse(it)
             Glide.with(this).load(imageUri).into(captureResult)
         }
-
 //        uploadViewModel.caption?.let { captionEditText.setText(it) }
         uploadViewModel.selectedLocation?.let {
             view.findViewById<TextView>(R.id.selectedLocationText).text = it
-        }
-        // Simpan caption ke ViewModel
-        captionEditText.addTextChangedListener {
-            uploadViewModel.caption = it.toString()
         }
 
         parentFragmentManager.setFragmentResultListener("LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
@@ -110,9 +99,27 @@ class UploadFragment : Fragment() {
             } ?: Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show()
         }
 
-        // Navigasi tombol
+        val petSelectedNameTextView: TextView = view.findViewById(R.id.petSelectedName)
+
+        parentFragmentManager.setFragmentResultListener("SELECTED_PET_REQUEST", viewLifecycleOwner) { _, bundle ->
+            val petName = bundle.getString("selectedPetName")
+            val petImageUrl = bundle.getString("selectedPetProfilePicture")
+
+            if (petName != null && petImageUrl != null) {
+                selectedPetNameTextView.text = petName
+                Glide.with(requireContext()).load(petImageUrl).into(selectedPetImageView)
+            } else {
+                Log.e("UploadFragment", "Data pet tidak lengkap atau null")
+            }
+            // Debug log untuk menampilkan informasi pet yang diterima
+            Log.d("UploadFragment", "Pet received: Name = $petName, Image URL = $petImageUrl")
+
+            petSelectedNameTextView.text = petName
+        }
+
         backButtonToPost.setOnClickListener {
-            findNavController().navigate(R.id.navigation_upload_to_navigation_post)
+            val sourceFragment = arguments?.getInt("sourceFragment", R.id.navigation_home) ?: R.id.navigation_home
+            findNavController().popBackStack(sourceFragment, false)
         }
 
         tagPet.setOnClickListener {
@@ -148,6 +155,8 @@ class UploadFragment : Fragment() {
         Toast.makeText(context, "Wait a Moment", Toast.LENGTH_SHORT).show()
 
         val captionText = captionEditText.text.toString()
+        val petSelectedName = uploadViewModel.selectedPetName
+
         val userId = auth.currentUser?.uid ?: run {
             Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
             return
@@ -157,12 +166,10 @@ class UploadFragment : Fragment() {
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
 
         if (bitmap != null) {
-            // Upload bitmap
             uploadBitmapToFirebaseStorage(bitmap, collection, captionText, userId) {
                 navigateToPost(collection)
             }
         } else if (uri != null) {
-            // Upload URI
             uploadImageToFirebaseStorage(uri, collection, captionText, userId) {
                 navigateToPost(collection)
             }
@@ -196,7 +203,7 @@ class UploadFragment : Fragment() {
 
         filePath.putBytes(data).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, uploadViewModel.selectedPetName, onUploadSuccess)
             }
         }
     }
@@ -213,7 +220,7 @@ class UploadFragment : Fragment() {
 
         filePath.putFile(imageUri).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, uploadViewModel.selectedPetName, onUploadSuccess)
             }
         }
     }
@@ -223,23 +230,34 @@ class UploadFragment : Fragment() {
         collection: String,
         captionText: String,
         userId: String,
+        petSelectedName: String?,
         onUploadSuccess: () -> Unit
     ) {
+
         val imagesCollection = db.collection("users").document(userId).collection(collection)
 
         val date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
 
-        val imageData = mapOf(
+        val postData = mapOf(
             "imageUrl" to downloadUrl,
             "caption" to captionText,
             "date" to date,
+            "petName" to (petSelectedName ?: ""),
             "location" to (selectedLocation ?: "")
         )
 
-        imagesCollection.add(imageData).addOnSuccessListener {
-            onUploadSuccess()
-        }
+        imagesCollection
+            .add(postData)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Post uploaded successfully!", Toast.LENGTH_SHORT).show()
+                onUploadSuccess()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error uploading post: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("UploadFragment", "Error uploading post", e)
+            }
     }
+
 
 
 

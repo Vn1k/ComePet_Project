@@ -40,6 +40,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
     secrets {
         // To add your Maps API key to this project:
@@ -73,6 +74,7 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.firebase.database.ktx)
+    implementation(libs.androidx.recyclerview)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -88,6 +90,10 @@ dependencies {
     implementation(libs.com.google.firebase.firebase.analytics2)
     implementation (libs.com.google.firebase.firebase.auth)
     implementation("com.google.firebase:firebase-storage-ktx:20.2.0")
+    implementation (libs.play.services.auth.v2001)
+    implementation (libs.play.services.location)
+    implementation (libs.androidx.core.ktx.v1101)
+
 
     // glide
     implementation(libs.glide)
@@ -108,4 +114,5 @@ dependencies {
     implementation(platform(libs.kotlin.bom))
     implementation(libs.places.v350)
     implementation (libs.material.v1110)
+
 }

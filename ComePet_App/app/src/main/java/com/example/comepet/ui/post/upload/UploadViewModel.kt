@@ -8,4 +8,5 @@ class UploadViewModel : ViewModel() {
     var selectedImageUri: String? = null
     var selectedLocation: String? = null
     var caption: String? = null
+    var selectedPetName: String? = null
 }

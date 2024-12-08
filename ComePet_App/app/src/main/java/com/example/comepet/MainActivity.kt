@@ -1,16 +1,27 @@
 package com.example.comepet
 
 import android.animation.ObjectAnimator
+import android.app.Dialog
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.Window
 import android.view.animation.AnticipateInterpolator
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
@@ -22,9 +33,10 @@ import com.google.android.datatransport.runtime.BuildConfig
 import com.google.android.libraries.places.api.net.PlacesClient
 
 class MainActivity : AppCompatActivity() {
-    lateinit var placesClient: PlacesClient
     private lateinit var binding: ActivityMainBinding
     private lateinit var navView: BottomNavigationView
+    private lateinit var likeButton: ImageView
+    private var capturedImageUri: Uri? = null
     private val MainViewModel: MainViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,12 +62,12 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_boarding -> hideBottomNavigation()
                 R.id.navigation_welcome -> hideBottomNavigation()
                 R.id.navigation_upload -> hideBottomNavigation()
-                R.id.navigation_search -> hideBottomNavigation()
                 R.id.navigation_forgot -> hideBottomNavigation()
                 R.id.navigation_setting -> hideBottomNavigation()
                 R.id.navigation_chat -> hideBottomNavigation()
                 R.id.navigation_change_email -> hideBottomNavigation()
                 R.id.navigation_change_password -> hideBottomNavigation()
+                R.id.navigation_tagpet -> hideBottomNavigation()
                 else -> showBottomNavigation()
             }
         }
@@ -67,14 +79,36 @@ class MainActivity : AppCompatActivity() {
             navigateToLoginScreen()
         }
 
-        val apiKey = com.example.comepet.BuildConfig.PLACES_API_KEY
-        if (apiKey.isEmpty() || apiKey == "DEFAULT_API_KEY") {
-            Log.d("Places test", "API key is missing: $apiKey")
-            finish()
-            return
+//        val apiKey = com.example.comepet.BuildConfig.PLACES_API_KEY
+//        if (apiKey.isEmpty() || apiKey == "DEFAULT_API_KEY") {
+//            Log.d("Places test", "API key is missing: $apiKey")
+//            finish()
+//            return
+//        }
+//        Places.initialize(applicationContext, apiKey)
+//        val placesClient = Places.createClient(this)
+
+        binding.navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_home)
+                    true
+                }
+                R.id.navigation_search -> {
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_search)
+                    true
+                }
+                R.id.navigation_post -> {
+                    showBottomDialog()
+                    true
+                }
+                R.id.navigation_profile -> {
+                    findNavController(R.id.nav_host_fragment_activity_main).navigate(R.id.navigation_profile)
+                    true
+                }
+                else -> false
+            }
         }
-        Places.initialize(applicationContext, apiKey)
-        val placesClient = Places.createClient(this)
     }
 
     private fun hideBottomNavigation() {
@@ -95,4 +129,81 @@ class MainActivity : AppCompatActivity() {
         navController.navigate(R.id.navigation_login)
     }
 
+    private fun showBottomDialog() {
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.fragment_post)
+
+        val cameraButton: TextView = dialog.findViewById(R.id.cameraButton)
+        val galleryButton: TextView = dialog.findViewById(R.id.galleryButton)
+
+        cameraButton.setOnClickListener {
+            val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
+
+            val bundle = Bundle().apply {
+                putInt("sourceFragment", currentDestination ?: R.id.navigation_home)
+            }
+
+            findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                R.id.navigation_camera,
+                bundle
+            )
+            dialog.dismiss()
+        }
+
+        galleryButton.setOnClickListener {
+            val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
+
+            val bundle = Bundle().apply {
+                putInt("sourceFragment", currentDestination ?: R.id.navigation_home)
+            }
+
+            findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                R.id.navigation_upload,
+                bundle
+            )
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.window?.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.window?.attributes?.windowAnimations = R.style.DialogAnimation
+        dialog.window?.setGravity(Gravity.BOTTOM)
+    }
+
+    private val pickImageLauncher =
+        registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+            uri?.let {
+                capturedImageUri = it
+
+                val bundle = Bundle().apply {
+                    putString("capturedImageUri", capturedImageUri.toString())
+                }
+
+                findNavController(R.id.nav_host_fragment_activity_main).navigate(
+                    R.id.navigation_upload,
+                    bundle
+                )
+            }
+        }
+
+    private fun openGallery() {
+        pickImageLauncher.launch("image/*")
+    }
+
+    fun navHome() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_home)
+    }
+
+    fun navSearch() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_search)
+    }
+
+    fun navProf() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        navController.navigate(R.id.navigation_profile)
+    }
 }
