@@ -31,9 +31,7 @@ class UserAdapter(private val onItemClick: (String) -> Unit) :
             binding.executePendingBindings()
 
             binding.root.setOnClickListener {
-                user.userId?.let { userId ->
-                    onItemClick(userId)
-                }
+                onItemClick(user.userId)
             }
         }
     }

@@ -92,7 +92,7 @@ class ProfileFragment : BaseAuthFragment() {
 
         if (!isCurrentUserProfile) {
             messageButton.visibility = View.VISIBLE
-            messageButton.text = "Message" // or "Follow" depending on your app's design
+            messageButton.text = "Message"
         } else {
             messageButton.visibility = View.GONE
         }
