@@ -46,6 +46,7 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
 
         val context = holder.itemView.context
         holder.getPostUsernameTop().setOnClickListener {
+            Log.d("PostAdapter", "Navigating to profile, clickedUserId: ${post.userId}")
             val bundle = Bundle().apply {
                 putString("userId", post.userId)
             }

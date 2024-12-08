@@ -45,4 +45,5 @@ class HomeFragment : BaseAuthFragment() {
             postAdapter.updatePosts(postList)
         }
     }
+
 }

@@ -163,6 +163,7 @@ class ProfileFragment : BaseAuthFragment() {
             findNavController().navigate(R.id.navigation_profile_to_navigation_add_pet)
         }
         messageButton.setOnClickListener {
+            Log.d("ProfileFragment", "Message button clicked by user with ID: $userId")
             findNavController().navigate(R.id.navigation_profile_to_navigation_message)
         }
 

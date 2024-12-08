@@ -115,4 +115,6 @@ dependencies {
     implementation(libs.places.v350)
     implementation (libs.material.v1110)
 
+    implementation (libs.androidx.swiperefreshlayout)
+
 }

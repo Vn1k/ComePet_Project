@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.comepet.databinding.ActivityMainBinding
 import com.example.comepet.ui.post.PostFragment
 import com.example.comepet.utils.SessionManager
@@ -34,6 +35,7 @@ import com.google.android.libraries.places.api.net.PlacesClient
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var navView: BottomNavigationView
     private lateinit var likeButton: ImageView
     private var capturedImageUri: Uri? = null
@@ -50,25 +52,35 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        swipeRefreshLayout = binding.swipeRefreshLayout
         navView = binding.navView
+
+        setupSwipeRefreshLayout()
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         navView.setupWithNavController(navController)
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.navigation_login -> hideBottomNavigation()
-                R.id.navigation_register -> hideBottomNavigation()
-                R.id.navigation_boarding -> hideBottomNavigation()
-                R.id.navigation_welcome -> hideBottomNavigation()
-                R.id.navigation_upload -> hideBottomNavigation()
-                R.id.navigation_forgot -> hideBottomNavigation()
-                R.id.navigation_setting -> hideBottomNavigation()
-                R.id.navigation_chat -> hideBottomNavigation()
-                R.id.navigation_change_email -> hideBottomNavigation()
-                R.id.navigation_change_password -> hideBottomNavigation()
-                R.id.navigation_tagpet -> hideBottomNavigation()
-                else -> showBottomNavigation()
+                // List of destinations where refresh should be disabled
+                R.id.navigation_login,
+                R.id.navigation_register,
+                R.id.navigation_boarding,
+                R.id.navigation_welcome,
+                R.id.navigation_upload,
+                R.id.navigation_forgot,
+                R.id.navigation_setting,
+                R.id.navigation_chat,
+                R.id.navigation_change_email,
+                R.id.navigation_change_password,
+                R.id.navigation_tagpet -> {
+                    swipeRefreshLayout.isEnabled = false
+                    hideBottomNavigation()
+                }
+                else -> {
+                    swipeRefreshLayout.isEnabled = true
+                    showBottomNavigation()
+                }
             }
         }
 
@@ -109,6 +121,47 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        swipeRefreshLayout.setOnRefreshListener {
+            // Perform refresh operation based on current fragment
+            refreshCurrentFragment()
+        }
+
+        // Customize refresh indicator colors
+        swipeRefreshLayout.setColorSchemeResources(
+            android.R.color.holo_blue_bright,
+            android.R.color.holo_green_light,
+            android.R.color.holo_orange_light,
+            android.R.color.holo_red_light
+        )
+    }
+
+    private fun refreshCurrentFragment() {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        val currentDestination = navController.currentDestination
+
+        when (currentDestination?.id) {
+            R.id.navigation_home -> {
+                // Refresh home fragment data
+                MainViewModel.refreshHomeData()
+            }
+            R.id.navigation_search -> {
+                // Refresh search fragment data
+                MainViewModel.refreshSearchData()
+            }
+            R.id.navigation_profile -> {
+                // Refresh profile fragment data
+                MainViewModel.refreshProfileData()
+            }
+            else -> {
+                MainViewModel.refreshAllData()
+            }
+        }
+
+        // Stop the refreshing animation after data is loaded
+        swipeRefreshLayout.isRefreshing = false
     }
 
     private fun hideBottomNavigation() {
