@@ -176,8 +176,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/buttonEditProfile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/buttonEditProfile"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Bio"
+            app:layout_constraintVertical_bias="0.73" />
 
         <Button
             android:id="@+id/buttonAddPet"
@@ -198,7 +198,6 @@
             android:id="@+id/profile_paw"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:background="@color/light_beige"
             android:scaleType="centerCrop"
@@ -206,13 +205,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/profile_shelter"
             app:layout_constraintStart_toEndOf="@+id/profile_grid"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
+            app:layout_constraintTop_toTopOf="@+id/profile_grid" />
 
         <ImageButton
             android:id="@+id/profile_shelter"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="64dp"
             android:layout_marginBottom="8dp"
             android:background="@color/light_beige"
@@ -220,21 +218,22 @@
             android:src="@drawable/profile_shelter"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
+            app:layout_constraintTop_toTopOf="@+id/profile_grid" />
 
         <ImageButton
             android:id="@+id/profile_grid"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginStart="64dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="80dp"
             android:layout_marginBottom="8dp"
             android:background="@color/light_beige"
             android:scaleType="centerCrop"
             android:src="@drawable/profile_grid"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/buttonAddPet" />
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Bio"
+            app:layout_constraintVertical_bias="1.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
