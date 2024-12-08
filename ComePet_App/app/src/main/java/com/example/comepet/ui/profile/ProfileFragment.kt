@@ -112,11 +112,11 @@ class ProfileFragment : BaseAuthFragment() {
 
                         Profile_Name.text = name
                         Profile_Username.text = username
-                        Profile_Status.text = if (status) "Available" else "Unavailable"
+                        Profile_Status.text = if (status) "Unavailable" else "Available"
                         Profile_Status.setTextColor(
                             ContextCompat.getColor(
                                 requireContext(),
-                                if (status) R.color.green else R.color.red
+                                if (status) R.color.red else R.color.green
                             )
                         )
                         Profile_Bio.text = bio

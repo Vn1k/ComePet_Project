@@ -18,7 +18,8 @@ data class ChatMessage(
     val receiverId: String = "",
     val message: String = "",
     val date: String = "",
-    val idMessage: String = ""
+    val idMessage: String = "",
+    val timestamp: Long = System.currentTimeMillis()
 )
 
 class ChatViewModel : ViewModel() {
@@ -34,9 +35,11 @@ class ChatViewModel : ViewModel() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessage::class.java)
                 chatMessage?.let {
-                    val updatedList = _messages.value.orEmpty().toMutableList()
-                    updatedList.add(it)
-                    _messages.value = updatedList // Memicu observer LiveData
+                    val currentList = _messages.value.orEmpty().toMutableList()
+                    if (!currentList.contains(it)) {
+                        currentList.add(it)
+                        _messages.value = currentList.sortedBy { it.timestamp }
+                    }
                 }
             }
 
@@ -50,17 +53,23 @@ class ChatViewModel : ViewModel() {
     }
 
     fun sendMessage(senderId: String, receiverId: String, message: String) {
-        val chatId = if (senderId < receiverId) "$senderId$receiverId" else "$receiverId$senderId"
+        val chatId = if (senderId < receiverId) {
+            "${senderId}_$receiverId"
+        } else {
+            "${receiverId}_$senderId"
+        }
 
         val messageId = database.child("chats").child(chatId).child("messages").push().key
         val date = getCurrentDate()
+        val timestamp = System.currentTimeMillis()
 
         val chatMessage = ChatMessage(
             senderId = senderId,
             receiverId = receiverId,
             message = message,
             date = date,
-            idMessage = messageId ?: "" // Pastikan idMessage tidak null
+            idMessage = messageId ?: "",
+            timestamp = timestamp
         )
 
         messageId?.let {

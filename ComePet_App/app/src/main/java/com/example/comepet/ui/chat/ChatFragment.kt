@@ -15,6 +15,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 import com.example.comepet.databinding.FragmentChatBinding
@@ -61,10 +62,10 @@ class ChatFragment : Fragment() {
         backButton = binding.backButton
 
         // Setup chat ID
-        chatId = if (senderId < receiverId) {
-            senderId + "_" + receiverId
+        val chatId = if (senderId < receiverId) {
+            "${senderId}_$receiverId"
         } else {
-            receiverId + "_" + senderId
+            "${receiverId}_$senderId"
         }
 
         // Setup ViewModel dan Adapter
@@ -75,14 +76,19 @@ class ChatFragment : Fragment() {
         // Load pesan
         chatViewModel.loadMessages(chatId)
 
+        val layoutManager = LinearLayoutManager(context)
+        layoutManager.stackFromEnd = true
+        recyclerView.layoutManager = layoutManager
+        recyclerView.adapter = chatAdapter
+
         // Observer untuk pesan
         chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
-            Log.d("ChatFragment", "Messages: $messages")
             chatAdapter.submitList(messages)
-            recyclerView.scrollToPosition(messages.size - 1)
+            if (messages.isNotEmpty()) {
+                recyclerView.scrollToPosition(messages.size - 1)
+            }
         }
 
-        // Ambil username penerima
         getReceiverUsername(receiverId)
 
         // Setup tombol kirim

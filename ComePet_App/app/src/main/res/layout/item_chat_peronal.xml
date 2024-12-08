@@ -9,7 +9,7 @@
             android:id="@+id/senderChatMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:background="@drawable/sender_message"
             android:visibility="gone"
             android:padding="8dp" />
@@ -18,7 +18,7 @@
             android:id="@+id/receiverChatMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:background="@drawable/receiver_message"
             android:visibility="gone"
             android:padding="8dp" />
