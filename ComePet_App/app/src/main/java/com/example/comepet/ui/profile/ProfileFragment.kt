@@ -163,8 +163,14 @@ class ProfileFragment : BaseAuthFragment() {
             findNavController().navigate(R.id.navigation_profile_to_navigation_add_pet)
         }
         messageButton.setOnClickListener {
-            Log.d("ProfileFragment", "Message button clicked by user with ID: $userId")
-            findNavController().navigate(R.id.navigation_profile_to_navigation_message)
+            userId?.let { targetUserId ->
+                val bundle = Bundle().apply {
+                    putString("receiverId", targetUserId)
+                }
+                findNavController().navigate(R.id.navigation_chat, bundle)
+            } ?: run {
+                Toast.makeText(requireContext(), "User ID not available", Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding.apply {

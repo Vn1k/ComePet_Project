@@ -9,53 +9,82 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 import com.example.comepet.databinding.FragmentChatBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ChatFragment : Fragment() {
+    private lateinit var binding: FragmentChatBinding
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var chatAdapter: ChatAdapter
+    private lateinit var postUsernameTop: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var sendButton: ImageButton
     private lateinit var messageInput: EditText
     private lateinit var backButton: ImageButton
 
-    private var senderId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-    private var receiverId: String = arguments?.getString("receiverId") ?: "defaultReceiverId"
     private lateinit var chatId: String
 
+    private var senderId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private var receiverId: String = ""  // Inisialisasi kosong
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentChatBinding.inflate(inflater, container, false)
+        // Ambil receiverId dari argumen dengan cara yang aman
+
+        receiverId = arguments?.getString("receiverId")
+            ?: run {
+                // Fallback atau error handling
+                Toast.makeText(context, "No receiver selected", Toast.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+                return null
+            }
+
+        binding = FragmentChatBinding.inflate(inflater, container, false)
+
+        // Inisialisasi komponen UI
         recyclerView = binding.recyclerViewChatPersonal
         sendButton = binding.buttonLogoSend
         messageInput = binding.messageHere
+        postUsernameTop = binding.postUsernameTop
+        backButton = binding.backButton
 
+        // Setup chat ID
         chatId = if (senderId < receiverId) {
             senderId + "_" + receiverId
         } else {
             receiverId + "_" + senderId
         }
 
+        // Setup ViewModel dan Adapter
         chatViewModel = ViewModelProvider(this).get(ChatViewModel::class.java)
-
         chatAdapter = ChatAdapter(senderId)
         recyclerView.adapter = chatAdapter
 
+        // Load pesan
         chatViewModel.loadMessages(chatId)
 
-        chatViewModel.messages.observe(viewLifecycleOwner, Observer { messages: List<ChatMessage> ->
+        // Observer untuk pesan
+        chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             Log.d("ChatFragment", "Messages: $messages")
             chatAdapter.submitList(messages)
-        })
+        }
 
+        // Ambil username penerima
+        getReceiverUsername(receiverId)
+
+        // Setup tombol kirim
         sendButton.setOnClickListener {
             val message = messageInput.text.toString().trim()
             if (message.isNotEmpty()) {
@@ -64,14 +93,30 @@ class ChatFragment : Fragment() {
             }
         }
 
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        backButton = view.findViewById(R.id.backButton)
+        // Setup tombol kembali
         backButton.setOnClickListener {
             findNavController().popBackStack()
         }
+
+        return binding.root
+    }
+
+    private fun getReceiverUsername(receiverId: String) {
+        FirebaseFirestore.getInstance()
+            .collection("users")
+            .document(receiverId)
+            .get()
+            .addOnSuccessListener { document ->
+                document?.getString("username")?.let { username ->
+                    postUsernameTop.text = username
+                } ?: run {
+                    postUsernameTop.text = "Unknown User"
+                    Log.w("ChatFragment", "No username found for user $receiverId")
+                }
+            }
+            .addOnFailureListener { exception ->
+                postUsernameTop.text = "Error Loading"
+                Log.e("ChatFragment", "Error getting receiver's username", exception)
+            }
     }
 }

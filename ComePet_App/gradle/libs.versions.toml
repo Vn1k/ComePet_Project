@@ -37,6 +37,7 @@ lifecycleViewmodelKtx = "2.8.6"
 materialVersion = "1.11.0"
 navigationFragmentKtx = "2.8.3"
 navigationFragmentKtxVersion = "2.8.3"
+navigationSafeArgsGradlePlugin = "2.8.4"
 navigationUiKtx = "2.8.3"
 legacySupportV4 = "1.0.0"
 fragmentKtx = "1.8.4"
@@ -67,6 +68,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-lifecycle-livedata-ktx-v262 = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtxVersion" }
 androidx-lifecycle-viewmodel-ktx-v262 = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtxVersion" }
 androidx-navigation-fragment-ktx-v275 = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
+androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigationSafeArgsGradlePlugin" }
 androidx-navigation-ui-ktx-v275 = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtxVersion" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 blurlibrary = { module = "com.eightbitlab:blurlibrary", version.ref = "blurview" }

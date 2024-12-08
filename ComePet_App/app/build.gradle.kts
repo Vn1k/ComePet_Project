@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id ("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
+    id ("androidx.navigation.safeargs.kotlin")
 }
 val placesApiKey = if (project.hasProperty("PLACES_API_KEY")) project.property("PLACES_API_KEY") as String else ""
 
