@@ -79,6 +79,7 @@ class ChatFragment : Fragment() {
         chatViewModel.messages.observe(viewLifecycleOwner) { messages ->
             Log.d("ChatFragment", "Messages: $messages")
             chatAdapter.submitList(messages)
+            recyclerView.scrollToPosition(messages.size - 1)
         }
 
         // Ambil username penerima
@@ -89,7 +90,9 @@ class ChatFragment : Fragment() {
             val message = messageInput.text.toString().trim()
             if (message.isNotEmpty()) {
                 chatViewModel.sendMessage(senderId, receiverId, message)
-                messageInput.text.clear()
+                messageInput.text.clear() // Kosongkan input setelah mengirim
+            } else {
+                Toast.makeText(requireContext(), "Message cannot be empty", Toast.LENGTH_SHORT).show()
             }
         }
 

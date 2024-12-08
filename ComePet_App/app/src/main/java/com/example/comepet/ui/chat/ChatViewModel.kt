@@ -24,7 +24,7 @@ data class ChatMessage(
 class ChatViewModel : ViewModel() {
 
     private val database = FirebaseDatabase.getInstance("https://comepet-e8840-default-rtdb.firebaseio.com/").reference
-    private val _messages = MutableLiveData<List<ChatMessage>>()
+    private val _messages = MutableLiveData<List<ChatMessage>>(emptyList())
     val messages: LiveData<List<ChatMessage>> get() = _messages
 
     fun loadMessages(chatId: String) {
@@ -34,8 +34,9 @@ class ChatViewModel : ViewModel() {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessage::class.java)
                 chatMessage?.let {
-                    Log.d("ChatViewModel", "Message received: $it")
-                    _messages.value = _messages.value?.plus(it) ?: listOf(it)
+                    val updatedList = _messages.value.orEmpty().toMutableList()
+                    updatedList.add(it)
+                    _messages.value = updatedList // Memicu observer LiveData
                 }
             }
 
@@ -58,7 +59,8 @@ class ChatViewModel : ViewModel() {
             senderId = senderId,
             receiverId = receiverId,
             message = message,
-            date = date
+            date = date,
+            idMessage = messageId ?: "" // Pastikan idMessage tidak null
         )
 
         messageId?.let {
