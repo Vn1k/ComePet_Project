@@ -110,7 +110,6 @@ class ProfileFragment : BaseAuthFragment() {
                         val bio = document.getString("bio") ?: ""
                         val profile_picture = document.getString("profilePicture") ?: ""
 
-                        // Fill the profile page with user data
                         Profile_Name.text = name
                         Profile_Username.text = username
                         Profile_Status.text = if (status) "Available" else "Unavailable"
@@ -130,6 +129,8 @@ class ProfileFragment : BaseAuthFragment() {
                         } else {
                             Profile_Picture.setImageResource(R.drawable.defaultprofilepicture)
                         }
+
+                        binding.profileShelter.visibility = if (status) View.GONE else View.VISIBLE
                     }
                 }
                 .addOnFailureListener { exception ->
@@ -138,6 +139,7 @@ class ProfileFragment : BaseAuthFragment() {
                 }
         }
     }
+
 
     private fun initViews(view: View) {
         Profile_Name = view.findViewById(R.id.Profile_Name)
