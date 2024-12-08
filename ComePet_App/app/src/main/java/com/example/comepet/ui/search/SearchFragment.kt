@@ -37,7 +37,7 @@ class SearchFragment : Fragment() {
 
         viewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
         userAdapter = UserAdapter()
-        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewChats)
+        val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerViewSearch)
         searchBar = view.findViewById(R.id.searchBar)
 
         recyclerView.layoutManager = LinearLayoutManager(context)
