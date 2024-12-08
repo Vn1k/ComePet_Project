@@ -33,7 +33,8 @@
             android:id="@+id/Profile_Picture"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/calista_circle" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/defaultprofilepicture" />
 
     </androidx.cardview.widget.CardView>
 
@@ -204,10 +205,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView14" />
 
-    <com.canhub.cropper.CropImageView
-        android:id="@+id/cropImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+<!--    <com.canhub.cropper.CropImageView-->
+<!--        android:id="@+id/cropImageView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
