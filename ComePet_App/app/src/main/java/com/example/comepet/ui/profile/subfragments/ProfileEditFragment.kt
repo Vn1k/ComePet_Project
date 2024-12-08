@@ -1,9 +1,9 @@
 package com.example.comepet.ui.profile.subfragments
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -16,27 +16,20 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
 import com.example.comepet.R
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
-
-
 
 class ProfileEditFragment : Fragment() {
     private lateinit var saveButton: Button
@@ -53,12 +46,6 @@ class ProfileEditFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
 
-    private var selectedImageUri: Uri? = null
-
-    private lateinit var cropImageView: CropImageView
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initFirebase()
@@ -74,15 +61,9 @@ class ProfileEditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Uri>("cropped_uri")
-            ?.observe(viewLifecycleOwner) { croppedUri ->
-                croppedUri?.let { compressAndUploadImage(it) }
-            }
-
         initViews(view)
         setOnClickListeners()
         getCurrentUserData()
-//        configCropImage()
     }
 
     private fun initFirebase() {
@@ -101,7 +82,6 @@ class ProfileEditFragment : Fragment() {
         cameraButton = view.findViewById(R.id.cameraButton)
         profilePictureImageView = view.findViewById(R.id.Profile_Picture)
         userDataLoadingProgressBar = view.findViewById(R.id.loadingProgressBar)
-
     }
 
     private fun setOnClickListeners(){
@@ -110,24 +90,19 @@ class ProfileEditFragment : Fragment() {
             findNavController().navigate(R.id.navigation_edit_profile_to_navigation_profile)
         }
         cameraButton.setOnClickListener {
-            showImagePickerDialog()
+            openGallery()
         }
     }
 
     private fun getCurrentUserData() {
         val currentUser = mAuth.currentUser
-        // Show loading before network call
         userDataLoadingProgressBar.visibility = View.VISIBLE
 
-        if (currentUser != null) {
-            db.collection("users")
-                .document(currentUser.uid)
-                .get()
+        currentUser?.let {
+            db.collection("users").document(currentUser.uid).get()
                 .addOnSuccessListener { document ->
-                    // Hide loading on success
                     userDataLoadingProgressBar.visibility = View.GONE
-                    if (document != null && document.exists()) {
-                        // Retrieve the fields
+                    if (document.exists()) {
                         val name = document.getString("name") ?: ""
                         val username = document.getString("username") ?: ""
                         val phone = document.getString("phone") ?: ""
@@ -135,24 +110,24 @@ class ProfileEditFragment : Fragment() {
                         val location = document.getString("location") ?: ""
                         val profilePicture = document.getString("profilePicture") ?: ""
 
-                        // Update the UI
+                        // Populate UI with current user data
                         editTextName.setText(name)
                         editTextUsername.setText(username)
                         editTextPhone.setText(phone)
                         editTextBio.setText(bio)
                         editTextLocation.setText(location)
 
-                        if (profilePicture.isNotEmpty()){
+                        if (profilePicture.isNotEmpty()) {
                             Glide.with(requireContext())
-                                .load(profilePicture) // profilePicture is the URL from your database
+                                .load(profilePicture)
+                                .placeholder(R.drawable.defaultprofilepicture)
                                 .into(profilePictureImageView)
                         }
                     }
                 }
                 .addOnFailureListener { exception ->
-                    // Hide loading on success
                     userDataLoadingProgressBar.visibility = View.GONE
-                    Log.e("ProfileFragment", "Error getting user data: ", exception)
+                    Log.e("ProfileFragment", "Error fetching user data", exception)
                     Toast.makeText(requireContext(), "Failed to load user data", Toast.LENGTH_SHORT).show()
                 }
         }
@@ -160,7 +135,6 @@ class ProfileEditFragment : Fragment() {
 
     private fun saveUserData() {
         val currentUser = mAuth.currentUser
-
         if (currentUser != null) {
             val name = editTextName.text.toString()
             val username = editTextUsername.text.toString()
@@ -169,7 +143,7 @@ class ProfileEditFragment : Fragment() {
             val location = editTextLocation.text.toString()
 
             if (validateInput(name, username, phone, bio, location)) {
-                val userDataToUpdate = hashMapOf(
+                val userDataToUpdate = hashMapOf<String, Any>(
                     "name" to name,
                     "username" to username,
                     "phone" to phone,
@@ -179,14 +153,13 @@ class ProfileEditFragment : Fragment() {
 
                 db.collection("users")
                     .document(currentUser.uid)
-                    .set(userDataToUpdate)
+                    .update(userDataToUpdate)
                     .addOnSuccessListener {
-                        Log.d("ProfileEditFragment", "User data saved successfully")
                         Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
                     }
                     .addOnFailureListener { exception ->
-                        Log.e("ProfileEditFragment", "Error saving user data: ", exception)
-                        Toast.makeText(requireContext(), "Failed to update profile. Please try again.", Toast.LENGTH_SHORT).show()
+                        Log.e("ProfileEditFragment", "Error updating user data", exception)
+                        Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
                     }
             }
         }
@@ -216,142 +189,142 @@ class ProfileEditFragment : Fragment() {
         galleryLauncher.launch(intent)
     }
 
-    private fun uploadImageToFirebase() {
-        selectedImageUri?.let { uri ->
-            // Show loading indicator
+    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.data?.let { uri ->
+                compressAndUploadImage(uri)
+            }
+        }
+    }
+
+    private fun compressAndUploadImage(imageUri: Uri) {
+        try {
+            // Calculate image dimensions before loading full bitmap
+            val options = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            val inputStream = requireContext().contentResolver.openInputStream(imageUri)
+            BitmapFactory.decodeStream(inputStream, null, options)
+            inputStream?.close()
+
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, 800, 800)
+            options.inJustDecodeBounds = false
+
+            // Decode bitmap with reduced memory footprint
+            val inputStreamForBitmap = requireContext().contentResolver.openInputStream(imageUri)
+            val bitmap = BitmapFactory.decodeStream(inputStreamForBitmap, null, options)
+            inputStreamForBitmap?.close()
+
+            bitmap?.let {
+                // Compress bitmap to JPEG
+                val outputStream = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)
+                val compressedBytes = outputStream.toByteArray()
+
+                // Create temp file from compressed bytes
+                val tempFile = createTempFile()
+                val fileOutputStream = FileOutputStream(tempFile)
+                fileOutputStream.write(compressedBytes)
+                fileOutputStream.close()
+
+                val compressedUri = Uri.fromFile(tempFile)
+                uploadImageToFirebase(compressedUri)
+            } ?: run {
+                Toast.makeText(requireContext(), "Failed to load image", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "Image compression failed", Toast.LENGTH_SHORT).show()
+            Log.e("ProfileEditFragment", "Error compressing image", e)
+        }
+    }
+
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
+        // Raw height and width of image
+        val height = options.outHeight
+        val width = options.outWidth
+        var inSampleSize = 1
+
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+
+        return inSampleSize
+    }
+
+    private fun uploadImageToFirebase(uri: Uri) {
+        uri.let {
             userDataLoadingProgressBar.visibility = View.VISIBLE
-
             val filename = UUID.randomUUID().toString()
-            val ref = storage.reference.child("profile_pictures/$filename")
+            val ref: StorageReference = storage.reference.child("profile_pictures/$filename")
 
-            ref.putFile(uri)
+            ref.putFile(it)
                 .addOnSuccessListener {
                     ref.downloadUrl.addOnSuccessListener { downloadUri ->
                         updateProfilePictureUrl(downloadUri.toString())
                         userDataLoadingProgressBar.visibility = View.GONE
                     }
                 }
-                .addOnFailureListener { e ->
+                .addOnFailureListener { exception ->
                     userDataLoadingProgressBar.visibility = View.GONE
                     Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
-                    Log.e("ProfileEditFragment", "Error uploading image", e)
+                    Log.e("ProfileEditFragment", "Error uploading image", exception)
                 }
         }
     }
 
-
     private fun updateProfilePictureUrl(imageUrl: String) {
         val currentUser = mAuth.currentUser
-
-        if (currentUser != null) {
+        currentUser?.let {
             db.collection("users")
                 .document(currentUser.uid)
                 .update("profilePicture", imageUrl)
                 .addOnSuccessListener {
                     Toast.makeText(requireContext(), "Profile picture updated", Toast.LENGTH_SHORT).show()
-                    // Use Glide to load the image
                     Glide.with(requireContext())
                         .load(imageUrl)
                         .into(profilePictureImageView)
                 }
                 .addOnFailureListener { exception ->
-                    Log.e("ProfileEditFragment", "Error updating profile picture URL: ", exception)
-                    Toast.makeText(requireContext(), "Failed to update profile picture. Please try again.", Toast.LENGTH_SHORT).show()
+                    Log.e("ProfileEditFragment", "Error updating profile picture URL", exception)
+                    Toast.makeText(requireContext(), "Failed to update profile picture", Toast.LENGTH_SHORT).show()
                 }
         }
     }
 
-
-    private val galleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.let { uri ->
-                startCrop(uri)
-            }
-        }
+    private fun compressBitmap(bitmap: Bitmap): Bitmap {
+        val maxSize = 1024 * 1024 // 1MB
+        val ratio = Math.min(
+            maxSize.toFloat() / bitmap.width,
+            maxSize.toFloat() / bitmap.height
+        )
+        val width = (bitmap.width * ratio).toInt()
+        val height = (bitmap.height * ratio).toInt()
+        return Bitmap.createScaledBitmap(bitmap, width, height, true)
     }
 
-
-    //    Cropping and compressing image
-    private val cropImageLauncher = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            val croppedImageUri = result.uriContent
-            val croppedImageFilePath = result.getUriFilePath(requireContext()) // optional
-            croppedImageUri?.let { compressAndUploadImage(it) }
-        } else {
-            val exception = result.error
-            Toast.makeText(requireContext(), "Crop failed: ${exception?.message}", Toast.LENGTH_SHORT).show()
-        }
+    private fun createTempFile(): File {
+        val tempFile = File(requireContext().cacheDir, "${UUID.randomUUID()}.jpg")
+        tempFile.createNewFile()
+        return tempFile
     }
 
-    private fun showImagePickerDialog() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        galleryLauncher.launch(intent)
-    }
-
-    private fun startCrop(sourceUri: Uri) {
-        val bundle = Bundle().apply {
-            putParcelable("IMAGE_URI", sourceUri)
-        }
-        findNavController().navigate(R.id.navigation_edit_profile_to_navigation_crop)
-    }
-
-
-    private fun compressAndUploadImage(imageUri: Uri) {
-        try {
-            val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, imageUri)
-            val compressedBitmap = Bitmap.createScaledBitmap(bitmap, 500, 500, true)
-
-            val compressedFile = File(requireContext().cacheDir, "compressed_profile_pic.jpg")
-            val outputStream = FileOutputStream(compressedFile)
-            compressedBitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream)
-            outputStream.close()
-
-            val compressedUri = Uri.fromFile(compressedFile)
-            uploadImageToFirebase(compressedUri)
-        } catch (e: Exception) {
-            Log.e("ProfileEditFragment", "Image compression error", e)
-            Toast.makeText(requireContext(), "Failed to process image", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun uploadImageToFirebase(uri: Uri) {
-        val filename = UUID.randomUUID().toString()
-        val ref = Firebase.storage.reference.child("profile_pictures/$filename")
-
-        userDataLoadingProgressBar.visibility = View.VISIBLE
-
-        ref.putFile(uri)
-            .addOnSuccessListener {
-                ref.downloadUrl.addOnSuccessListener { downloadUri ->
-                    updateProfilePictureUrl(downloadUri.toString())
-                    userDataLoadingProgressBar.visibility = View.GONE
-                }
-            }
-            .addOnFailureListener { e ->
-                userDataLoadingProgressBar.visibility = View.GONE
-                Toast.makeText(requireContext(), "Failed to upload image", Toast.LENGTH_SHORT).show()
-                Log.e("ProfileEditFragment", "Error uploading image", e)
-            }
-    }
-
-
-
-
-companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ProfileEditFragment.
-         */
-        // TODO: Rename and change types and number of parameters
+    companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
             ProfileEditFragment().apply {
                 arguments = Bundle().apply {
-
                 }
             }
     }

@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.EditText
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
 import com.example.comepet.databinding.FragmentChatBinding
@@ -22,6 +23,7 @@ class ChatFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var sendButton: ImageButton
     private lateinit var messageInput: EditText
+    private lateinit var backButton: ImageButton
 
     private var senderId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
     private var receiverId: String = arguments?.getString("receiverId") ?: "defaultReceiverId"
@@ -63,5 +65,13 @@ class ChatFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        backButton = view.findViewById(R.id.backButton)
+        backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
     }
 }

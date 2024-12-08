@@ -31,7 +31,7 @@ class EditPetFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         saveButton = view.findViewById(R.id.buttonSave)
         saveButton.setOnClickListener {
-            findNavController().navigate(R.id.navigation_editpet_to_navigation_profile)
+            findNavController().navigate(R.id.navigation_edit_pet_to_navigation_profile)
         }
     }
 

@@ -106,13 +106,13 @@ dependencies {
     implementation (libs.places)
 
     // image cropper
-    implementation("com.vanniktech:android-image-cropper:4.6.0")
+    implementation(libs.android.image.cropper)
 
-    implementation ("androidx.appcompat:appcompat:1.6.1")
+    implementation (libs.androidx.appcompat.v161)
 
     implementation (libs.play.services.maps.v1700)
     implementation(platform(libs.kotlin.bom))
     implementation(libs.places.v350)
-
+    implementation (libs.material.v1110)
 
 }

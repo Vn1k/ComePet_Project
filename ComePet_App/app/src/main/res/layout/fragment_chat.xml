@@ -31,11 +31,13 @@
             android:padding="8dp"
             android:layout_gravity="center">
 
-            <ImageView
+            <ImageButton
+                android:id="@+id/backButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
                 android:layout_marginRight="20dp"
+                android:background="@null"
                 android:src="@drawable/back_green_vector" />
 
             <LinearLayout
@@ -55,24 +57,24 @@
                         android:contentDescription="Profile Image"
                         android:src="@drawable/calista_circle" />
 
-                    <com.google.android.material.card.MaterialCardView
-                        android:layout_width="14dp"
-                        android:layout_height="14dp"
-                        app:cardBackgroundColor="@color/white"
-                        app:cardCornerRadius="40dp"
-                        android:translationY="0dp"
-                        android:translationX="-12dp"
-                        android:layout_gravity="bottom|end">
+<!--                    <com.google.android.material.card.MaterialCardView-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="bottom|end"-->
+<!--                        style="@style/Theme.ComePet.MaterialCard"-->
+<!--                        app:cardBackgroundColor="@color/white"-->
+<!--                        tools:ignore="MissingMaterialTheme">-->
 
-                        <ImageView
-                            android:id="@+id/ButtonAvailability"
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:translationY="-1dp"
-                            android:translationX="-1dp"
-                            android:src="@drawable/available"
-                            android:contentDescription="Availability" />
-                    </com.google.android.material.card.MaterialCardView>
+<!--                        <ImageView-->
+<!--                            android:id="@+id/ButtonAvailability"-->
+<!--                            android:layout_width="16dp"-->
+<!--                            android:layout_height="16dp"-->
+<!--                            android:translationY="-1dp"-->
+<!--                            android:translationX="-1dp"-->
+<!--                            android:src="@drawable/available"-->
+<!--                            android:contentDescription="Availability" />-->
+<!--                    </com.google.android.material.card.MaterialCardView>-->
+
                 </FrameLayout>
 
                 <LinearLayout

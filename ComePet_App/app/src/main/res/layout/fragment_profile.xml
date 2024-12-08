@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:background="@color/light_beige"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -70,34 +69,46 @@
             android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="64dp"
+            android:layout_marginBottom="16dp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Akbar Wijaya"
             android:textColor="@color/black"
             android:textSize="18sp"
+            android:text=""
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-        <ImageView
-            android:id="@+id/Profile_Picture"
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/Profile_Picture_Canvas"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:layout_marginTop="8dp"
-            android:src="@drawable/calista_circle"
+            app:cardCornerRadius="64dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.508"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Profile_Name" />
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Name">
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/available"
-            app:layout_constraintBottom_toBottomOf="@+id/Profile_Picture"
-            app:layout_constraintEnd_toEndOf="@+id/Profile_Picture"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="@+id/Profile_Picture" />
+            <ImageView
+                android:id="@+id/Profile_Picture"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.cardview.widget.CardView>
+
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imageView2"-->
+<!--            android:layout_width="24dp"-->
+<!--            android:layout_height="24dp"-->
+<!--            android:src="@drawable/available"-->
+<!--            app:layout_constraintBottom_toBottomOf="@+id/Profile_Picture"-->
+<!--            app:layout_constraintEnd_toEndOf="@+id/Profile_Picture"-->
+<!--            app:layout_constraintHorizontal_bias="1.0"-->
+<!--            app:layout_constraintStart_toStartOf="@+id/Profile_Picture" />-->
 
 
         <TextView
@@ -106,12 +117,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/montserrat_semibold"
-            android:text="\@ak_bar"
+            android:text="\@"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Profile_Picture" />
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Picture_Canvas" />
 
         <TextView
             android:id="@+id/Profile_Status"
@@ -119,7 +130,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/montserrat_bold"
-            android:text="Available"
             android:textColor="@color/green"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -131,7 +141,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Open untuk penitipan hewan kecayanganmuu ♥"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Status" />
@@ -149,10 +158,26 @@
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/buttonAddPet"
-            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toStartOf="@+id/buttonMessage"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Profile_Bio" />
+
+        <Button
+            android:id="@+id/buttonMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:background="@drawable/rounded_button"
+            android:fontFamily="@font/montserrat_semibold"
+            android:paddingHorizontal="20dp"
+            android:text="Message"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonEditProfile"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/buttonEditProfile"
+            app:layout_constraintVertical_bias="0.0" />
 
         <Button
             android:id="@+id/buttonAddPet"
@@ -166,8 +191,7 @@
             android:textColor="#FFFFFF"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonEditProfile"
+            app:layout_constraintStart_toEndOf="@+id/buttonMessage"
             app:layout_constraintTop_toTopOf="@+id/buttonEditProfile" />
 
         <ImageButton
