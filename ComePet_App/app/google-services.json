@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "324070079062",
+    "firebase_url": "https://comepet-e8840-default-rtdb.firebaseio.com",
     "project_id": "comepet-e8840",
     "storage_bucket": "comepet-e8840.appspot.com"
   },
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyC_Q9LzUBDDgwTJkb0asHW8oXuPApxS7Nk"
+          "current_key": "AIzaSyAYm7bqWXrPcxXJ49_kMEqvUuiVOZyWv58"
         }
       ],
       "services": {
