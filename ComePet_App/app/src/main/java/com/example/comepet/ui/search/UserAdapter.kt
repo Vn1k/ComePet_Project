@@ -5,15 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.comepet.databinding.ListItemUserBinding
 import com.example.comepet.ui.auth.register.model.User
 
 
 class UserAdapter(private val onItemClick: (String) -> Unit) :
-    ListAdapter<User, UserAdapter.UserViewHolder>(UserDiffCallback()) {
+    ListAdapter<User, UserAdapter.UserViewHolder>(UserViewHolder.UserDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
-        val binding = ListItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ListItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return UserViewHolder(binding, onItemClick)
     }
 
@@ -33,16 +35,22 @@ class UserAdapter(private val onItemClick: (String) -> Unit) :
             binding.root.setOnClickListener {
                 onItemClick(user.userId)
             }
+            if (!user.profilePicture.isNullOrEmpty()) {
+                Glide.with(binding.profilePictureImageView.context)
+                    .load(user.profilePicture)
+                    .circleCrop()
+                    .into(binding.profilePictureImageView)
+            }
         }
-    }
 
-    class UserDiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem.username == newItem.username
-        }
+        class UserDiffCallback : DiffUtil.ItemCallback<User>() {
+            override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+                return oldItem.username == newItem.username
+            }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem == newItem
+            override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
+                return oldItem == newItem
+            }
         }
     }
 }
