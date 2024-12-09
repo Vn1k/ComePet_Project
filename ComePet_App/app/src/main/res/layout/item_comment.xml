@@ -31,7 +31,7 @@
                 android:layout_height="50dp"
                 android:layout_marginRight="10dp"
                 android:contentDescription="Profile Image"
-                android:src="@drawable/calista_circle" />
+                android:src="@drawable/defaultprofilepicture" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="16dp"

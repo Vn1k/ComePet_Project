@@ -34,7 +34,7 @@
                 android:layout_height="120dp"
                 android:padding="12dp"
                 android:contentDescription="Profile Image"
-                android:src="@drawable/calista_circle"/>
+                android:src="@drawable/defaultprofilepicture"/>
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
