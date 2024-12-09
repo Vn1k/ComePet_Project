@@ -102,15 +102,18 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
             db.collection("users").document(post.userId)
                 .get()
                 .addOnSuccessListener { document ->
-                    val profileImageUrl = document.getString("profileImageUrl")
-                    if (profileImageUrl != null) {
+                    val profilePicture = document.getString("profilePicture")
+                    if (!profilePicture.isNullOrEmpty()) {
                         Glide.with(itemView.context)
-                            .load(profileImageUrl)
+                            .load(profilePicture)
                             .circleCrop()
                             .into(imageViewProfile)
                     } else {
-                        Log.e("PostAdapter", "Profile image URL is null")
+                        Log.e("PostAdapter", "Profile image URL is null or empty for user: ${post.userId}")
                     }
+                }
+                .addOnFailureListener { error ->
+                    Log.e("PostAdapter", "Failed to fetch profile picture for user: ${post.userId}, error: ${error.message}")
                 }
 
             db.collection("users").document(post.userId).collection("feeds")
@@ -118,21 +121,19 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         for (document in querySnapshot.documents) {
-                            val imageUrl = document.getString("imageUrl")
 
-                            if (imageUrl != null) {
+                            if (post.imageUrl.isNotEmpty()) {
                                 Glide.with(itemView.context)
-                                    .load(imageUrl)
+                                    .load(post.imageUrl)
                                     .into(postImageView)
                             } else {
-                                Log.e("PostAdapter", "Image URL is null for document ID: ${document.id}")
+                                Log.e("PostAdapter", "Image URL is empty for post: ${post.id}")
                             }
                         }
                     } else {
                         Log.e("PostAdapter", "No documents found in the 'feeds' collection for post ID: ${post.userId}")
                     }
                 }
-
 
             setLikeColor(post.isLiked)
             updateLikeDrawable(post.isLiked)
