@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.comepet.R
 import com.example.comepet.databinding.ListItemUserBinding
 import com.example.comepet.ui.auth.register.model.User
 
@@ -40,7 +41,13 @@ class UserAdapter(private val onItemClick: (String) -> Unit) :
                     .load(user.profilePicture)
                     .circleCrop()
                     .into(binding.profilePictureImageView)
+            }else {
+                Glide.with(binding.profilePictureImageView.context)
+                    .load(R.drawable.defaultprofilepicture)
+                    .circleCrop()
+                    .into(binding.profilePictureImageView)
             }
+
         }
 
         class UserDiffCallback : DiffUtil.ItemCallback<User>() {
