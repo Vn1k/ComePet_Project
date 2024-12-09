@@ -142,47 +142,48 @@ class ProfileEditFragment : Fragment() {
             val bio = editTextBio.text.toString()
             val location = editTextLocation.text.toString()
 
-            if (validateInput(name, username, phone, bio, location)) {
-                val userDataToUpdate = hashMapOf<String, Any>(
-                    "name" to name,
-                    "username" to username,
-                    "phone" to phone,
-                    "bio" to bio,
-                    "location" to location
-                )
 
-                db.collection("users")
-                    .document(currentUser.uid)
-                    .update(userDataToUpdate)
-                    .addOnSuccessListener {
-                        Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
-                    }
-                    .addOnFailureListener { exception ->
-                        Log.e("ProfileEditFragment", "Error updating user data", exception)
-                        Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
-                    }
-            }
+            val userDataToUpdate = hashMapOf<String, Any>(
+                "name" to name,
+                "username" to username,
+                "phone" to phone,
+                "bio" to bio,
+                "location" to location
+            )
+
+            db.collection("users")
+                .document(currentUser.uid)
+                .update(userDataToUpdate)
+                .addOnSuccessListener {
+                    Toast.makeText(requireContext(), "Profile updated successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { exception ->
+                    Log.e("ProfileEditFragment", "Error updating user data", exception)
+                    Toast.makeText(requireContext(), "Failed to update profile", Toast.LENGTH_SHORT).show()
+                }
+
         }
     }
 
-    private fun validateInput(name: String, username: String, phone: String, bio: String, location: String): Boolean {
-        if (name.isEmpty() || username.isEmpty() || phone.isEmpty() || location.isEmpty()) {
-            Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (phone.length < 10) {
-            Toast.makeText(requireContext(), "Invalid phone number. Please enter a 10-digit number", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if (bio.length > 200) {
-            Toast.makeText(requireContext(), "Bio is too long. Please limit to 200 characters", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        return true
-    }
+//    # ini kalau mau validate input nya yeah
+//    private fun validateInput(name: String, username: String, phone: String, bio: String, location: String): Boolean {
+//        if (name.isEmpty() || username.isEmpty() || phone.isEmpty() || location.isEmpty()) {
+//            Toast.makeText(requireContext(), "Please fill in all required fields", Toast.LENGTH_SHORT).show()
+//            return false
+//        }
+//
+//        if (phone.length < 10) {
+//            Toast.makeText(requireContext(), "Invalid phone number. Please enter a 10-digit number", Toast.LENGTH_SHORT).show()
+//            return false
+//        }
+//
+//        if (bio.length > 200) {
+//            Toast.makeText(requireContext(), "Bio is too long. Please limit to 200 characters", Toast.LENGTH_SHORT).show()
+//            return false
+//        }
+//
+//        return true
+//    }
 
     private fun openGallery() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
