@@ -68,7 +68,7 @@ class HomeViewModel : ViewModel() {
                                 val caption = feedDoc.getString("caption") ?: ""
                                 val location = feedDoc.getString("location") ?: ""
                                 val imageUrl = feedDoc.getString("imageUrl")?: ""
-                                val profileImageUrl = userDoc.getString("profileImage") ?: ""
+                                val profilePicture = userDoc.getString("profilePicture") ?: ""
 
                                 Log.d("HomeViewModel", "imageUrl: $imageUrl")
                                 Log.d("HomeViewModel", "location: $location")
@@ -88,7 +88,7 @@ class HomeViewModel : ViewModel() {
                                     name = name,
                                     caption = caption,
                                     location = location,
-                                    profileImage = profileImageUrl,
+                                    profileImage = profilePicture,
                                     imageUrl = imageUrl,
                                     date = date,
                                     isLiked = isLiked,
