@@ -118,14 +118,13 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 .addOnSuccessListener { querySnapshot ->
                     if (!querySnapshot.isEmpty) {
                         for (document in querySnapshot.documents) {
-                            val imageUrl = document.getString("imageUrl")
 
-                            if (imageUrl != null) {
+                            if (post.imageUrl.isNotEmpty()) {
                                 Glide.with(itemView.context)
-                                    .load(imageUrl)
+                                    .load(post.imageUrl)
                                     .into(postImageView)
                             } else {
-                                Log.e("PostAdapter", "Image URL is null for document ID: ${document.id}")
+                                Log.e("PostAdapter", "Image URL is empty for post: ${post.id}")
                             }
                         }
                     } else {
