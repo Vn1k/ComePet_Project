@@ -103,14 +103,17 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 .get()
                 .addOnSuccessListener { document ->
                     val profilePicture = document.getString("profilePicture")
-                    if (profilePicture != null) {
+                    if (!profilePicture.isNullOrEmpty()) {
                         Glide.with(itemView.context)
                             .load(profilePicture)
                             .circleCrop()
                             .into(imageViewProfile)
                     } else {
-                        Log.e("PostAdapter", "Profile image URL is null")
+                        Log.e("PostAdapter", "Profile image URL is null or empty for user: ${post.userId}")
                     }
+                }
+                .addOnFailureListener { error ->
+                    Log.e("PostAdapter", "Failed to fetch profile picture for user: ${post.userId}, error: ${error.message}")
                 }
 
             db.collection("users").document(post.userId).collection("feeds")
@@ -131,7 +134,6 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                         Log.e("PostAdapter", "No documents found in the 'feeds' collection for post ID: ${post.userId}")
                     }
                 }
-
 
             setLikeColor(post.isLiked)
             updateLikeDrawable(post.isLiked)

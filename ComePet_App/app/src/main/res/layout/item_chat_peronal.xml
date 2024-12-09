@@ -23,7 +23,7 @@
                     android:visibility="gone"
                     android:fontFamily="@font/montserrat"
                     android:textColor="@color/white"
-                    android:textSize="16sp"
+                    android:textSize="12sp"
                     android:maxWidth="250dp" />
         </LinearLayout>
 
@@ -44,6 +44,6 @@
                     android:visibility="gone"
                     android:fontFamily="@font/montserrat"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="12sp" />
         </LinearLayout>
 </LinearLayout>
