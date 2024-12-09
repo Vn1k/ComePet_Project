@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -35,6 +36,8 @@ class ProfileFragment : BaseAuthFragment() {
     private lateinit var editProfileButton: Button
     private lateinit var addPetButton: Button
     private lateinit var messageButton: Button
+
+    private lateinit var userDataLoadingProgressBar: ProgressBar
 
     private lateinit var Profile_Name: TextView
     private lateinit var Profile_Picture: ImageView
@@ -100,9 +103,12 @@ class ProfileFragment : BaseAuthFragment() {
 
     private fun getUserData() {
         val userToFetch = userId ?: mAuth.currentUser?.uid
+        userDataLoadingProgressBar.visibility = View.VISIBLE
+
         userToFetch?.let {
             db.collection("users").document(it).get()
                 .addOnSuccessListener { document ->
+                    userDataLoadingProgressBar.visibility = View.GONE
                     if (document != null) {
                         val name = document.getString("name") ?: ""
                         val username = document.getString("username") ?: ""
@@ -134,6 +140,7 @@ class ProfileFragment : BaseAuthFragment() {
                     }
                 }
                 .addOnFailureListener { exception ->
+                    userDataLoadingProgressBar.visibility = View.GONE
                     Log.e("ProfileFragment", "Error getting user data", exception)
                     Toast.makeText(requireContext(), "Error getting user data", Toast.LENGTH_SHORT).show()
                 }
@@ -152,6 +159,8 @@ class ProfileFragment : BaseAuthFragment() {
         editProfileButton = view.findViewById(R.id.buttonEditProfile)
         addPetButton = view.findViewById(R.id.buttonAddPet)
         messageButton = view.findViewById(R.id.buttonMessage)
+
+        userDataLoadingProgressBar = view.findViewById(R.id.loadingProgressBar)
     }
 
     private fun setupClickListeners() {
@@ -206,9 +215,11 @@ class ProfileFragment : BaseAuthFragment() {
     }
 
     private fun loadPostsFragment() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.profile_content_container, ProfilePostsFragment())
-            .commit()
+        userId?.let { targetUserId ->
+            childFragmentManager.beginTransaction()
+                .replace(R.id.profile_content_container, ProfilePostsFragment.newInstance(targetUserId))
+                .commit()
+        }
     }
 
     private fun loadPetsFragment() {
