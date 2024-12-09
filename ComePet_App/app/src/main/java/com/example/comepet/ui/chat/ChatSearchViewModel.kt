@@ -4,88 +4,78 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-
-data class Chat(
-    val userId: String,
-    var name: String,
-    val userNameKedua: String,
-    val profileImageUserId2: String = "",
-    val chatMessage: String,
-    val idChat: String = "",
-    val date: String = ""
-)
 
 class ChatSearchViewModel : ViewModel() {
+    private val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    private val database = FirebaseDatabase.getInstance("https://comepet-e8840-default-rtdb.firebaseio.com/").reference
+    private val firestore = FirebaseFirestore.getInstance()
 
-    private val _chats = MutableLiveData<List<Chat>>()
-    val chats: LiveData<List<Chat>> get() = _chats
+    private val _chatUsers = MutableLiveData<List<ChatUser>>()
+    val chatUsers: LiveData<List<ChatUser>> = _chatUsers
 
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+    fun loadChatUsers() {
+        database.child("chats")
+            .orderByKey()
+            .addListenerForSingleValueEvent(object : com.google.firebase.database.ValueEventListener {
+                override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
+                    val userChats = mutableListOf<ChatUser>()
 
-    init {
-        fetchChats()
-    }
+                    for (chatSnapshot in snapshot.children) {
+                        val chatId = chatSnapshot.key ?: continue
 
-    private fun fetchChats() {
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { userSnapshot: QuerySnapshot ->
-                val chatList = mutableListOf<Chat>()
+                        if (!chatId.contains(currentUserId)) continue
 
-                for (userDoc in userSnapshot.documents) {
-                    val userId = userDoc.id
-                    val name = userDoc.getString("name") ?: ""
+                        val otherUserId = chatId.replace("${currentUserId}_", "")
+                            .replace("_$currentUserId", "")
 
-                    db.collection("users").document(userId).collection("chats")
-                        .get()
-                        .addOnSuccessListener { chatSnapshot: QuerySnapshot ->
-                            for (chatDoc in chatSnapshot.documents) {
-                                val chatId = chatDoc.id
-                                val userNameKedua = chatDoc.getString("userNameKedua") ?: ""
-                                val chatMessage = chatDoc.getString("chatMessage") ?: ""
-                                val profileImageUserId2 = chatDoc.getString("profileImageUserId2") ?: ""
-                                val date = chatDoc.getString("date") ?: getCurrentDate()
+                        val lastMessageSnapshot = chatSnapshot.child("messages")
+                            .children.lastOrNull()
 
-                                Log.d("ChatSearchViewModel", "chatMessage: $chatMessage")
-                                Log.d("ChatSearchViewModel", "profileImageUserId2: $profileImageUserId2")
-                                Log.d("ChatSearchViewModel", "name: $name")
-                                Log.d("ChatSearchViewModel", "userNameKedua: $userNameKedua")
+                        val lastMessage = lastMessageSnapshot
+                            ?.child("message")
+                            ?.getValue(String::class.java) ?: ""
 
-                                val chat = Chat(
-                                    userId = userId,
-                                    name = name,
-                                    userNameKedua = userNameKedua,
-                                    profileImageUserId2 = profileImageUserId2,
-                                    chatMessage = chatDoc.getString("chatMessage") ?: "",
-                                    date = date,
-                                    idChat = chatId
-                                )
-                                chatList.add(chat)
-                            }
+                        val timestamp = lastMessageSnapshot
+                            ?.child("timestamp")
+                            ?.getValue(Long::class.java) ?: 0
 
-                            val sortedChats = chatList.sortedByDescending { chat ->
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                                dateFormat.parse(chat.date)
-                            }
-                            _chats.value = sortedChats
-                        }
-                        .addOnFailureListener { error: Exception ->
-                            Log.e("ChatSearchViewModel", "Failed to fetch chats: ${error.message}")
-                        }
+                        fetchUserDetails(otherUserId, lastMessage, timestamp, userChats)
+                    }
                 }
-            }
-            .addOnFailureListener { error: Exception ->
-                Log.e("ChatSearchViewModel", "Failed to fetch users: ${error.message}")
-            }
+
+                override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
+                    Log.e("ChatSearchViewModel", "Error loading chats", error.toException())
+                }
+            })
     }
 
-    private fun getCurrentDate(): String {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        return dateFormat.format(Date())
+    private fun fetchUserDetails(
+        userId: String,
+        lastMessage: String,
+        timestamp: Long,
+        userChats: MutableList<ChatUser>
+    ) {
+        firestore.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                val username = document.getString("username") ?: "Unknown User"
+                val chatUser = ChatUser(
+                    userId = userId,
+                    username = username,
+                    lastMessage = lastMessage,
+                    timestamp = timestamp
+                )
+                userChats.add(chatUser)
+
+                val sortedChats = userChats.sortedByDescending { it.timestamp }
+                _chatUsers.value = sortedChats
+            }
+            .addOnFailureListener { e ->
+                Log.e("ChatSearchViewModel", "Error fetching user details", e)
+            }
     }
 }
