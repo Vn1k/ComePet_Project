@@ -1,5 +1,6 @@
 package com.example.comepet.ui.post.upload
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
@@ -51,6 +52,7 @@ class UploadFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_upload, container, false)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -65,6 +67,7 @@ class UploadFragment : Fragment() {
         uploadViewModel = ViewModelProvider(requireActivity()).get(UploadViewModel::class.java)
 
         selectedPetNameTextView = view.findViewById(R.id.petSelectedName)
+        selectedPetImageView = view.findViewById(R.id.petSelectedImage)
 
         // Inisialisasi Firebase
         db = FirebaseFirestore.getInstance()
@@ -100,6 +103,7 @@ class UploadFragment : Fragment() {
         }
 
         val petSelectedNameTextView: TextView = view.findViewById(R.id.petSelectedName)
+        val petSelectedProfilePicture: ImageView = view.findViewById(R.id.petSelectedImage)
 
         parentFragmentManager.setFragmentResultListener("SELECTED_PET_REQUEST", viewLifecycleOwner) { _, bundle ->
             val petName = bundle.getString("selectedPetName")
@@ -115,6 +119,7 @@ class UploadFragment : Fragment() {
             Log.d("UploadFragment", "Pet received: Name = $petName, Image URL = $petImageUrl")
 
             petSelectedNameTextView.text = petName
+            petSelectedProfilePicture.setImageURI(Uri.parse(petImageUrl))
         }
 
         backButtonToPost.setOnClickListener {
@@ -155,10 +160,15 @@ class UploadFragment : Fragment() {
         Toast.makeText(context, "Wait a Moment", Toast.LENGTH_SHORT).show()
 
         val captionText = captionEditText.text.toString()
-        val petSelectedName = uploadViewModel.selectedPetName
-
         val userId = auth.currentUser?.uid ?: run {
             Toast.makeText(context, "User not authenticated", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val petSelectedName = selectedPetNameTextView.text.toString()
+
+        if (petSelectedName.isEmpty()) {
+            Toast.makeText(context, "Please tag a pet", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -166,17 +176,19 @@ class UploadFragment : Fragment() {
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
 
         if (bitmap != null) {
-            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, userId) {
+            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, petSelectedName, userId) {
                 navigateToPost(collection)
             }
         } else if (uri != null) {
-            uploadImageToFirebaseStorage(uri, collection, captionText, userId) {
+            uploadImageToFirebaseStorage(uri, collection, captionText, petSelectedName, userId) {
                 navigateToPost(collection)
             }
         } else {
             Toast.makeText(context, "No image to upload", Toast.LENGTH_SHORT).show()
         }
     }
+
+
 
     private fun navigateToPost(collection: String) {
         val destination = if (collection == "feeds") {
@@ -191,6 +203,7 @@ class UploadFragment : Fragment() {
         bitmap: Bitmap,
         collection: String,
         captionText: String,
+        petSelectedName: String,
         userId: String,
         onUploadSuccess: () -> Unit
     ) {
@@ -203,7 +216,7 @@ class UploadFragment : Fragment() {
 
         filePath.putBytes(data).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, uploadViewModel.selectedPetName, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
             }
         }
     }
@@ -212,6 +225,7 @@ class UploadFragment : Fragment() {
         imageUri: Uri,
         collection: String,
         captionText: String,
+        petSelectedName: String,
         userId: String,
         onUploadSuccess: () -> Unit
     ) {
@@ -220,7 +234,7 @@ class UploadFragment : Fragment() {
 
         filePath.putFile(imageUri).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, uploadViewModel.selectedPetName, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
             }
         }
     }
@@ -242,7 +256,7 @@ class UploadFragment : Fragment() {
             "imageUrl" to downloadUrl,
             "caption" to captionText,
             "date" to date,
-            "petName" to (petSelectedName ?: ""),
+            "petName" to petSelectedName,
             "location" to (selectedLocation ?: "")
         )
 
@@ -257,8 +271,4 @@ class UploadFragment : Fragment() {
                 Log.e("UploadFragment", "Error uploading post", e)
             }
     }
-
-
-
-
 }
