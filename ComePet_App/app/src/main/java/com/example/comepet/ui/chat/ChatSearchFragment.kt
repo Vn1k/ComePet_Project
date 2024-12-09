@@ -1,56 +1,54 @@
 package com.example.comepet.ui.chat
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
-import com.example.comepet.ui.auth.BaseAuthFragment
+import com.example.comepet.databinding.FragmentChatSearchBinding
 
-class ChatSearchFragment : BaseAuthFragment() {
-
-    private val chatSearchViewModel: ChatSearchViewModel by viewModels()
-    private lateinit var recyclerView: RecyclerView
+class ChatSearchFragment : Fragment() {
+    private lateinit var binding: FragmentChatSearchBinding
+    private lateinit var chatSearchViewModel: ChatSearchViewModel
     private lateinit var chatSearchAdapter: ChatSearchAdapter
-    private lateinit var backbuttonTohome: ImageView
-    private lateinit var imageViewSearch: ImageView
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_chat, container, false)
-    }
+        binding = FragmentChatSearchBinding.inflate(inflater, container, false)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        chatSearchViewModel = ViewModelProvider(this)[ChatSearchViewModel::class.java]
 
-        backbuttonTohome = view.findViewById(R.id.backbuttonTohome)
-        imageViewSearch = view.findViewById(R.id.imageViewSearch)
-
-        backbuttonTohome.setOnClickListener {
-            findNavController().navigate(R.id.action_chatSearchFragment_to_homeFragment)
+        chatSearchAdapter = ChatSearchAdapter { chatUser ->
+            val bundle = Bundle().apply {
+                putString("receiverId", chatUser.userId)
+            }
+            findNavController().navigate(R.id.action_chatSearchFragment_to_chatFragment, bundle)
         }
 
-        imageViewSearch.setOnClickListener {
-            findNavController().navigate(R.id.action_chatSearchFragment_to_chatFragment)
+        binding.recyclerViewChatSearch.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = chatSearchAdapter
         }
 
-        chatSearchAdapter = ChatSearchAdapter(mutableListOf())
-        recyclerView = view.findViewById(R.id.recyclerViewChatContact)
-        recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = chatSearchAdapter
+        chatSearchViewModel.chatUsers.observe(viewLifecycleOwner) { chatUsers ->
+            chatSearchAdapter.submitList(chatUsers)
 
-        chatSearchViewModel.chats.observe(viewLifecycleOwner) { chatList ->
-            Log.d("ChatSearchFragment", "Chat List Size: ${chatList.size}")
-            chatSearchAdapter.updateChats(chatList)
+            binding.emptyStateChat.visibility = if (chatUsers.isEmpty()) View.VISIBLE else View.GONE
         }
+
+        chatSearchViewModel.loadChatUsers()
+
+        binding.backButton.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
+        return binding.root
     }
 }

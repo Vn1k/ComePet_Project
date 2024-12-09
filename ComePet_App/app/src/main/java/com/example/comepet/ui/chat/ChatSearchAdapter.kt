@@ -1,74 +1,59 @@
 package com.example.comepet.ui.chat
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.comepet.R
-import com.example.comepet.ui.home.Post
-import com.google.firebase.firestore.FirebaseFirestore
 
-class ChatSearchAdapter(private var chatList: MutableList<Chat>) : RecyclerView.Adapter<ChatSearchAdapter.ChatSearchViewHolder>() {
+data class ChatUser(
+    val userId: String = "",
+    val username: String = "",
+    val lastMessage: String = "",
+    val timestamp: Long = 0
+)
 
-    private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
+class ChatSearchAdapter(
+    private val onItemClick: (ChatUser) -> Unit
+) : ListAdapter<ChatUser, ChatSearchAdapter.ChatSearchViewHolder>(ChatSearchDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatSearchViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_chat_contact, parent, false)
-        return ChatSearchViewHolder(view)
+            .inflate(R.layout.item_chat_search, parent, false)
+        return ChatSearchViewHolder(view, onItemClick)
     }
 
     override fun onBindViewHolder(holder: ChatSearchViewHolder, position: Int) {
-        val chat = chatList[position]
-        holder.getChatName().text = chat.name
-
-        holder.bind(chat)
+        holder.bind(getItem(position))
     }
 
-    fun updateChats(newChats: List<Chat>) {
-        chatList = newChats.toMutableList()
-        notifyDataSetChanged()
-    }
+    inner class ChatSearchViewHolder(
+        itemView: View,
+        private val onItemClick: (ChatUser) -> Unit
+    ) : RecyclerView.ViewHolder(itemView) {
+        private val usernameTextView: TextView = itemView.findViewById(R.id.username_chat_search)
+        private val lastMessageTextView: TextView = itemView.findViewById(R.id.last_message_chat_search)
 
-    override fun getItemCount() = chatList.size
+        fun bind(chatUser: ChatUser) {
+            usernameTextView.text = chatUser.username
+            lastMessageTextView.text = chatUser.lastMessage
 
-    inner class ChatSearchViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val profileImageUserKedua = itemView.findViewById<ImageView>(R.id.imageViewProfile)
-        private val chatMessage = itemView.findViewById<TextView>(R.id.chatMessage)
-        private val chatName = itemView.findViewById<TextView>(R.id.chatName)
-
-        fun getChatProfilePicture() = profileImageUserKedua
-        fun getChatMessage() = chatMessage
-        fun getChatName() = chatName
-
-        fun bind(chat: Chat) {
-            chatMessage.text = chat.chatMessage
-            chatName.text = chat.name
-
-            db.collection("users").document(chat.userId).collection("chats")
-                .get()
-                .addOnSuccessListener { querySnapshot ->
-                    if (!querySnapshot.isEmpty) {
-                        for (chatDoc in querySnapshot.documents) {
-                            val profileImageUserId2 = chatDoc.getString("profileImageUserId2")
-
-                            if (profileImageUserId2 != null) {
-                                Glide.with(itemView.context)
-                                    .load(profileImageUserId2)
-                                    .into(profileImageUserKedua)
-                            } else {
-                                Log.d("ChatSearchAdapter", "profileImageUserId2 is null for chatId: ${chat.idChat}")
-                            }
-                        }
-                    } else {
-                        Log.d("ChatSearchAdapter", "chatSnapshot is empty for userId: ${chat.userId}")
-                    }
-                }
+            itemView.setOnClickListener {
+                onItemClick(chatUser)
+            }
         }
     }
 
+    class ChatSearchDiffCallback : DiffUtil.ItemCallback<ChatUser>() {
+        override fun areItemsTheSame(oldItem: ChatUser, newItem: ChatUser): Boolean {
+            return oldItem.userId == newItem.userId
+        }
+
+        override fun areContentsTheSame(oldItem: ChatUser, newItem: ChatUser): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
