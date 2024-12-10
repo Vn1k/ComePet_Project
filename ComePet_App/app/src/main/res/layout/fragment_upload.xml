@@ -118,6 +118,11 @@
                         android:drawableStart="@drawable/dog_black"
                         android:fontFamily="@font/montserrat_medium" />
 
+                    <ImageView
+                        android:id="@+id/petSelectedImage"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp" />
+
                     <TextView
                         android:id="@+id/petSelectedName"
                         android:layout_width="wrap_content"

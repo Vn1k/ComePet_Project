@@ -55,14 +55,14 @@ class TagpetFragment : Fragment() {
         val userId = auth.currentUser?.uid
 
         if (userId != null) {
-            db.collection("users").document(userId).collection("petIdLists")
+            db.collection("users").document(userId).collection("pets")
                 .get()
                 .addOnSuccessListener { result ->
                     val petList = mutableListOf<Pet>()
                     for (document in result) {
-                        val name = document.getString("name")
-                        val petProfilePicture = document.getString("petProfilePicture")
-                        val ras = document.getString("ras")
+                        val name = document.getString("petName")
+                        val petProfilePicture = document.getString("profilePicture")
+                        val ras = document.getString("breed")
 
                         val pet = Pet(name, petProfilePicture, ras)
                         petList.add(pet)
