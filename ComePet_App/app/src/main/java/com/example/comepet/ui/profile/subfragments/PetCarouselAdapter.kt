@@ -33,7 +33,7 @@ class PetCarouselAdapter : RecyclerView.Adapter<PetCarouselAdapter.PetViewHolder
         fun bind(pet: PetData) {
             binding.apply {
                 petName.text = pet.name
-                petAge.text = pet.age
+//                petAge.text = pet.age
                 // In real app, use proper image loading library like Glide
                 petImage.setImageResource(R.drawable.temp_post_01)
             }
