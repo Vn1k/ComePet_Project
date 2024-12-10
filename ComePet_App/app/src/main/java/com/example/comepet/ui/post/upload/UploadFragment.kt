@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.addCallback
-import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
@@ -113,15 +112,14 @@ class UploadFragment : Fragment() {
             if (petName != null && petImageUrl != null) {
                 selectedPetNameTextView.text = petName
                 Glide.with(requireContext()).load(petImageUrl).into(selectedPetImageView)
-                selectedPetImageView.tag = petImageUrl
             } else {
                 Log.e("UploadFragment", "Data pet tidak lengkap atau null")
             }
+            // Debug log untuk menampilkan informasi pet yang diterima
             Log.d("UploadFragment", "Pet received: Name = $petName, Image URL = $petImageUrl")
 
             petSelectedNameTextView.text = petName
             petSelectedProfilePicture.setImageURI(Uri.parse(petImageUrl))
-            selectedPetImageView.tag = petImageUrl
         }
 
         backButtonToPost.setOnClickListener {
@@ -178,23 +176,18 @@ class UploadFragment : Fragment() {
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
 
         if (bitmap != null) {
-            // Check if the drawable is not null before converting to bitmap
-            val petSelectedImageBitmap = selectedPetImageView.drawable?.toBitmap()
-            if (petSelectedImageBitmap != null) {
-                uploadBitmapToFirebaseStorage(bitmap, collection, captionText, petSelectedName, userId, petSelectedImageBitmap, onUploadSuccess = {
-                    navigateToPost(collection)
-                })
-            } else {
-                Toast.makeText(context, "Pet image not available", Toast.LENGTH_SHORT).show()
+            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, petSelectedName, userId) {
+                navigateToPost(collection)
             }
         } else if (uri != null) {
-            uploadImageToFirebaseStorage(uri, collection, captionText, petSelectedName, userId, onUploadSuccess = {
+            uploadImageToFirebaseStorage(uri, collection, captionText, petSelectedName, userId) {
                 navigateToPost(collection)
-            })
+            }
         } else {
             Toast.makeText(context, "No image to upload", Toast.LENGTH_SHORT).show()
         }
     }
+
 
 
     private fun navigateToPost(collection: String) {
@@ -212,7 +205,6 @@ class UploadFragment : Fragment() {
         captionText: String,
         petSelectedName: String,
         userId: String,
-        petSelectedImage: Bitmap,
         onUploadSuccess: () -> Unit
     ) {
         val storageReference = FirebaseStorage.getInstance().reference
@@ -224,17 +216,7 @@ class UploadFragment : Fragment() {
 
         filePath.putBytes(data).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                // Upload petSelectedImage to Firebase Storage
-                val petImagePath = storageReference.child("pet_images/${System.currentTimeMillis()}.jpg")
-                val petBaos = ByteArrayOutputStream()
-                petSelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, petBaos)
-                val petData = petBaos.toByteArray()
-
-                petImagePath.putBytes(petData).addOnSuccessListener {
-                    petImagePath.downloadUrl.addOnSuccessListener { petUri ->
-                        saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, petUri.toString(), onUploadSuccess)
-                    }
-                }
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
             }
         }
     }
@@ -252,7 +234,7 @@ class UploadFragment : Fragment() {
 
         filePath.putFile(imageUri).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, null, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
             }
         }
     }
@@ -263,7 +245,6 @@ class UploadFragment : Fragment() {
         captionText: String,
         userId: String,
         petSelectedName: String?,
-        petSelectedImageUrl: String?,
         onUploadSuccess: () -> Unit
     ) {
 
@@ -276,8 +257,7 @@ class UploadFragment : Fragment() {
             "caption" to captionText,
             "date" to date,
             "petName" to petSelectedName,
-            "petImageUrl" to petSelectedImageUrl,
-            "location" to (selectedLocation ?: ""),
+            "location" to (selectedLocation ?: "")
         )
 
         imagesCollection
