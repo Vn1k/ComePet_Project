@@ -205,6 +205,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         galleryButton.setOnClickListener {
+            openGallery()
             val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
 
             val bundle = Bundle().apply {
