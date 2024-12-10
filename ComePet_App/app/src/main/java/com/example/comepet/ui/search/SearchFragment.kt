@@ -58,7 +58,7 @@ class SearchFragment : Fragment() {
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString().lowercase()
                 val filteredList = viewModel.userList.value?.filter {
-                    it.name.lowercase().contains(query) || it.username.lowercase().contains(query)
+                    it.name.lowercase().contains(query) || it.username.lowercase().contains(query) || it.profilePicture.lowercase().contains(query)
                 }
                 if (filteredList != null) {
                     userAdapter.submitList(filteredList)
