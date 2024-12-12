@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.comepet.R
@@ -27,6 +29,7 @@ data class Comment(
 class CommentFragment : BottomSheetDialogFragment() {
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var isSubmitting = false
 
     companion object {
         private const val POST_ID = "post_id"
@@ -109,43 +112,66 @@ class CommentFragment : BottomSheetDialogFragment() {
             }
 
         commentSendButton.setOnClickListener {
-            val commentText = commentInput.text.toString()
-            val currentUser = mAuth.currentUser?.uid
+                if (isSubmitting) return@setOnClickListener
 
-            if (commentText.isNotBlank() && postId != null) {
-                db.collection("users")
-                    .document(currentUser!!)
-                    .get()
-                    .addOnSuccessListener { userDocument ->
-                        val username = userDocument.getString("username") ?: "Unknown"
-                        val profilePicture = userDocument.getString("profilePicture") ?: ""
+                val commentText = commentInput.text.toString().trim()
+                val currentUser = mAuth.currentUser?.uid
 
-                        // Buat data komentar
-                        val commentData = mapOf(
-                            "profilePicture" to profilePicture,
-                            "commentText" to commentText,
-                            "username" to username,
-                            "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
-                        )
+                if (commentText.isNotBlank() && postId != null) {
+                    isSubmitting = true
 
-                        db.collection("feeds")
-                            .document(postId!!)
-                            .collection("comments")
-                            .add(commentData)
-                            .addOnSuccessListener {
-                                commentInput.text.clear()
-                                Log.d("CommentFragment", "Comment added successfully")
-                                listener?.onCommentAdded(commentText)
-                            }
-                            .addOnFailureListener { error ->
-                                Log.e("CommentFragment", "Error adding comment: ${error.message}")
-                            }
-                    }
-                    .addOnFailureListener { error ->
-                        Log.e("CommentFragment", "Error fetching user data: ${error.message}")
-                    }
+                    commentSendButton.isEnabled = false
+
+                    db.collection("users")
+                        .document(currentUser!!)
+                        .get()
+                        .addOnSuccessListener { userDocument ->
+                            val username = userDocument.getString("username") ?: "Unknown"
+                            val profilePicture = userDocument.getString("profilePicture") ?: ""
+
+                            val commentData = mapOf(
+                                "profilePicture" to profilePicture,
+                                "commentText" to commentText,
+                                "username" to username,
+                                "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
+                            )
+
+                            db.collection("feeds")
+                                .document(postId!!)
+                                .collection("comments")
+                                .add(commentData)
+                                .addOnSuccessListener {
+                                    commentInput.text.clear()
+                                    Log.d("CommentFragment", "Comment added successfully")
+                                    listener?.onCommentAdded(commentText)
+                                }
+                                .addOnFailureListener { error ->
+                                    Log.e("CommentFragment", "Error adding comment: ${error.message}")
+                                    Toast.makeText(context, "Failed to send comment", Toast.LENGTH_SHORT).show()
+                                }
+                                .addOnCompleteListener {
+                                    isSubmitting = false
+                                    commentSendButton.isEnabled = true
+                                }
+                        }
+                        .addOnFailureListener { error ->
+                            Log.e("CommentFragment", "Error fetching user data: ${error.message}")
+                            isSubmitting = false
+                            commentSendButton.isEnabled = true
+                            Toast.makeText(context, "Failed to send comment", Toast.LENGTH_SHORT).show()
+                        }
+                } else {
+                    Log.e("CommentFragment", "Comment text is empty or postId is null")
+                    Toast.makeText(context, "Please enter a comment", Toast.LENGTH_SHORT).show()
+                }
+        }
+
+        commentInput.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEND) {
+                commentSendButton.performClick()
+                true
             } else {
-                Log.e("CommentFragment", "Comment text is empty or postId is null")
+                false
             }
         }
     }
