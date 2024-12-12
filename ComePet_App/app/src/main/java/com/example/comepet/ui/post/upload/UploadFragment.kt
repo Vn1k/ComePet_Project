@@ -123,6 +123,7 @@ class UploadFragment : Fragment() {
         }
 
         backButtonToPost.setOnClickListener {
+            uploadViewModel.resetSelectedImage()
             val sourceFragment = arguments?.getInt("sourceFragment", R.id.navigation_home) ?: R.id.navigation_home
             findNavController().popBackStack(sourceFragment, false)
         }

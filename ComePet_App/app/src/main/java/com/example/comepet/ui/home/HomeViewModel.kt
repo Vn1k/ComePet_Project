@@ -101,10 +101,10 @@ class HomeViewModel : ViewModel() {
                                 postList.add(post)
                             }
 
-                            val sortedPosts = postList.sortedBy { post ->
-                                val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                            val sortedPosts = postList.sortedByDescending { post ->
+                                val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
                                 dateFormat.parse(post.date)
-                            }.toMutableList().reversed()
+                            }
 
                             _posts.value = sortedPosts
                         }
