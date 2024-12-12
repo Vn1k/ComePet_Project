@@ -1,5 +1,6 @@
 package com.example.comepet.ui.home
 
+import android.media.Image
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,7 +20,8 @@ import java.util.Locale
 
 data class Comment(
     val commentText: String? = null,
-    val username: String? = null
+    val username: String? = null,
+    val profilePicture: String? = null
 )
 
 class CommentFragment : BottomSheetDialogFragment() {
@@ -89,10 +91,21 @@ class CommentFragment : BottomSheetDialogFragment() {
                     val comments = snapshot.documents.mapNotNull { document ->
                         val commentText = document.getString("commentText")
                         val username = document.getString("username")
-                        Comment(commentText, username)
+                        val profilePicture = document.getString("profilePicture") ?: ""
+                        Comment(commentText, username, profilePicture)
                     }
                     commentAdapter.submitList(comments)
                 }
+            }
+        db.collection("users")
+            .document(mAuth.currentUser?.uid!!)
+            .get()
+            .addOnSuccessListener { userDocument ->
+                val profilePicture = userDocument.getString("profilePicture")
+                Log.d("CommentFragment", "PP: $profilePicture")
+            }
+            .addOnFailureListener { error ->
+                Log.e("CommentFragment", "Error fetching user data: ${error.message}")
             }
 
         commentSendButton.setOnClickListener {
@@ -105,15 +118,17 @@ class CommentFragment : BottomSheetDialogFragment() {
                     .get()
                     .addOnSuccessListener { userDocument ->
                         val username = userDocument.getString("username") ?: "Unknown"
+                        val profilePicture = userDocument.getString("profilePicture") ?: ""
 
                         // Buat data komentar
                         val commentData = mapOf(
+                            "profilePicture" to profilePicture,
                             "commentText" to commentText,
                             "username" to username,
                             "date" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())
                         )
 
-                        db.collection("feeds")  // Akses feeds langsung
+                        db.collection("feeds")
                             .document(postId!!)
                             .collection("comments")
                             .add(commentData)
