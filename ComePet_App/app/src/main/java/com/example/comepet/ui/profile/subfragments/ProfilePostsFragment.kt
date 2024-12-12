@@ -72,6 +72,7 @@ class ProfilePostsFragment : Fragment() {
         userId?.let { targetUserId ->
             db.collection("users").document(targetUserId)
                 .collection("feeds")
+                .orderBy("date", com.google.firebase.firestore.Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { querySnapshot ->
                     imageUrls.clear()
