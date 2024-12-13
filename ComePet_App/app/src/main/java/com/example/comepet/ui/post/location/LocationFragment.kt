@@ -5,7 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.comepet.R
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
@@ -31,8 +35,25 @@ class LocationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        fetchPlacePredictions("cafe") // Example: Fetch predictions for "cafe"
-        return inflater.inflate(R.layout.fragment_location, container, false)
+        val view = inflater.inflate(R.layout.fragment_location, container, false)
+
+        // Reference the EditText and Button
+        val locationInput: EditText = view.findViewById(R.id.editTextLocation)
+        val saveButton: Button = view.findViewById(R.id.buttonSaveLocation)
+
+        // Set an OnClickListener for the button
+        saveButton.setOnClickListener {
+            val location = locationInput.text.toString()
+            if (location.isNotBlank()) {
+                // Do something with the input location, e.g., save it or pass it to another fragment
+                Toast.makeText(requireContext(), "Location saved: $location", Toast.LENGTH_SHORT).show()
+                findNavController().navigate(R.id.navigation_addlocation_to_navigation_upload)
+            } else {
+                Toast.makeText(requireContext(), "Please enter a location", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        return view
     }
 
     private fun fetchPlacePredictions(query: String) {

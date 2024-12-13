@@ -122,6 +122,16 @@ class UploadFragment : Fragment() {
             petSelectedProfilePicture.setImageURI(Uri.parse(petImageUrl))
         }
 
+        uploadViewModel.selectedLocation?.let {
+            view.findViewById<TextView>(R.id.locationSelectedName).text = it
+        }
+        parentFragmentManager.setFragmentResultListener("LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
+            val location = bundle.getString("location")
+            uploadViewModel.selectedLocation = location
+            view.findViewById<TextView>(R.id.locationSelectedName).text =
+                location ?: getString(R.string.add_location)
+        }
+
         backButtonToPost.setOnClickListener {
             uploadViewModel.resetSelectedImage()
             val sourceFragment = arguments?.getInt("sourceFragment", R.id.navigation_home) ?: R.id.navigation_home
@@ -154,7 +164,6 @@ class UploadFragment : Fragment() {
             uploadViewModel.caption = it.toString()
         }
 
-
     }
 
     private fun handleUpload(collection: String, capturedImage: Bitmap?, imageUriString: String?) {
@@ -167,16 +176,20 @@ class UploadFragment : Fragment() {
         }
 
         val petSelectedName = selectedPetNameTextView.text.toString()
+        val selectedLocationText = uploadViewModel.selectedLocation ?: "No location selected"
+
+        uploadViewModel.selectedLocation = "User-selected location"
+        uploadViewModel.selectedPetName = "User-selected pet"
 
         val bitmap = uploadViewModel.selectedImageBitmap
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
 
         if (bitmap != null) {
-            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, petSelectedName, userId) {
+            uploadBitmapToFirebaseStorage(bitmap, collection, captionText, petSelectedName, selectedLocationText, userId) {
                 navigateToPost(collection)
             }
         } else if (uri != null) {
-            uploadImageToFirebaseStorage(uri, collection, captionText, petSelectedName, userId) {
+            uploadImageToFirebaseStorage(uri, collection, captionText, petSelectedName, selectedLocationText, userId) {
                 navigateToPost(collection)
             }
         } else {
@@ -201,6 +214,7 @@ class UploadFragment : Fragment() {
         collection: String,
         captionText: String,
         petSelectedName: String,
+        selectedLocationText: String,
         userId: String,
         onUploadSuccess: () -> Unit
     ) {
@@ -213,7 +227,7 @@ class UploadFragment : Fragment() {
 
         filePath.putBytes(data).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, selectedLocationText, onUploadSuccess)
             }
         }
     }
@@ -223,6 +237,7 @@ class UploadFragment : Fragment() {
         collection: String,
         captionText: String,
         petSelectedName: String,
+        selectedLocationText: String,
         userId: String,
         onUploadSuccess: () -> Unit
     ) {
@@ -231,7 +246,7 @@ class UploadFragment : Fragment() {
 
         filePath.putFile(imageUri).addOnSuccessListener {
             filePath.downloadUrl.addOnSuccessListener { uri ->
-                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, onUploadSuccess)
+                saveImageUrlToFirestore(uri.toString(), collection, captionText, userId, petSelectedName, selectedLocationText, onUploadSuccess)
             }
         }
     }
@@ -242,6 +257,7 @@ class UploadFragment : Fragment() {
         captionText: String,
         userId: String,
         petSelectedName: String?,
+        selectedLocationText: String?,
         onUploadSuccess: () -> Unit
     ) {
 
@@ -253,8 +269,8 @@ class UploadFragment : Fragment() {
             "imageUrl" to downloadUrl,
             "caption" to captionText,
             "date" to date,
-            "petName" to petSelectedName,
-            "location" to (selectedLocation ?: "")
+            "petName" to (petSelectedName ?: "Unknown"),
+            "location" to (selectedLocationText ?: "Unknown")
         )
 
         imagesCollection

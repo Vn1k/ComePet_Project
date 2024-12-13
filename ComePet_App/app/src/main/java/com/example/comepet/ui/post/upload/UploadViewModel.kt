@@ -14,4 +14,10 @@ class UploadViewModel : ViewModel() {
         selectedImageBitmap = null
         selectedImageUri = null
     }
+
+    fun resetLocationAndPetName() {
+        selectedLocation = null
+        selectedPetName = null
+    }
+
 }
