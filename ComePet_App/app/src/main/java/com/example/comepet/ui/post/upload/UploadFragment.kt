@@ -123,6 +123,7 @@ class UploadFragment : Fragment() {
         }
 
         backButtonToPost.setOnClickListener {
+            uploadViewModel.resetSelectedImage()
             val sourceFragment = arguments?.getInt("sourceFragment", R.id.navigation_home) ?: R.id.navigation_home
             findNavController().popBackStack(sourceFragment, false)
         }
@@ -167,11 +168,6 @@ class UploadFragment : Fragment() {
 
         val petSelectedName = selectedPetNameTextView.text.toString()
 
-        if (petSelectedName.isEmpty()) {
-            Toast.makeText(context, "Please tag a pet", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         val bitmap = uploadViewModel.selectedImageBitmap
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
 
@@ -191,6 +187,7 @@ class UploadFragment : Fragment() {
 
 
     private fun navigateToPost(collection: String) {
+        uploadViewModel.resetSelectedImage()
         val destination = if (collection == "feeds") {
             R.id.navigation_upload_to_navigation_postFeeds
         } else {
