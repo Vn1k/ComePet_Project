@@ -106,6 +106,7 @@ class UploadFragment : Fragment() {
             if (petName != null && petImageUrl != null) {
                 selectedPetNameTextView.text = petName
                 Glide.with(requireContext()).load(petImageUrl).into(selectedPetImageView)
+                uploadViewModel.selectedPetName = petName
             } else {
                 Log.e("UploadFragment", "Data pet tidak lengkap atau null")
             }
@@ -130,7 +131,8 @@ class UploadFragment : Fragment() {
             }
         }
 
-
+        uploadViewModel.selectedPetName?.let { selectedPetNameTextView.text = it }
+        uploadViewModel.selectedLocation?.let { view.findViewById<TextView>(R.id.selectedLocationText).text = it }
 
         backButtonToPost.setOnClickListener {
             uploadViewModel.resetSelectedImage()
