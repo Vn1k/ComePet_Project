@@ -45,6 +45,7 @@ class CommentAdapter : RecyclerView.Adapter<CommentAdapter.CommentViewHolder>() 
             } else {
                 Glide.with(itemView.context)
                     .load(comment.profilePicture)
+                    .circleCrop()
                     .into(profilePicutre)
             }
         }
