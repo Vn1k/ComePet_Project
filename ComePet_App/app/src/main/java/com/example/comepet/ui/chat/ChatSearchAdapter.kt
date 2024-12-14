@@ -50,6 +50,7 @@ class ChatSearchAdapter(
                     .load(chatUser.profilePicture)
                     .placeholder(R.drawable.defaultprofilepicture)
                     .error(R.drawable.defaultprofilepicture)
+                    .circleCrop()
                     .into(profilePicture)
             } else {
                 profilePicture.setImageResource(R.drawable.defaultprofilepicture)
