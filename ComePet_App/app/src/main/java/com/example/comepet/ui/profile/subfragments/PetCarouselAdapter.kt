@@ -44,6 +44,12 @@ class PetCarouselAdapter : RecyclerView.Adapter<PetCarouselAdapter.PetViewHolder
                 .load(pet.profilePicture)
                 .into(binding.petImage)
 
+            val backgroundColor = if (pet.sex == "M") {
+                binding.root.context.getColor(R.color.soft_blue)
+            } else {
+                binding.root.context.getColor(R.color.pink)
+            }
+            binding.petCard.setBackgroundColor(backgroundColor)
         }
     }
 }
