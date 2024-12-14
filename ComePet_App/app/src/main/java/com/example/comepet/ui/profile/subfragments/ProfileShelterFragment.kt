@@ -1,56 +1,68 @@
 package com.example.comepet.ui.profile.subfragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import com.example.comepet.R
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.auth.User
 
 class ProfileShelterFragment : Fragment(){
 
-//    private lateinit var mapView: MapView
+    private lateinit var locShelter: TextView
+    private lateinit var userId: String
+
+    private lateinit var db: FirebaseFirestore
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_profile_shelter, container, false)
-//        mapView = view.findViewById(R.id.mapView)
-//        mapView.onCreate(savedInstanceState)
-//        mapView.getMapAsync(this)
-        return view
+        return inflater.inflate(R.layout.fragment_profile_shelter, container, false)
     }
 
-//    override fun onMapReady(googleMap: GoogleMap) {
-//        val location = LatLng(-34.0, 151.0) // Replace with your desired location
-//        googleMap.addMarker(MarkerOptions().position(location).title("Marker in Sydney"))
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10f))
-//    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-//    override fun onResume() {
-//        super.onResume()
-//        mapView.onResume()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        mapView.onPause()
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        mapView.onDestroy()
-//    }
-//
-//    override fun onLowMemory() {
-//        super.onLowMemory()
-//        mapView.onLowMemory()
-//    }
+        locShelter = view.findViewById(R.id.locShelter)
+
+        auth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
+
+        userId = auth.currentUser?.uid ?: ""
+
+        if (userId.isNotEmpty()) {
+            getUserData()
+        } else {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun getUserData() {
+        db.collection("users")
+            .document(userId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document != null && document.exists()) {
+                    val location = document.getString("location") ?: "Location not found"
+                    locShelter.text = location
+                } else {
+                    Log.e("ProfileFragment", "Document does not exist")
+                    Toast.makeText(requireContext(), "Document does not exist", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("ProfileFragment", "Error getting user data", exception)
+                Toast.makeText(requireContext(), "Error getting user data", Toast.LENGTH_SHORT)
+                    .show()
+            }
+    }
 }
