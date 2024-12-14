@@ -117,16 +117,19 @@ class UploadFragment : Fragment() {
         }
 
         parentFragmentManager.setFragmentResultListener("SELECTED_LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
-            // Get the location passed from LocationFragment
             val location = bundle.getString("selectedLocation")
             Log.d("UploadFragment", "Location received: $location")
 
-            // If location is not null, update the TextView
+            // If location is not null, update the TextView and save it in the ViewModel
             if (location != null) {
                 val locationTextView: TextView = view.findViewById(R.id.locationSelectedName)
                 locationTextView.text = location
+
+                // Save the location in the ViewModel for later use during upload
+                uploadViewModel.selectedLocation = location
             }
         }
+
 
 
         backButtonToPost.setOnClickListener {
@@ -173,10 +176,7 @@ class UploadFragment : Fragment() {
         }
 
         val petSelectedName = selectedPetNameTextView.text.toString()
-        val selectedLocationText = uploadViewModel.selectedLocation ?: "No location selected"
-
-        uploadViewModel.selectedLocation = "User-selected location"
-        uploadViewModel.selectedPetName = "User-selected pet"
+        val selectedLocationText = uploadViewModel.selectedLocation ?: "..."
 
         val bitmap = uploadViewModel.selectedImageBitmap
         val uri = uploadViewModel.selectedImageUri?.let { Uri.parse(it) }
@@ -193,8 +193,6 @@ class UploadFragment : Fragment() {
             Toast.makeText(context, "No image to upload", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
     private fun navigateToPost(collection: String) {
         uploadViewModel.resetSelectedImage()
