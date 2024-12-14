@@ -15,6 +15,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.comepet.R
 import com.google.firebase.auth.FirebaseAuth
@@ -84,13 +85,6 @@ class UploadFragment : Fragment() {
             view.findViewById<TextView>(R.id.selectedLocationText).text = it
         }
 
-        parentFragmentManager.setFragmentResultListener("LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
-            val location = bundle.getString("location")
-            uploadViewModel.selectedLocation = location
-            view.findViewById<TextView>(R.id.selectedLocationText).text =
-                location ?: getString(R.string.add_location)
-        }
-
         // Ambil data gambar dari argumen (hanya jika pertama kali dibuka)
         if (uploadViewModel.selectedImageBitmap == null && uploadViewModel.selectedImageUri == null) {
             arguments?.getParcelable<Bitmap>("capturedImage")?.let { bitmap ->
@@ -122,15 +116,18 @@ class UploadFragment : Fragment() {
             petSelectedProfilePicture.setImageURI(Uri.parse(petImageUrl))
         }
 
-        uploadViewModel.selectedLocation?.let {
-            view.findViewById<TextView>(R.id.locationSelectedName).text = it
+        parentFragmentManager.setFragmentResultListener("SELECTED_LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
+            // Get the location passed from LocationFragment
+            val location = bundle.getString("selectedLocation")
+            Log.d("UploadFragment", "Location received: $location")
+
+            // If location is not null, update the TextView
+            if (location != null) {
+                val locationTextView: TextView = view.findViewById(R.id.locationSelectedName)
+                locationTextView.text = location
+            }
         }
-        parentFragmentManager.setFragmentResultListener("LOCATION_REQUEST", viewLifecycleOwner) { _, bundle ->
-            val location = bundle.getString("location")
-            uploadViewModel.selectedLocation = location
-            view.findViewById<TextView>(R.id.locationSelectedName).text =
-                location ?: getString(R.string.add_location)
-        }
+
 
         backButtonToPost.setOnClickListener {
             uploadViewModel.resetSelectedImage()
