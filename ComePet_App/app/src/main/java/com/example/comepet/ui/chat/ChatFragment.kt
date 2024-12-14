@@ -131,6 +131,7 @@ class ChatFragment : Fragment() {
                                 .load(pictureUrl)
                                 .placeholder(R.drawable.defaultprofilepicture)
                                 .error(R.drawable.defaultprofilepicture)
+                                .circleCrop()
                                 .into(binding.imageViewProfile)
                         } else {
                             binding.imageViewProfile.setImageResource(R.drawable.defaultprofilepicture)
