@@ -186,7 +186,7 @@
                         android:textColor="@color/black"
                         android:paddingHorizontal="20dp"
                         android:drawablePadding="10dp"
-                        android:layout_marginStart="145dp"
+                        android:layout_marginStart="130dp"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/montserrat_medium" />
 
@@ -195,6 +195,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:layout_marginTop="5dp"
+                        android:layout_marginLeft="15dp"
                         android:src="@drawable/back_green_vector"
                         android:rotation="180" />
                 </LinearLayout>
