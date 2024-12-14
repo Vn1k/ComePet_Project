@@ -17,35 +17,42 @@
         android:background="@color/soft_blue">
 
 
-        <ImageView
-            android:id="@+id/petImage"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/Profile_Picture_Canvas"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:cardCornerRadius="64dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/temp_post_02" />
+            tools:ignore="MissingConstraints">
+
+            <ImageView
+                android:id="@+id/petImage"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/petName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/petImage"
-            tools:text="Max" />
+            app:layout_constraintTop_toBottomOf="@+id/Profile_Picture_Canvas" />
 
         <TextView
             android:id="@+id/petBirthday"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Birthdate"
             android:textColor="@color/white"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +64,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Bio"
             android:textColor="@color/white"
             android:textSize="10sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +75,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="64dp"
-            android:text="Breed"
             android:textColor="@color/white"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
