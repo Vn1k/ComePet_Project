@@ -14,7 +14,7 @@
             android:background="@drawable/background_dark_brown_gray"
             android:layout_gravity="end"
             android:layout_marginBottom="8dp"
-            android:padding="8dp">
+            android:padding="12dp">
 
                 <TextView
                     android:id="@+id/senderChatMessage"
@@ -35,7 +35,7 @@
             android:background="@drawable/background_white"
             android:layout_gravity="start"
             android:layout_marginBottom="8dp"
-            android:padding="8dp">
+            android:padding="12dp">
 
                 <TextView
                     android:id="@+id/receiverChatMessage"

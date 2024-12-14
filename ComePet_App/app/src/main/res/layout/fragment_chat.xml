@@ -145,7 +145,7 @@
                     android:fontFamily="@font/montserrat"
                     android:textSize="12sp"
                     android:paddingStart="10dp"
-                    android:paddingEnd="140dp"
+                    android:paddingEnd="10dp"
                     android:layout_gravity="center"
                     android:background="@android:color/transparent"
                     android:textColor="@android:color/black"

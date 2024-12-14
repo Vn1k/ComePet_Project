@@ -31,6 +31,9 @@ class ChatAdapter(
         private val receiverChatMessage: TextView = itemView.findViewById(R.id.receiverChatMessage)
 
         fun bind(message: ChatMessage) {
+            senderChatMessage.visibility = View.GONE
+            receiverChatMessage.visibility = View.GONE
+
             if (message.senderId == senderId) {
                 senderChatMessage.text = message.message
                 senderChatMessage.visibility = View.VISIBLE
