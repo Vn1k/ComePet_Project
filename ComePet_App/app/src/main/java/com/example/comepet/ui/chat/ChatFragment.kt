@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
@@ -18,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.comepet.R
 import com.example.comepet.databinding.FragmentChatBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -28,7 +26,6 @@ class ChatFragment : Fragment() {
     private lateinit var binding: FragmentChatBinding
     private lateinit var chatViewModel: ChatViewModel
     private lateinit var chatAdapter: ChatAdapter
-    private lateinit var profilePicureTop: ImageView
     private lateinit var postUsernameTop: TextView
     private lateinit var recyclerView: RecyclerView
     private lateinit var sendButton: ImageButton
@@ -56,7 +53,7 @@ class ChatFragment : Fragment() {
             }
 
         binding = FragmentChatBinding.inflate(inflater, container, false)
-        profilePicureTop = binding.imageViewProfile
+
         // Inisialisasi komponen UI
         recyclerView = binding.recyclerViewChatPersonal
         sendButton = binding.buttonLogoSend
@@ -119,31 +116,16 @@ class ChatFragment : Fragment() {
             .document(receiverId)
             .get()
             .addOnSuccessListener { document ->
-                document?.let {
-                    val username = it.getString("username") ?: "Unknown User"
+                document?.getString("username")?.let { username ->
                     postUsernameTop.text = username
-
-                    // Set profile picture
-                    val profilePicture = it.getString("profilePicture")
-                    profilePicture?.let { pictureUrl ->
-                        if (pictureUrl.isNotEmpty()) {
-                            Glide.with(requireContext())
-                                .load(pictureUrl)
-                                .placeholder(R.drawable.defaultprofilepicture)
-                                .error(R.drawable.defaultprofilepicture)
-                                .into(binding.imageViewProfile)
-                        } else {
-                            binding.imageViewProfile.setImageResource(R.drawable.defaultprofilepicture)
-                        }
-                    } ?: run {
-                        binding.imageViewProfile.setImageResource(R.drawable.defaultprofilepicture)
-                    }
+                } ?: run {
+                    postUsernameTop.text = "Unknown User"
+                    Log.w("ChatFragment", "No username found for user $receiverId")
                 }
             }
             .addOnFailureListener { exception ->
                 postUsernameTop.text = "Error Loading"
-                binding.imageViewProfile.setImageResource(R.drawable.defaultprofilepicture)
-                Log.e("ChatFragment", "Error getting receiver's details", exception)
+                Log.e("ChatFragment", "Error getting receiver's username", exception)
             }
     }
 }

@@ -3,33 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/light_beige"
-    android:gravity="center">
+    android:padding="16dp">
 
     <EditText
-        android:id="@+id/editTextLocation"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:hint="Enter location"
-        android:inputType="text"
-        android:background="@drawable/background_white"
-        android:paddingLeft="20dp"
-        android:fontFamily="@font/montserrat_medium"
-        android:layout_marginBottom="16dp"/>
-
-    <Button
-        android:id="@+id/buttonSaveLocation"
+        android:id="@+id/search_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Location"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/background_blue"
-        android:fontFamily="@font/montserrat_bold"
-        android:textColor="@color/white"/>
+        android:hint="Search places" />
 
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/predictions_list"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" />-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/predictions_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

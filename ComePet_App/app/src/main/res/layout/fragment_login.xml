@@ -72,7 +72,7 @@
                     android:id="@+id/passwordField"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:startIconDrawable="@drawable/pass"
+                    app:startIconDrawable="@drawable/user"
                     app:startIconContentDescription="@string/icon_description"
                     app:endIconMode="password_toggle">
 

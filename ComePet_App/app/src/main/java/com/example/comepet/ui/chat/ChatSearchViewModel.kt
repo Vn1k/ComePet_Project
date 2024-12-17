@@ -66,12 +66,9 @@ class ChatSearchViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { document ->
                 val username = document.getString("username") ?: "Unknown User"
-                val profilePicture = document.getString("profilePicture") ?: ""
-
                 val chatUser = ChatUser(
                     userId = userId,
                     username = username,
-                    profilePicture = profilePicture,
                     lastMessage = lastMessage,
                     timestamp = timestamp
                 )

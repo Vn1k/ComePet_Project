@@ -3,23 +3,18 @@ package com.example.comepet.ui.profile.subfragments
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.example.comepet.R
-import com.example.comepet.databinding.ItemPetBinding
 import com.example.comepet.databinding.ItemPetCardBinding
-import com.example.comepet.ui.auth.register.model.Pet
-import com.example.comepet.ui.auth.register.model.User
 
 class PetCarouselAdapter : RecyclerView.Adapter<PetCarouselAdapter.PetViewHolder>() {
-    private var pets = listOf<Pet>()
+    private var pets = listOf<PetData>()
 
-    fun submitList(newPets: List<Pet>) {
+    fun submitList(newPets: List<PetData>) {
         pets = newPets
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PetViewHolder {
-        // Inflate the correct layout and binding for the CardView
         val binding = ItemPetCardBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
@@ -32,24 +27,16 @@ class PetCarouselAdapter : RecyclerView.Adapter<PetCarouselAdapter.PetViewHolder
 
     override fun getItemCount() = pets.size
 
-    inner class PetViewHolder(private val binding: ItemPetCardBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(pet: Pet) {
+    class PetViewHolder(private val binding: ItemPetCardBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-            binding.petName.text = pet.petName
-            binding.petBirthday.text = pet.dateOfBirth
-            binding.petBio.text = pet.description
-            binding.petBreed.text = pet.breed
-
-            Glide.with(binding.root.context)
-                .load(pet.profilePicture)
-                .into(binding.petImage)
-
-            val backgroundColor = if (pet.sex == "M") {
-                binding.root.context.getColor(R.color.soft_blue)
-            } else {
-                binding.root.context.getColor(R.color.pink)
+        fun bind(pet: PetData) {
+            binding.apply {
+                petName.text = pet.name
+                petAge.text = pet.age
+                // In real app, use proper image loading library like Glide
+                petImage.setImageResource(R.drawable.temp_post_01)
             }
-            binding.petCard.setBackgroundColor(backgroundColor)
         }
     }
 }
