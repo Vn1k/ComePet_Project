@@ -176,12 +176,26 @@
                         android:drawableStart="@drawable/location_black"
                         android:fontFamily="@font/montserrat_medium" />
 
+                    <TextView
+                        android:id="@+id/locationSelectedName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="15sp"
+                        android:layout_gravity="end"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:paddingHorizontal="20dp"
+                        android:drawablePadding="10dp"
+                        android:layout_marginStart="130dp"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/montserrat_medium" />
+
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="end"
                         android:layout_marginTop="5dp"
-                        android:layout_marginStart="185dp"
+                        android:layout_marginLeft="15dp"
                         android:src="@drawable/back_green_vector"
                         android:rotation="180" />
                 </LinearLayout>

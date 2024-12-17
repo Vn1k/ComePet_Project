@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.navigation_chat,
                 R.id.navigation_change_email,
                 R.id.navigation_change_password,
+                R.id.navigation_edit_profile,
                 R.id.navigation_tagpet -> {
                     swipeRefreshLayout.isEnabled = false
                     hideBottomNavigation()
@@ -205,6 +206,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         galleryButton.setOnClickListener {
+            openGallery()
             val currentDestination = findNavController(R.id.nav_host_fragment_activity_main).currentDestination?.id
 
             val bundle = Bundle().apply {

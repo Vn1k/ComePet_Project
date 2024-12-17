@@ -267,8 +267,13 @@
         tools:layout="@layout/fragment_location">
 
         <action
-            android:id="@+id/navigation_addlocation_to_navigation_upload"
-            app:destination="@id/navigation_upload"/>
+            android:id="@+id/navigation_location_to_navigation_upload"
+            app:destination="@id/navigation_upload">
+            <argument
+                android:name="location"
+                app:argType="string" />
+        </action>
+
     </fragment>
 
 <!--    <fragment-->
