@@ -1,6 +1,7 @@
 package com.example.comepet.ui.profile.subfragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,12 +42,23 @@ class ProfilePostsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         initFirebase()
 
+        // Log the raw arguments
+        Log.d("ProfilePostsFragment", "Raw arguments: ${arguments}")
+
+        // Log the retrieved user ID from arguments
+        val argUserId = arguments?.getString(ARG_USER_ID)
+        Log.d("ProfilePostsFragment", "User ID from arguments: $argUserId")
+
         // Retrieve userId from arguments
         userId = arguments?.getString(ARG_USER_ID) ?: mAuth.currentUser?.uid
+
+        // Log the final userId
+        Log.d("ProfilePostsFragment", "Final userId: $userId")
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile_posts, container, false)

@@ -51,6 +51,8 @@ class PostAdapter(private var postList: MutableList<Post>) : RecyclerView.Adapte
                 putString("userId", post.userId)
             }
 
+            Log.d("PostAdapter", "Navigating to profile for userId: ${post.userId}")
+
             (context as? AppCompatActivity)?.findNavController(R.id.nav_host_fragment_activity_main)?.navigate(
                 R.id.navigation_profile,
                 bundle
