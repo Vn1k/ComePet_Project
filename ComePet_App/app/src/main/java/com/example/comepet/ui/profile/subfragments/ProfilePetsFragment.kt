@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.comepet.R
@@ -21,17 +23,16 @@ import com.google.firebase.storage.FirebaseStorage
 val Int.dp: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
-
 class ProfilePetsFragment : Fragment() {
     private var _binding: FragmentProfilePetsBinding? = null
     private val binding get() = _binding!!
-//    private val firestore by lazy { FirebaseFirestore.getInstance() }
-//    private val auth by lazy { FirebaseAuth.getInstance() }
-    private var userId: String? = null
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
+
+    private var userId: String? = null
+    private var currentPets = listOf<Pet>()
 
     // Inner class for PetCarouselAdapter
     private inner class PetCarouselAdapter : RecyclerView.Adapter<PetCarouselAdapter.PetViewHolder>() {
@@ -39,6 +40,7 @@ class ProfilePetsFragment : Fragment() {
 
         fun submitList(newPets: List<Pet>) {
             pets = newPets
+            currentPets = newPets  // Store the current list of pets
             notifyDataSetChanged()
         }
 
@@ -50,14 +52,14 @@ class ProfilePetsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: PetViewHolder, position: Int) {
-            holder.bind(pets[position])
+            holder.bind(pets[position], position)
         }
 
         override fun getItemCount() = pets.size
 
         inner class PetViewHolder(private val binding: ItemPetCardBinding) :
             RecyclerView.ViewHolder(binding.root) {
-            fun bind(pet: Pet) {
+            fun bind(pet: Pet, position: Int) {
                 binding.petName.text = pet.petName
                 binding.petBirthday.text = pet.dateOfBirth
                 binding.petBio.text = pet.description
@@ -73,6 +75,11 @@ class ProfilePetsFragment : Fragment() {
                     binding.root.context.getColor(R.color.pink)
                 }
                 binding.petCard.setBackgroundColor(backgroundColor)
+
+                // Set up edit button for each pet card
+                binding.petEditButton.setOnClickListener {
+                    navigateToEditPet(pet)
+                }
             }
         }
     }
@@ -96,15 +103,12 @@ class ProfilePetsFragment : Fragment() {
         super.onCreate(savedInstanceState)
         initFirebase()
 
-        // Detailed logging
-        Log.d("ProfilePetsFragment", "Arguments: ${arguments.toString()}")
-        Log.d("ProfilePetsFragment", "ARG_USER_ID value: ${arguments?.getString(ARG_USER_ID)}")
-
         // Retrieve targetUserId from arguments
         userId = arguments?.getString(ARG_USER_ID)
 
         Log.d("ProfilePetsFragment", "Received userId: $userId")
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -117,8 +121,17 @@ class ProfilePetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupCarousel()
+    }
+
+    private fun navigateToEditPet(pet: Pet) {
+        // Create a bundle to pass pet data
+        val bundle = Bundle().apply {
+            putString("PET_ID", pet.petId)
+        }
+
+        // Navigate to AddPetFragment with the pet ID
+        findNavController().navigate(R.id.navigation_add_pet, bundle)
     }
 
     private fun initFirebase() {
