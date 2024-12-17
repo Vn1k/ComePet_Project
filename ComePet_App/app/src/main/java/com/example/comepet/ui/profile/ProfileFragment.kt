@@ -31,7 +31,6 @@ import java.util.UUID
 class ProfileFragment : BaseAuthFragment() {
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
-    private val viewModel: ProfileViewModel by viewModels()
     private lateinit var settingButton: ImageButton
     private lateinit var editProfileButton: Button
     private lateinit var addPetButton: Button
@@ -223,15 +222,20 @@ class ProfileFragment : BaseAuthFragment() {
     }
 
     private fun loadPetsFragment() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.profile_content_container, ProfilePetsFragment())
-            .commit()
+        userId?.let { targetUserId ->
+            childFragmentManager.beginTransaction()
+                .replace(R.id.profile_content_container, ProfilePetsFragment.newInstance(targetUserId))
+                .commit()
+        }
     }
 
     private fun loadShelterFragment() {
-        childFragmentManager.beginTransaction()
-            .replace(R.id.profile_content_container, ProfileShelterFragment())
-            .commit()
+        userId?.let { targetUserId ->
+            childFragmentManager.beginTransaction()
+                .replace(R.id.profile_content_container, ProfileShelterFragment.newInstance(targetUserId))
+                .commit()
+        }
+
     }
 
     override fun onDestroyView() {
